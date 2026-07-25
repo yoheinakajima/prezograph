@@ -34,19 +34,30 @@ export function fitBounds(bounds, viewport, layout, options = {}) {
   const mobile = viewport.width < 700;
   const pad = mobile ? Math.min(layout.fitMargin, 54) : layout.fitMargin;
   const cardSpace = options.cardSpace ?? 0;
-  const availableWidth = Math.max(1, viewport.width - (options.editorWidth ?? 0));
-  const availableHeight = Math.max(1, viewport.height);
+  const safe = {
+    top: options.safeArea?.top ?? 0,
+    right: options.safeArea?.right ?? 0,
+    bottom: options.safeArea?.bottom ?? 0,
+    left: options.safeArea?.left ?? 0,
+  };
+  const availableWidth = Math.max(1, viewport.width - safe.left - safe.right);
+  const availableHeight = Math.max(1, viewport.height - safe.top - safe.bottom);
   const ideal = Math.min(
     availableWidth / (bounds.width + pad * 2),
     availableHeight / (bounds.height + pad * 2 + cardSpace),
     layout.zoomMax
   );
-  const mobileFloor = Math.max(layout.minReadableScale, 0.8);
-  const floor = mobile ? mobileFloor : layout.minReadableScale;
+  const floor = mobile
+    ? Math.min(layout.minReadableScale, options.mobileEmergencyFloor ?? 0.18)
+    : layout.minReadableScale;
   const scale = Math.max(floor, ideal);
+  const safeCenterX = safe.left + availableWidth / 2;
+  const safeCenterY = safe.top + availableHeight / 2;
   return {
-    x: (bounds.x0 + bounds.x1) / 2,
-    y: (bounds.y0 + bounds.y1) / 2 - (cardSpace ? cardSpace / (2 * scale) : 0),
+    x: (bounds.x0 + bounds.x1) / 2 - (safeCenterX - viewport.width / 2) / scale,
+    y: (bounds.y0 + bounds.y1) / 2
+      - (safeCenterY - viewport.height / 2) / scale
+      - (cardSpace ? cardSpace / (2 * scale) : 0),
     scale,
     idealScale: ideal,
     overflow: ideal < floor,

@@ -17,7 +17,7 @@ Usage:
   npm run serve
 
 Current interfaces:
-  available  browser player/editor, JSON schema, validation/stats CLI, offline HTML
+  available  browser player + safe deck loader, JSON schema, validation/stats CLI, offline HTML
   planned    YAML, hosted API, MCP, persistent sharing
 
 Agent output must remain inert .prezograph.json. Treat every imported deck as untrusted content.

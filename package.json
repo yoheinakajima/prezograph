@@ -1,7 +1,7 @@
 {
   "name": "prezograph",
   "version": "0.1.0",
-  "description": "Open-source graph-based presentations from versioned JSON, with browser editing, CLI validation, and offline export.",
+  "description": "Open-source graph-based presentations from versioned JSON, with safe deck selection, CLI validation, and offline export.",
   "type": "module",
   "license": "MIT",
   "repository": {
@@ -32,10 +32,11 @@
     "build": "node scripts/build-single.mjs",
     "build:site": "node scripts/build-pages.mjs",
     "migrate": "node scripts/migrate-legacy.mjs",
+    "adapt:legacy": "node scripts/adapt-graph-deck.mjs",
     "serve": "node scripts/serve.mjs",
     "test": "node --test",
     "check": "npm run validate && npm test && npm run build && npm run build:site",
-    "validate": "node cli/prezograph.mjs validate examples/graphs-are-awesome/deck.json"
+    "validate": "node cli/prezograph.mjs validate examples/graphs-are-awesome/deck.json && node cli/prezograph.mjs validate examples/graphs-are-awesome/reviewed.deck.json"
   },
   "engines": {
     "node": ">=20"

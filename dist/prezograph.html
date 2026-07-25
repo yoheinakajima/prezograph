@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'sha256-Tk/QW3LjOc8vAj+dYjcHZw4lBr/KmAQNaBq7T7aXTks='; script-src 'sha256-9uNuPiRh6HVqRxjbR3TSvifSqRF6ikjen441wQ1dY0Q='; img-src data:; connect-src 'none'; font-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'sha256-uQkgpjOYzgt8B3My91F8dKw3kcTPa3u9oq/bJSUhmZ8='; script-src 'sha256-E6m7o4C1Tal8LedAynto6Vb8JQXHd3F/XfgWCWbtpkc='; img-src data:; connect-src 'none'; font-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
   <title>Prezograph · Single-file deck</title>
   <style>:root {
   color-scheme: light;
@@ -240,6 +240,11 @@ textarea {
 
 .pz-node.kind-tiny .pz-node-title {
   font-size: 12px;
+}
+
+.pz-node.kind-company .pz-node-sub,
+.pz-node.kind-company .pz-node-body {
+  display: none;
 }
 
 .pz-node.kind-ghost {
@@ -519,78 +524,7 @@ textarea {
   cursor: pointer;
 }
 
-.pz-panel {
-  position: fixed;
-  inset: 0 0 0 auto;
-  z-index: 25;
-  width: 300px;
-  padding: 18px 18px 90px;
-  overflow-y: auto;
-  border-left: 1px solid var(--pz-hair);
-  background: rgba(255, 255, 255, 0.96);
-  translate: 100% 0;
-  transition: translate 250ms ease;
-}
-
-.pz-panel.is-open {
-  translate: 0 0;
-}
-
-.pz-panel h2 {
-  margin: 0;
-  font-size: 15px;
-}
-
-.pz-panel-scene {
-  margin: 3px 0 15px;
-  color: var(--pz-light);
-  font: 10px ui-monospace, monospace;
-}
-
-.pz-slider {
-  margin: 0 0 12px;
-}
-
-.pz-slider label {
-  display: flex;
-  justify-content: space-between;
-  color: var(--pz-muted);
-  font-size: 11px;
-}
-
-.pz-slider output {
-  color: var(--pz-indigo);
-  font-family: ui-monospace, monospace;
-}
-
-.pz-slider input {
-  width: 100%;
-  accent-color: var(--pz-indigo);
-}
-
-.pz-panel-actions {
-  display: grid;
-  gap: 7px;
-  margin-top: 18px;
-}
-
-.pz-panel-actions button {
-  padding: 8px 10px;
-  border: 1px solid var(--pz-hair);
-  border-radius: 8px;
-  background: white;
-  text-align: left;
-  cursor: pointer;
-}
-
-.pz-panel-note {
-  margin-top: 15px;
-  color: var(--pz-light);
-  font-size: 10px;
-  line-height: 1.55;
-}
-
-.pz-modal {
+.pz-deck-picker {
   position: fixed;
   inset: 0;
   z-index: 40;
@@ -600,50 +534,73 @@ textarea {
   background: rgba(29, 31, 35, 0.5);
 }
 
-.pz-modal[hidden] {
+.pz-deck-picker[hidden] {
   display: none;
 }
 
-.pz-modal-box {
-  display: flex;
-  width: min(780px, 94vw);
-  height: min(650px, 86vh);
-  flex-direction: column;
-  gap: 10px;
-  padding: 18px;
+.pz-deck-picker-box {
+  width: min(460px, calc(100vw - 28px));
+  padding: 22px;
+  border: 1px solid var(--pz-hair);
   border-radius: 14px;
-  background: white;
+  background: var(--pz-surface);
+  box-shadow: 0 20px 80px rgba(29, 31, 35, 0.24);
 }
 
-.pz-modal textarea {
-  flex: 1;
-  padding: 11px;
+.pz-deck-picker h2 {
+  margin: 0 0 8px;
+  font-size: 20px;
+}
+
+.pz-deck-picker p {
+  margin: 0 0 18px;
+  color: var(--pz-muted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.pz-deck-picker label {
+  display: grid;
+  gap: 7px;
+  color: var(--pz-muted);
+  font-size: 12px;
+}
+
+.pz-deck-picker select,
+.pz-deck-actions button {
+  min-height: 42px;
+  padding: 8px 11px;
   border: 1px solid var(--pz-hair);
   border-radius: 8px;
-  resize: none;
-  font: 11px/1.5 ui-monospace, monospace;
+  background: var(--pz-surface);
+  color: var(--pz-ink);
 }
 
-.pz-modal-error {
+.pz-deck-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.pz-deck-actions button {
+  cursor: pointer;
+}
+
+.pz-deck-actions button:first-child {
+  border-color: var(--pz-indigo);
+  background: var(--pz-indigo);
+  color: white;
+}
+
+.pz-deck-error {
+  max-height: min(180px, 25vh);
   min-height: 1.4em;
-  margin: 0;
+  margin: 12px 0 0;
+  overflow: auto;
   color: #a12d27;
   font: 11px/1.4 ui-monospace, monospace;
   white-space: pre-wrap;
-}
-
-.pz-modal-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 8px;
-}
-
-.pz-modal-actions button {
-  padding: 7px 14px;
-  border: 1px solid var(--pz-hair);
-  border-radius: 8px;
-  background: white;
-  cursor: pointer;
 }
 
 .pz-toast {
@@ -750,8 +707,19 @@ textarea {
     width: min(300px, calc(100vw - 28px));
   }
 
-  .pz-panel {
-    width: min(300px, 88vw);
+  .pz-deck-picker {
+    align-items: end;
+    padding: 14px;
+  }
+
+  .pz-deck-picker-box {
+    width: 100%;
+    padding: 18px;
+    border-radius: 16px;
+  }
+
+  .pz-deck-actions {
+    display: grid;
   }
 }
 
@@ -774,38 +742,34 @@ textarea {
 globalThis.PREZOGRAPH_DECK = {
   "schemaVersion": "2.0",
   "meta": {
-    "title": "Graphs Are Awesome",
+    "title": "Graphs Are Awesome · Reviewed graph-deck adaptation",
     "author": "Yohei Nakajima",
     "event": "GraphCon",
     "date": "July 25, 2026",
-    "presentedDate": "2026-07-25",
-    "reviewedDate": "2026-07-24",
+    "asOf": "2026-07-24",
     "repository": "https://github.com/yoheinakajima/prezograph",
-    "disclosure": "FalkorDB is an Untapped Capital portfolio company. Mem0 is an Agent Fund portfolio company.",
-    "source": "Migrated from graph-deck_1.html"
+    "source": "Adapted from the supplied graph-deck JSON; raw HTML assets removed"
   },
   "theme": {
     "colors": {
-      "background": "#f4f0e8",
-      "surface": "#fffdf8",
-      "ink": "#14211c",
-      "muted": "#52655c",
-      "light": "#65766e",
-      "hair": "#cfc9bb",
-      "indigo": "#4f46c8",
-      "green": "#17714d",
-      "tan": "#8a4b10"
+      "background": "#FCFBF7",
+      "surface": "#ffffff",
+      "ink": "#1D1F23",
+      "muted": "#62666F",
+      "light": "#9BA0A8",
+      "hair": "#E7E3D9",
+      "indigo": "#574ce3",
+      "green": "#47751f",
+      "tan": "#80551d"
     }
   },
   "entities": {
     "t_hub": {
       "title": "Graphs are awesome",
-      "sub": "because relationships are where the meaning lives",
-      "body": "An interactive presentation whose structure, sequence, and camera are all generated from JSON."
+      "sub": "because relationships are where the meaning lives"
     },
     "t_speaker": {
-      "title": "Yohei Nakajima",
-      "body": "Founder, Untapped Capital · creator of BabyAGI and Prezograph"
+      "title": "Yohei Nakajima"
     },
     "t_conf": {
       "title": "GraphCon · Jul 25 2026"
@@ -863,18 +827,16 @@ globalThis.PREZOGRAPH_DECK = {
       "tip": "Current work: event-sourced context graphs — the living state layer this talk keeps circling back to."
     },
     "oc_data": {
-      "title": "The same seven facts",
-      "sub": "Two representations"
+      "title": "same data",
+      "sub": "seven nodes · seven edges"
     },
     "oc_order": {
-      "title": "Graph-native",
-      "sub": "Relationships are first-class",
-      "body": "Multi-hop questions stay close to the way the problem is described."
+      "title": "Order",
+      "sub": "drawn as a graph — the topology is visible"
     },
     "oc_chaos": {
-      "title": "Relational",
-      "sub": "Relationships are reconstructed",
-      "body": "Joins are powerful, but relationship-heavy questions often require more modeling and query work."
+      "title": "Chaos",
+      "sub": "stored as tables — the topology is hidden"
     },
     "ev_hub": {
       "title": "Everything is a graph"
@@ -934,17 +896,24 @@ globalThis.PREZOGRAPH_DECK = {
     "i_src": {
       "title": "the source"
     },
+    "re_edges": {
+      "title": "Edges",
+      "sub": "easy to reason about",
+      "body": "uses · paid_by · mentions · owns · limits"
+    },
+    "re_rows": {
+      "title": "Rows",
+      "sub": "easy to inspect, one by one",
+      "body": "customer · invoice · ticket · team · policy"
+    },
     "tl_hub": {
-      "title": "Agents became graph-shaped in public",
-      "sub": "2022 → 2026",
-      "body": "Plans, tool calls, memory, teams, interoperability, and reusable skills all made relationships explicit."
+      "title": "Agents got graph-shaped",
+      "sub": "in public · 2022 – 2025"
     },
     "tl_react": {
       "title": "ReAct",
       "sub": "Oct 2022",
-      "body": "interleave reasoning + acting — the base loop",
-      "source": "https://arxiv.org/abs/2210.03629",
-      "sourceDate": "2026-07-24"
+      "body": "interleave reasoning + acting — the base loop"
     },
     "tl_baby": {
       "title": "BabyAGI / AutoGPT / ToT",
@@ -954,16 +923,12 @@ globalThis.PREZOGRAPH_DECK = {
     "tl_fc": {
       "title": "Function calling",
       "sub": "Jun 2023",
-      "body": "structured tool edges from the model",
-      "source": "https://openai.com/index/function-calling-and-other-api-updates/",
-      "sourceDate": "2026-07-24"
+      "body": "structured tool edges from the model"
     },
     "tl_ag": {
-      "title": "AutoGen + Assistants API",
-      "sub": "2023 · teams + threaded state",
-      "body": "Agent teams and persistent threads made conversational state and delegation explicit. The Assistants API is now deprecated.",
-      "source": "https://help.openai.com/en/articles/8550641-assistants-",
-      "sourceDate": "2026-07-24"
+      "title": "AutoGen / Assistants API",
+      "sub": "Sep – Nov 2023",
+      "body": "agent teams + threads as state"
     },
     "tl_lg": {
       "title": "LangGraph",
@@ -973,21 +938,17 @@ globalThis.PREZOGRAPH_DECK = {
     "tl_gr": {
       "title": "Microsoft GraphRAG",
       "sub": "Jul 2024",
-      "body": "retrieval over an entity graph + community summaries",
-      "source": "https://www.microsoft.com/en-us/research/blog/graphrag-new-tool-for-complex-data-discovery-now-on-github/",
-      "sourceDate": "2026-07-24"
+      "body": "retrieval over an entity graph + community summaries"
     },
     "tl_mcp": {
       "title": "MCP",
       "sub": "Nov 2024",
-      "body": "open standard — tools + resources as a context graph",
-      "source": "https://www.anthropic.com/news/model-context-protocol",
-      "sourceDate": "2026-07-24"
+      "body": "open standard — tools + resources as a context graph"
     },
     "tl_op": {
-      "title": "Operator → ChatGPT agent",
-      "sub": "2025 · UI actions",
-      "body": "Operator introduced browser-acting research preview capabilities later integrated into ChatGPT agent.",
+      "title": "Operator",
+      "sub": "Jan 23 2025",
+      "body": "Browser-acting research preview; later integrated into ChatGPT agent.",
       "source": "https://openai.com/index/introducing-operator/",
       "sourceDate": "2026-07-24"
     },
@@ -995,9 +956,9 @@ globalThis.PREZOGRAPH_DECK = {
       "title": "graph-first"
     },
     "inv_ont_old": {
-      "title": "Model-first ontology",
-      "sub": "Define before observing use",
-      "body": "Useful when the domain is stable, but expensive when behavior changes faster than the model."
+      "title": "ontology",
+      "sub": "the prerequisite",
+      "body": "classes, relations, constraints — designed before use"
     },
     "inv_ing": {
       "title": "ingestion & schema",
@@ -1027,20 +988,20 @@ globalThis.PREZOGRAPH_DECK = {
       "sub": "humans + rules approve or reject"
     },
     "inv_ont_new": {
-      "title": "Living ontology",
-      "sub": "Proposed from use · reviewed by people",
-      "body": "Let repeated behavior suggest structure, then validate, govern, and version it."
+      "title": "ontology",
+      "sub": "the runtime contract",
+      "body": "hardened where correctness matters"
     },
     "st_before": {
-      "title": "The old job",
+      "title": "the old job",
       "sub": "finish the ontology",
-      "body": "Model the world before usage.",
+      "body": "model every fact before anyone benefits",
       "tip": "Graph-first: months of modeling before the first user query. Ends in trust decay — see the inversion."
     },
     "st_after": {
-      "title": "The new job",
+      "title": "the new job",
       "sub": "keep living state trustworthy",
-      "body": "Continuously answer five relationship questions as usage evolves.",
+      "body": "harden what agents actually use",
       "tip": "Agent-first: the workflow runs from day one and the job becomes tending the graph it generates."
     },
     "st_hub": {
@@ -1068,8 +1029,8 @@ globalThis.PREZOGRAPH_DECK = {
       "sub": "how does it improve?"
     },
     "mk_hub": {
-      "title": "A market forms around the questions",
-      "sub": "Infrastructure layers + relationship workloads",
+      "title": "The graph market",
+      "sub": "six segments · one stack",
       "tip": "The picks-and-shovels layer forming around living graphs — hover any segment or company for what it does and how it is doing."
     },
     "seg_db": {
@@ -1104,17 +1065,13 @@ globalThis.PREZOGRAPH_DECK = {
     },
     "co_neo4j": {
       "title": "Neo4j",
-      "sub": "Graph database + graph analytics",
-      "tip": "Category leader — AuraDB cloud, GraphRAG / context-graph positioning. $200M+ ARR, 80+ of the Fortune 100.",
-      "source": "https://neo4j.com/company/",
+      "tip": "Graph database and analytics company; it announced more than $200M in ARR in November 2024.",
+      "source": "https://neo4j.com/press-releases/neo4j-revenue-milestone-2024/",
       "sourceDate": "2026-07-24"
     },
     "co_tigergraph": {
       "title": "TigerGraph",
-      "sub": "Enterprise graph analytics",
-      "tip": "Native MPP graph database for real-time multi-hop analytics at petabyte scale. JPMC, Mastercard, Amex.",
-      "source": "https://www.tigergraph.com/company/",
-      "sourceDate": "2026-07-24"
+      "tip": "Native MPP graph database for real-time multi-hop analytics at petabyte scale. JPMC, Mastercard, Amex."
     },
     "co_memgraph": {
       "title": "Memgraph",
@@ -1125,16 +1082,14 @@ globalThis.PREZOGRAPH_DECK = {
       "tip": "Multi-model: graph + vector + document + search in one engine; AutoGraph KG construction coming. ~$47M raised."
     },
     "co_hypermodedgrap": {
-      "title": "Hypermode (Dgraph)",
-      "tip": "AI dev platform built around Dgraph, the distributed open-source graph DB it acquired. $9M seed."
+      "title": "Dgraph",
+      "tip": "Open-source graph database stewarded by Istari Digital since October 2025.",
+      "source": "https://discuss.dgraph.io/t/dgraph-welcome-to-istari/20021",
+      "sourceDate": "2026-07-24"
     },
     "co_falkordb": {
       "title": "FalkorDB",
-      "tip": "Ultra-low-latency RedisGraph successor (sparse-matrix based), purpose-built for GraphRAG. Tel Aviv seed.",
-      "sub": "Untapped portfolio ◈",
-      "body": "Graph database for low-latency knowledge and agent workloads.",
-      "source": "https://www.falkordb.com/",
-      "sourceDate": "2026-07-24"
+      "tip": "Ultra-low-latency RedisGraph successor (sparse-matrix based), purpose-built for GraphRAG. Tel Aviv seed."
     },
     "co_nebulagraph": {
       "title": "NebulaGraph",
@@ -1146,15 +1101,11 @@ globalThis.PREZOGRAPH_DECK = {
     },
     "co_puppygraph": {
       "title": "PuppyGraph",
-      "sub": "zero-ETL on lakehouse",
       "tip": "Zero-ETL graph query engine over Iceberg / Delta / Snowflake — query the lakehouse as a graph without moving it. Coinbase, eBay. $5M seed."
     },
     "co_diffbot": {
       "title": "Diffbot",
-      "sub": "10B+ entity public-web knowledge graph",
-      "tip": "Crawls the whole web into a 10B-entity, 1T-fact knowledge graph, sold as APIs. Tencent-backed; famously capital-efficient.",
-      "source": "https://docs.diffbot.com/docs/getting-started-with-diffbot-knowledge-graph",
-      "sourceDate": "2026-07-24"
+      "tip": "Crawls the whole web into a 10B-entity, 1T-fact knowledge graph, sold as APIs. Tencent-backed; famously capital-efficient."
     },
     "co_lettria": {
       "title": "Lettria",
@@ -1162,27 +1113,28 @@ globalThis.PREZOGRAPH_DECK = {
     },
     "co_graphlit": {
       "title": "Graphlit",
-      "tip": "API-first managed KG + RAG — ingest docs, audio, web into a graph with built-in retrieval for AI apps."
+      "tip": "Historical landscape entry only. Active product operations are winding down, new signups are closed, and customer offboarding is underway.",
+      "source": "https://www.graphlit.com/legal/sunset",
+      "sourceDate": "2026-07-24"
+    },
+    "co_whyhowai": {
+      "title": "WhyHow.AI",
+      "tip": "SDK for small, schema-controlled knowledge graphs — determinism for RAG and agent pipelines."
     },
     "co_mem0": {
       "title": "Mem0",
-      "sub": "$24M raised · Agent Fund portfolio ◈",
-      "tip": "$24M total funding announced in 2025; available as an AWS Agent SDK memory provider.",
-      "body": "Long-term memory layer for AI agents; an AWS Agent SDK memory provider.",
+      "tip": "The company announced $24M across Seed and Series A and selection as the AWS Agent SDK memory provider.",
       "source": "https://mem0.ai/series-a",
       "sourceDate": "2026-07-24"
     },
     "co_stardog": {
       "title": "Stardog",
-      "sub": "enterprise KG · Voicebox",
       "tip": "Enterprise KG that virtualizes data without moving it; Voicebox markets 'hallucination-free' semantic parsing. NASA, Morgan Stanley."
     },
     "co_graphwiseontot": {
       "title": "Graphwise",
-      "tip": "Ontotext + PoolParty merger — the largest independent semantic KG vendor; GraphRAG grounding for GenAI. BBC, AstraZeneca.",
-      "sub": "Ontotext + Semantic Web Company",
-      "body": "Formed from the merger of Ontotext and Semantic Web Company.",
-      "source": "https://graphwise.ai/wp-content/uploads/2024/10/Graphwise-press-release-General.pdf",
+      "tip": "The combined company formed by Ontotext and Semantic Web Company; GraphDB and PoolParty remain product lineages.",
+      "source": "https://graphwise.ai/blog/graphwise-merger-swc-ontotext/",
       "sourceDate": "2026-07-24"
     },
     "co_franzallegrogr": {
@@ -1195,9 +1147,8 @@ globalThis.PREZOGRAPH_DECK = {
     },
     "co_metaphacts": {
       "title": "metaphacts",
-      "sub": "Acquired by Digital Science · Jan 2023",
-      "tip": "metaphactory platform for ontology modeling and semantic search — acquired by Digital Science (2022).",
-      "source": "https://metaphacts.com/images/PDFs/PR-metaphacts-joins-the-Digital-Science-technology-group-following-acquisition_final.pdf",
+      "tip": "Acquired by Digital Science on January 23, 2023; metaphactory remains its semantic platform.",
+      "source": "https://metaphacts.com/metaphacts-joins-the-digital-science-technology-group-following-acquisition",
       "sourceDate": "2026-07-24"
     },
     "co_timbrai": {
@@ -1206,24 +1157,17 @@ globalThis.PREZOGRAPH_DECK = {
     },
     "co_relationalai": {
       "title": "RelationalAI",
-      "sub": "$122M raised · relational knowledge graph system",
-      "tip": "Relational knowledge graphs as a Snowflake-native coprocessor — rules, reasoning, and graph analytics over enterprise data.",
-      "source": "https://www.relational.ai/post/relationalai-raises-usd122m-to-redefine-how-intelligent-data-apps-are-built",
-      "sourceDate": "2026-07-24"
+      "tip": "Relational knowledge graphs as a Snowflake-native coprocessor — rules, reasoning, and graph analytics over enterprise data."
     },
     "co_quantexa": {
       "title": "Quantexa",
-      "sub": "Decision intelligence + entity resolution",
-      "tip": "Decision intelligence: 99%-accuracy entity resolution + graph analytics for AML / fraud / KYC. $100M+ ARR; HSBC, HMRC.",
+      "tip": "Decision-intelligence platform using entity resolution and graph analytics.",
       "source": "https://www.quantexa.com/",
       "sourceDate": "2026-07-24"
     },
     "co_senzing": {
       "title": "Senzing",
-      "sub": "Entity resolution engine",
-      "tip": "Jeff Jonas's entity-resolution engine, embedded in customer infra, validated to ~100B records; OEM'd by IBM and Esri.",
-      "source": "https://senzing.com/",
-      "sourceDate": "2026-07-24"
+      "tip": "Jeff Jonas's entity-resolution engine, embedded in customer infra, validated to ~100B records; OEM'd by IBM and Esri."
     },
     "co_tilores": {
       "title": "Tilores",
@@ -1231,9 +1175,8 @@ globalThis.PREZOGRAPH_DECK = {
     },
     "co_linkurious": {
       "title": "Linkurious",
-      "sub": "Nuix / Linkurious · acquired 2026",
-      "tip": "Graph investigation UI used by the ICIJ for the Panama Papers; AML, fraud, intel. Acquired by Nuix (2026).",
-      "source": "https://www.nuix.com/linkurious",
+      "tip": "Graph investigation and visualization product acquired by Nuix.",
+      "source": "https://www.nuix.com/news/completion-linkurious-acquisition-and-updated-full-year-acv-guidance-range",
       "sourceDate": "2026-07-24"
     },
     "co_cambridgeintel": {
@@ -1251,12 +1194,12 @@ globalThis.PREZOGRAPH_DECK = {
     "ex_reason": {
       "title": "Reasoning / plans",
       "sub": "branches, search, dependencies",
-      "tip": "A plan can be modeled as tasks with dependency and prerequisite edges."
+      "tip": "Branch, score, and select across reasoning trees, plans, and dependency DAGs."
     },
     "ex_world": {
       "title": "World / UI",
       "sub": "agents map the interface",
-      "tip": "UI elements and actions form a changing graph of affordances."
+      "tip": "State-transition and affordance graphs describe screens, actions, and changing environments."
     },
     "ex_know": {
       "title": "Knowledge / memory",
@@ -1266,12 +1209,12 @@ globalThis.PREZOGRAPH_DECK = {
     "ex_teams": {
       "title": "Agent teams",
       "sub": "workers, roles, handoffs",
-      "tip": "Delegation, review, escalation, and handoffs are relationships between agents and work."
+      "tip": "Roles, messages, delegation, review, escalation, and handoffs form a collaboration graph."
     },
     "ex_tools": {
       "title": "Tools / skills",
       "sub": "skills + code as dependency graphs",
-      "tip": "Tools expose capabilities, permissions, inputs, outputs, and dependencies."
+      "tip": "Typed registries connect skills, dependencies, capabilities, inputs, outputs, and permissions."
     },
     "ex_traces": {
       "title": "Traces / evals",
@@ -1329,12 +1272,48 @@ globalThis.PREZOGRAPH_DECK = {
     "t_zep": {
       "title": "Zep / Graphiti",
       "sub": "temporal memory graphs",
-      "tip": "Agent memory on Graphiti, an open-source temporal knowledge graph engine — sub-200ms context retrieval."
+      "tip": "Agent memory built on Graphiti, an open-source temporal knowledge-graph engine."
     },
     "t_lsmith": {
       "title": "LangSmith / Phoenix",
       "sub": "trace observability",
       "tip": "Trace tooling — the raw material for treating runs as replayable graphs."
+    },
+    "lp_agent": {
+      "title": "agent loop"
+    },
+    "lp_comm": {
+      "title": "community loop"
+    },
+    "lp_dev": {
+      "title": "developer loop"
+    },
+    "lp_obs": {
+      "title": "observe"
+    },
+    "lp_rsn": {
+      "title": "reason"
+    },
+    "lp_act": {
+      "title": "act"
+    },
+    "lp_trc": {
+      "title": "traces"
+    },
+    "lp_pat": {
+      "title": "patterns"
+    },
+    "lp_std": {
+      "title": "standards"
+    },
+    "lp_ins": {
+      "title": "instrument"
+    },
+    "lp_cmp": {
+      "title": "compare"
+    },
+    "lp_shr": {
+      "title": "share"
     },
     "yg_you": {
       "title": "you"
@@ -1342,118 +1321,32 @@ globalThis.PREZOGRAPH_DECK = {
     "yg_graphs": {
       "title": "graphs"
     },
-    "ag_trace_hub": {
-      "title": "Agents leave a graph behind",
-      "sub": "Even when the application never calls it one",
-      "body": "Prompts create plans; plans invoke tools; results update memory; traces feed evaluation."
+    "co_cognee": {
+      "title": "Cognee",
+      "tip": "Active open-source memory platform for AI agents; Cognee 1.0 launched June 26, 2026.",
+      "source": "https://www.cognee.ai/blog/cognee-news/cognee-1-0-announcement",
+      "sourceDate": "2026-07-24"
     },
-    "ag_prompt": {
-      "title": "prompt",
-      "sub": "intent + context"
-    },
-    "ag_plan": {
-      "title": "plan",
-      "sub": "tasks + dependencies"
-    },
-    "ag_tool": {
-      "title": "tool call",
-      "sub": "capability + permission"
-    },
-    "ag_result": {
-      "title": "result",
-      "sub": "observation + artifact"
-    },
-    "ag_memory": {
-      "title": "memory",
-      "sub": "state across time"
-    },
-    "ag_trace": {
-      "title": "trace",
-      "sub": "what actually happened"
-    },
-    "ag_eval": {
-      "title": "evaluation",
-      "sub": "evidence for change"
+    "tl_responses": {
+      "title": "Responses API + Agents SDK",
+      "sub": "Mar 11 2025",
+      "body": "A separate platform milestone for tool use, orchestration, tracing, and agent applications.",
+      "source": "https://openai.com/index/new-tools-for-building-agents/",
+      "sourceDate": "2026-07-24"
     },
     "tl_a2a": {
       "title": "Agent2Agent (A2A)",
-      "sub": "2025 · agent interoperability",
-      "body": "An open protocol for agents to discover capabilities and collaborate across systems.",
+      "sub": "Apr 9 2025",
+      "body": "An open protocol for interoperable communication between agents.",
       "source": "https://developers.googleblog.com/en/a2a-a-new-era-of-agent-interoperability/",
-      "sourceDate": "2026-07-24"
-    },
-    "tl_skills": {
-      "title": "Agent Skills",
-      "sub": "2025 · reusable procedural knowledge",
-      "body": "Filesystem-based packages make instructions, scripts, and resources composable across agent tasks.",
-      "source": "https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills",
-      "sourceDate": "2026-07-24"
-    },
-    "tl_aaif": {
-      "title": "MCP joins AAIF",
-      "sub": "2025 · neutral governance",
-      "body": "Anthropic donated MCP to the Agentic AI Foundation under the Linux Foundation.",
-      "source": "https://www.anthropic.com/news/donating-the-model-context-protocol-and-establishing-of-the-agentic-ai-foundation",
-      "sourceDate": "2026-07-24"
-    },
-    "co_neptune": {
-      "title": "Amazon Neptune",
-      "sub": "AWS managed graph platform",
-      "body": "Graph database and analytics services spanning operational graphs and GraphRAG workflows.",
-      "source": "https://aws.amazon.com/neptune/graph-and-ai/",
-      "sourceDate": "2026-07-24"
-    },
-    "co_spanner_graph": {
-      "title": "Spanner Graph",
-      "sub": "Google Cloud graph + relational",
-      "body": "Property graph capabilities integrated with Spanner's relational platform.",
-      "source": "https://docs.cloud.google.com/spanner/docs/graph/overview",
-      "sourceDate": "2026-07-24"
-    },
-    "oss_hub": {
-      "title": "This deck is a graph",
-      "sub": "And the tool is open source",
-      "body": "One JSON document defines reusable entities, visual instances, edges, scenes, and explicit narrative beats."
-    },
-    "oss_json": {
-      "title": "deck.json",
-      "sub": "portable source of truth"
-    },
-    "oss_entities": {
-      "title": "entities",
-      "sub": "facts defined once"
-    },
-    "oss_scenes": {
-      "title": "scenes",
-      "sub": "local visual instances"
-    },
-    "oss_beats": {
-      "title": "beats",
-      "sub": "show · focus · reveal order"
-    },
-    "oss_camera": {
-      "title": "camera",
-      "sub": "derived from the focused graph"
-    },
-    "oss_repo": {
-      "title": "Prezograph",
-      "sub": "JSON → graph-native presentation",
-      "body": "Validate it, present it, edit positions, and export a portable single-file deck.",
-      "source": "https://github.com/yoheinakajima/prezograph",
-      "sourceDate": "2026-07-24"
-    },
-    "yg_repo": {
-      "title": "github.com/yoheinakajima/prezograph",
-      "sub": "Fork it · build a graph · tell a relationship",
-      "source": "https://github.com/yoheinakajima/prezograph",
       "sourceDate": "2026-07-24"
     }
   },
   "scenes": [
     {
       "id": "title",
-      "title": "Graphs Are Awesome",
-      "caption": "Graphs Are Awesome · Yohei Nakajima · GraphCon · July 25, 2026",
+      "title": "Graphs are awesome",
+      "caption": "because relationships are where the meaning lives — I invest in graphs, and I build graphs (press next)",
       "anchor": [
         1689,
         1238
@@ -1590,22 +1483,24 @@ globalThis.PREZOGRAPH_DECK = {
           "w": 190
         },
         {
-          "id": "title_falkordb",
+          "id": "title_co_falkordb",
           "entity": "co_falkordb",
           "pos": [
             -760,
             585
           ],
-          "kind": "company"
+          "kind": "tiny ink",
+          "w": 90
         },
         {
-          "id": "title_mem0",
+          "id": "title_co_mem0",
           "entity": "co_mem0",
           "pos": [
             -400,
             645
           ],
-          "kind": "company"
+          "kind": "tiny green",
+          "w": 88
         }
       ],
       "edges": [
@@ -1646,6 +1541,18 @@ globalThis.PREZOGRAPH_DECK = {
           "label": ":runs"
         },
         {
+          "id": "title_edge_7",
+          "from": "n_untapped",
+          "to": "title_co_falkordb",
+          "label": ":backed"
+        },
+        {
+          "id": "title_edge_8",
+          "from": "n_agentfund",
+          "to": "title_co_mem0",
+          "label": ":backed"
+        },
+        {
           "id": "title_edge_9",
           "from": "n_build",
           "to": "y_babyagi",
@@ -1680,24 +1587,12 @@ globalThis.PREZOGRAPH_DECK = {
           "from": "y_b2",
           "to": "y_active",
           "label": ":then"
-        },
-        {
-          "id": "title_portfolio_falkor",
-          "from": "n_untapped",
-          "to": "title_falkordb",
-          "label": ":invests"
-        },
-        {
-          "id": "title_portfolio_mem0",
-          "from": "n_agentfund",
-          "to": "title_mem0",
-          "label": ":invests"
         }
       ],
       "beats": [
         {
-          "id": "identity",
-          "label": "Identity",
+          "id": "cue_1",
+          "label": "Opening view",
           "show": [
             "t_hub",
             "t_speaker",
@@ -1707,11 +1602,16 @@ globalThis.PREZOGRAPH_DECK = {
             "t_hub",
             "t_speaker",
             "t_conf"
+          ],
+          "revealOrder": [
+            "t_hub",
+            "t_speaker",
+            "t_conf"
           ]
         },
         {
-          "id": "invest",
-          "label": "Investor",
+          "id": "cue_2",
+          "label": "Reveal 1",
           "show": [
             "t_hub",
             "t_speaker",
@@ -1723,11 +1623,14 @@ globalThis.PREZOGRAPH_DECK = {
             "t_speaker",
             "t_conf",
             "n_invest"
+          ],
+          "revealOrder": [
+            "n_invest"
           ]
         },
         {
-          "id": "build",
-          "label": "Builder",
+          "id": "cue_3",
+          "label": "Reveal 2",
           "show": [
             "t_hub",
             "t_speaker",
@@ -1741,11 +1644,46 @@ globalThis.PREZOGRAPH_DECK = {
             "t_conf",
             "n_invest",
             "n_build"
+          ],
+          "revealOrder": [
+            "n_build"
           ]
         },
         {
-          "id": "portfolio",
-          "label": "Portfolio",
+          "id": "cue_4",
+          "label": "Reveal 3",
+          "show": [
+            "t_hub",
+            "t_speaker",
+            "t_conf",
+            "n_invest",
+            "n_build",
+            "n_untapped",
+            "n_agentfund",
+            "title_co_falkordb",
+            "title_co_mem0"
+          ],
+          "focus": [
+            "t_hub",
+            "t_speaker",
+            "t_conf",
+            "n_invest",
+            "n_build",
+            "n_untapped",
+            "n_agentfund",
+            "title_co_falkordb",
+            "title_co_mem0"
+          ],
+          "revealOrder": [
+            "n_untapped",
+            "n_agentfund",
+            "title_co_falkordb",
+            "title_co_mem0"
+          ]
+        },
+        {
+          "id": "cue_5",
+          "label": "Reveal 4",
           "show": [
             "t_hub",
             "t_speaker",
@@ -1760,33 +1698,47 @@ globalThis.PREZOGRAPH_DECK = {
             "y_pretty",
             "y_b2",
             "y_active",
-            "title_falkordb",
-            "title_mem0"
+            "title_co_falkordb",
+            "title_co_mem0"
           ],
           "focus": [
+            "t_hub",
+            "t_speaker",
+            "t_conf",
+            "n_invest",
+            "n_build",
             "n_untapped",
             "n_agentfund",
-            "title_falkordb",
-            "title_mem0"
+            "y_babyagi",
+            "y_insta",
+            "y_mind",
+            "y_pretty",
+            "y_b2",
+            "y_active",
+            "title_co_falkordb",
+            "title_co_mem0"
           ],
           "revealOrder": [
-            "n_untapped",
-            "title_falkordb",
-            "n_agentfund",
-            "title_mem0"
+            "y_babyagi",
+            "y_insta",
+            "y_mind",
+            "y_pretty",
+            "y_b2",
+            "y_active"
           ]
         }
       ],
       "layout": {
-        "fitMargin": 200,
+        "fitMargin": 190,
         "zoomMax": 1,
-        "minReadableScale": 0.48
+        "noCard": true,
+        "minReadableScale": 0.36
       }
     },
     {
-      "id": "same-facts",
-      "title": "Same facts, different relationship cost",
-      "caption": "The claim is not that tables are bad. It is that relationship-heavy questions reward relationship-first models.",
+      "id": "order-chaos",
+      "title": "Order vs chaos",
+      "caption": "the same seven nodes and seven edges — drawn, the structure is obvious; listed, it is invisible",
       "anchor": [
         1577,
         869
@@ -1841,42 +1793,33 @@ globalThis.PREZOGRAPH_DECK = {
       ],
       "beats": [
         {
-          "id": "facts",
-          "label": "Same facts",
-          "show": [
-            "oc_data"
-          ],
-          "focus": [
-            "oc_data"
-          ]
-        },
-        {
-          "id": "representations",
-          "label": "Two representations",
+          "id": "cue_1",
+          "label": "Opening view",
           "show": [
             "oc_data",
             "oc_order",
             "oc_chaos"
           ],
           "focus": [
+            "oc_data",
             "oc_order",
             "oc_chaos"
           ],
           "revealOrder": [
+            "oc_data",
             "oc_order",
             "oc_chaos"
           ]
         }
       ],
       "layout": {
-        "fitMargin": 150,
-        "minReadableScale": 0.48
+        "minReadableScale": 0.36
       }
     },
     {
       "id": "everything",
-      "title": "Everything is already a graph",
-      "caption": "Objects matter; the relationships between them are where systems start to explain themselves.",
+      "title": "Everything is a graph",
+      "caption": "press next: ten real things, five domains, one interwoven graph",
       "anchor": [
         2128,
         811
@@ -2170,12 +2113,18 @@ globalThis.PREZOGRAPH_DECK = {
           "from": "i_bob",
           "to": "i_src",
           "label": ":wrote"
+        },
+        {
+          "id": "everything_nrt_sea",
+          "from": "i_nrt",
+          "to": "i_sea",
+          "label": ":flight"
         }
       ],
       "beats": [
         {
-          "id": "domains",
-          "label": "Domains",
+          "id": "cue_1",
+          "label": "Opening view",
           "show": [
             "ev_hub",
             "ev_social",
@@ -2191,11 +2140,19 @@ globalThis.PREZOGRAPH_DECK = {
             "ev_objects",
             "ev_places",
             "ev_beliefs"
+          ],
+          "revealOrder": [
+            "ev_hub",
+            "ev_social",
+            "ev_business",
+            "ev_objects",
+            "ev_places",
+            "ev_beliefs"
           ]
         },
         {
-          "id": "examples",
-          "label": "Examples",
+          "id": "cue_2",
+          "label": "Reveal 1",
           "show": [
             "ev_hub",
             "ev_social",
@@ -2221,6 +2178,18 @@ globalThis.PREZOGRAPH_DECK = {
             "ev_objects",
             "ev_places",
             "ev_beliefs",
+            "i_alice",
+            "i_bob",
+            "i_fund",
+            "i_acme",
+            "i_car",
+            "i_wheel",
+            "i_nrt",
+            "i_sea",
+            "i_claim",
+            "i_src"
+          ],
+          "revealOrder": [
             "i_alice",
             "i_bob",
             "i_fund",
@@ -2235,241 +2204,120 @@ globalThis.PREZOGRAPH_DECK = {
         }
       ],
       "layout": {
-        "fitMargin": 150,
-        "minReadableScale": 0.48
+        "minReadableScale": 0.36
       }
     },
     {
-      "id": "agent-exhaust",
-      "title": "Agents leave a graph behind",
-      "caption": "The graph is present in the trace whether or not the application persists it as a graph.",
+      "id": "rows-edges",
+      "title": "Rows and edges",
+      "caption": "same node, two views — Rows are the Chaos tables, Edges are the Order drawing",
       "anchor": [
         1577,
         955
       ],
       "instances": [
         {
-          "id": "ag_trace_hub",
-          "entity": "ag_trace_hub",
+          "id": "re_edges",
+          "entity": "re_edges",
           "pos": [
-            0,
-            0
+            -295,
+            106
           ],
-          "kind": "hub",
-          "r": 54
+          "kind": "green",
+          "w": 195
         },
         {
-          "id": "ag_prompt",
-          "entity": "ag_prompt",
+          "id": "re_rows",
+          "entity": "re_rows",
           "pos": [
-            -420,
-            -210
-          ]
+            316,
+            59
+          ],
+          "kind": "tan",
+          "w": 200
         },
         {
-          "id": "ag_plan",
-          "entity": "ag_plan",
-          "pos": [
-            -150,
-            -250
-          ]
-        },
-        {
-          "id": "ag_tool",
-          "entity": "ag_tool",
-          "pos": [
-            155,
-            -210
-          ]
-        },
-        {
-          "id": "ag_result",
-          "entity": "ag_result",
-          "pos": [
-            420,
-            -70
-          ]
-        },
-        {
-          "id": "ag_memory",
-          "entity": "ag_memory",
-          "pos": [
-            315,
-            250
-          ]
-        },
-        {
-          "id": "ag_trace",
-          "entity": "ag_trace",
+          "id": "rows-edges_oc_data",
+          "entity": "oc_data",
           "pos": [
             0,
-            300
-          ]
+            -250
+          ],
+          "kind": "ink",
+          "w": 165
         },
         {
-          "id": "ag_eval",
-          "entity": "ag_eval",
+          "id": "rows-edges_oc_order",
+          "entity": "oc_order",
           "pos": [
             -330,
-            220
-          ]
+            -60
+          ],
+          "kind": "img green",
+          "w": 260,
+          "visual": "network7"
+        },
+        {
+          "id": "rows-edges_oc_chaos",
+          "entity": "oc_chaos",
+          "pos": [
+            330,
+            -60
+          ],
+          "kind": "img tan",
+          "w": 245,
+          "visual": "table7"
         }
       ],
       "edges": [
         {
-          "id": "ag_e1",
-          "from": "ag_prompt",
-          "to": "ag_plan",
-          "label": ":prompts"
+          "id": "rows-edges_edge_1",
+          "from": "rows-edges_oc_data",
+          "to": "re_edges",
+          "label": ":as_edges"
         },
         {
-          "id": "ag_e2",
-          "from": "ag_plan",
-          "to": "ag_tool",
-          "label": ":invokes"
-        },
-        {
-          "id": "ag_e3",
-          "from": "ag_tool",
-          "to": "ag_result",
-          "label": ":returns"
-        },
-        {
-          "id": "ag_e4",
-          "from": "ag_result",
-          "to": "ag_memory",
-          "label": ":updates"
-        },
-        {
-          "id": "ag_e5",
-          "from": "ag_result",
-          "to": "ag_trace",
-          "label": ":records"
-        },
-        {
-          "id": "ag_e6",
-          "from": "ag_trace",
-          "to": "ag_eval",
-          "label": ":feeds"
-        },
-        {
-          "id": "ag_e7",
-          "from": "ag_eval",
-          "to": "ag_plan",
-          "label": ":improves"
-        },
-        {
-          "id": "ag_spoke_1",
-          "from": "ag_trace_hub",
-          "to": "ag_prompt",
-          "kind": "spoke"
-        },
-        {
-          "id": "ag_spoke_2",
-          "from": "ag_trace_hub",
-          "to": "ag_plan",
-          "kind": "spoke"
-        },
-        {
-          "id": "ag_spoke_3",
-          "from": "ag_trace_hub",
-          "to": "ag_tool",
-          "kind": "spoke"
-        },
-        {
-          "id": "ag_spoke_4",
-          "from": "ag_trace_hub",
-          "to": "ag_result",
-          "kind": "spoke"
-        },
-        {
-          "id": "ag_spoke_5",
-          "from": "ag_trace_hub",
-          "to": "ag_memory",
-          "kind": "spoke"
-        },
-        {
-          "id": "ag_spoke_6",
-          "from": "ag_trace_hub",
-          "to": "ag_trace",
-          "kind": "spoke"
-        },
-        {
-          "id": "ag_spoke_7",
-          "from": "ag_trace_hub",
-          "to": "ag_eval",
-          "kind": "spoke"
+          "id": "rows-edges_edge_2",
+          "from": "rows-edges_oc_data",
+          "to": "re_rows",
+          "label": ":as_rows"
         }
       ],
       "beats": [
         {
-          "id": "intent",
-          "label": "Intent",
+          "id": "cue_1",
+          "label": "Opening view",
           "show": [
-            "ag_trace_hub",
-            "ag_prompt"
+            "re_edges",
+            "re_rows",
+            "rows-edges_oc_data",
+            "rows-edges_oc_order",
+            "rows-edges_oc_chaos"
           ],
           "focus": [
-            "ag_trace_hub",
-            "ag_prompt"
-          ]
-        },
-        {
-          "id": "execution",
-          "label": "Execution",
-          "show": [
-            "ag_trace_hub",
-            "ag_prompt",
-            "ag_plan",
-            "ag_tool",
-            "ag_result"
-          ],
-          "focus": [
-            "ag_prompt",
-            "ag_plan",
-            "ag_tool",
-            "ag_result"
+            "re_edges",
+            "re_rows",
+            "rows-edges_oc_data",
+            "rows-edges_oc_order",
+            "rows-edges_oc_chaos"
           ],
           "revealOrder": [
-            "ag_plan",
-            "ag_tool",
-            "ag_result"
-          ]
-        },
-        {
-          "id": "learning",
-          "label": "Learning loop",
-          "show": [
-            "ag_trace_hub",
-            "ag_prompt",
-            "ag_plan",
-            "ag_tool",
-            "ag_result",
-            "ag_memory",
-            "ag_trace",
-            "ag_eval"
-          ],
-          "focus": [
-            "ag_memory",
-            "ag_trace",
-            "ag_eval"
-          ],
-          "revealOrder": [
-            "ag_memory",
-            "ag_trace",
-            "ag_eval"
+            "re_edges",
+            "re_rows",
+            "rows-edges_oc_data",
+            "rows-edges_oc_order",
+            "rows-edges_oc_chaos"
           ]
         }
       ],
       "layout": {
-        "fitMargin": 150,
-        "minReadableScale": 0.48
+        "minReadableScale": 0.36
       }
     },
     {
       "id": "timeline",
-      "title": "Agents became graph-shaped in public",
-      "caption": "Selected milestones, not an exhaustive history. Product names and statuses are current as of July 24, 2026.",
+      "title": "Agents got graph-shaped in public",
+      "caption": "Reasoning, interoperability, and durable state converged in parallel",
       "anchor": [
         2004,
         1436
@@ -2479,8 +2327,8 @@ globalThis.PREZOGRAPH_DECK = {
           "id": "tl_hub",
           "entity": "tl_hub",
           "pos": [
-            -1170,
-            -95
+            -820,
+            -420
           ],
           "kind": "hub ink",
           "w": 215
@@ -2489,8 +2337,8 @@ globalThis.PREZOGRAPH_DECK = {
           "id": "tl_react",
           "entity": "tl_react",
           "pos": [
-            -850,
-            50
+            -600,
+            -180
           ],
           "kind": "ink",
           "w": 165
@@ -2499,8 +2347,8 @@ globalThis.PREZOGRAPH_DECK = {
           "id": "tl_baby",
           "entity": "tl_baby",
           "pos": [
-            -613,
-            -120
+            -200,
+            -180
           ],
           "kind": "ink",
           "w": 205
@@ -2509,8 +2357,8 @@ globalThis.PREZOGRAPH_DECK = {
           "id": "tl_fc",
           "entity": "tl_fc",
           "pos": [
-            -350,
-            60
+            -600,
+            40
           ],
           "kind": "ink",
           "w": 165
@@ -2519,8 +2367,8 @@ globalThis.PREZOGRAPH_DECK = {
           "id": "tl_ag",
           "entity": "tl_ag",
           "pos": [
-            -112,
-            -121
+            -600,
+            260
           ],
           "kind": "ink",
           "w": 190
@@ -2529,8 +2377,8 @@ globalThis.PREZOGRAPH_DECK = {
           "id": "tl_lg",
           "entity": "tl_lg",
           "pos": [
-            134,
-            71
+            200,
+            -180
           ],
           "kind": "ink",
           "w": 175
@@ -2539,8 +2387,8 @@ globalThis.PREZOGRAPH_DECK = {
           "id": "tl_gr",
           "entity": "tl_gr",
           "pos": [
-            415,
-            -118
+            -200,
+            260
           ],
           "kind": "ink",
           "w": 190
@@ -2549,8 +2397,8 @@ globalThis.PREZOGRAPH_DECK = {
           "id": "tl_mcp",
           "entity": "tl_mcp",
           "pos": [
-            645,
-            56
+            -200,
+            40
           ],
           "kind": "ink",
           "w": 180
@@ -2559,293 +2407,189 @@ globalThis.PREZOGRAPH_DECK = {
           "id": "tl_op",
           "entity": "tl_op",
           "pos": [
-            847,
-            -77
+            200,
+            260
           ],
           "kind": "ink",
           "w": 195
         },
         {
+          "id": "tl_responses",
+          "entity": "tl_responses",
+          "pos": [
+            200,
+            40
+          ],
+          "kind": "indigo",
+          "w": 230
+        },
+        {
           "id": "tl_a2a",
           "entity": "tl_a2a",
           "pos": [
-            995,
-            -24
-          ]
-        },
-        {
-          "id": "tl_skills",
-          "entity": "tl_skills",
-          "pos": [
-            1325,
-            161
-          ]
-        },
-        {
-          "id": "tl_aaif",
-          "entity": "tl_aaif",
-          "pos": [
-            1655,
-            -19
-          ]
+            600,
+            40
+          ],
+          "kind": "indigo",
+          "w": 210
         }
       ],
       "edges": [
         {
-          "id": "timeline_1",
+          "id": "timeline_reason_1",
           "from": "tl_react",
           "to": "tl_baby",
-          "label": ":next",
-          "kind": "timeline"
+          "label": ":develops"
         },
         {
-          "id": "timeline_2",
+          "id": "timeline_reason_2",
           "from": "tl_baby",
-          "to": "tl_fc",
-          "label": ":next",
-          "kind": "timeline"
-        },
-        {
-          "id": "timeline_3",
-          "from": "tl_fc",
-          "to": "tl_ag",
-          "label": ":next",
-          "kind": "timeline"
-        },
-        {
-          "id": "timeline_4",
-          "from": "tl_ag",
           "to": "tl_lg",
-          "label": ":next",
-          "kind": "timeline"
+          "label": ":develops"
         },
         {
-          "id": "timeline_5",
-          "from": "tl_lg",
-          "to": "tl_gr",
-          "label": ":next",
-          "kind": "timeline"
-        },
-        {
-          "id": "timeline_6",
-          "from": "tl_gr",
+          "id": "timeline_tools_1",
+          "from": "tl_fc",
           "to": "tl_mcp",
-          "label": ":next",
-          "kind": "timeline"
+          "label": ":opens"
         },
         {
-          "id": "timeline_7",
+          "id": "timeline_tools_2",
+          "from": "tl_mcp",
+          "to": "tl_responses",
+          "label": ":converges"
+        },
+        {
+          "id": "timeline_tools_3",
+          "from": "tl_responses",
+          "to": "tl_a2a",
+          "label": ":interoperates"
+        },
+        {
+          "id": "timeline_state_1",
+          "from": "tl_ag",
+          "to": "tl_gr",
+          "label": ":adds_state"
+        },
+        {
+          "id": "timeline_state_2",
+          "from": "tl_gr",
+          "to": "tl_op",
+          "label": ":acts_in_world"
+        },
+        {
+          "id": "timeline_cross_1",
+          "from": "tl_lg",
+          "to": "tl_responses",
+          "label": ":converges",
+          "kind": "cross"
+        },
+        {
+          "id": "timeline_cross_2",
           "from": "tl_mcp",
           "to": "tl_op",
-          "label": ":next",
-          "kind": "timeline"
-        },
-        {
-          "id": "timeline_8",
-          "from": "tl_op",
-          "to": "tl_a2a",
-          "label": ":next",
-          "kind": "timeline"
-        },
-        {
-          "id": "timeline_9",
-          "from": "tl_a2a",
-          "to": "tl_skills",
-          "label": ":next",
-          "kind": "timeline"
-        },
-        {
-          "id": "timeline_10",
-          "from": "tl_skills",
-          "to": "tl_aaif",
-          "label": ":next",
-          "kind": "timeline"
-        },
-        {
-          "id": "timeline_spoke_1",
-          "from": "tl_hub",
-          "to": "tl_react",
-          "kind": "spoke"
-        },
-        {
-          "id": "timeline_spoke_2",
-          "from": "tl_hub",
-          "to": "tl_baby",
-          "kind": "spoke"
-        },
-        {
-          "id": "timeline_spoke_3",
-          "from": "tl_hub",
-          "to": "tl_fc",
-          "kind": "spoke"
-        },
-        {
-          "id": "timeline_spoke_4",
-          "from": "tl_hub",
-          "to": "tl_ag",
-          "kind": "spoke"
-        },
-        {
-          "id": "timeline_spoke_5",
-          "from": "tl_hub",
-          "to": "tl_lg",
-          "kind": "spoke"
-        },
-        {
-          "id": "timeline_spoke_6",
-          "from": "tl_hub",
-          "to": "tl_gr",
-          "kind": "spoke"
-        },
-        {
-          "id": "timeline_spoke_7",
-          "from": "tl_hub",
-          "to": "tl_mcp",
-          "kind": "spoke"
-        },
-        {
-          "id": "timeline_spoke_8",
-          "from": "tl_hub",
-          "to": "tl_op",
-          "kind": "spoke"
-        },
-        {
-          "id": "timeline_spoke_9",
-          "from": "tl_hub",
-          "to": "tl_a2a",
-          "kind": "spoke"
-        },
-        {
-          "id": "timeline_spoke_10",
-          "from": "tl_hub",
-          "to": "tl_skills",
-          "kind": "spoke"
-        },
-        {
-          "id": "timeline_spoke_11",
-          "from": "tl_hub",
-          "to": "tl_aaif",
-          "kind": "spoke"
+          "label": ":enables",
+          "kind": "cross"
         }
       ],
       "beats": [
         {
-          "id": "year_2022",
-          "label": "2022",
-          "show": [
-            "tl_hub",
-            "tl_react"
-          ],
-          "focus": [
-            "tl_hub",
-            "tl_react"
-          ]
-        },
-        {
-          "id": "year_2023",
-          "label": "2023",
+          "id": "reasoning",
+          "label": "Reasoning and orchestration",
           "show": [
             "tl_hub",
             "tl_react",
             "tl_baby",
-            "tl_fc",
-            "tl_ag"
+            "tl_lg"
           ],
           "focus": [
+            "tl_hub",
+            "tl_react",
             "tl_baby",
-            "tl_fc",
-            "tl_ag"
+            "tl_lg"
           ],
           "revealOrder": [
+            "tl_hub",
+            "tl_react",
             "tl_baby",
-            "tl_fc",
-            "tl_ag"
+            "tl_lg"
           ]
         },
         {
-          "id": "year_2024",
-          "label": "2024",
+          "id": "interoperability",
+          "label": "Tools and interoperability",
           "show": [
             "tl_hub",
             "tl_react",
             "tl_baby",
+            "tl_lg",
             "tl_fc",
-            "tl_ag",
-            "tl_lg",
-            "tl_gr",
-            "tl_mcp"
-          ],
-          "focus": [
-            "tl_lg",
-            "tl_gr",
-            "tl_mcp"
-          ],
-          "revealOrder": [
-            "tl_lg",
-            "tl_gr",
-            "tl_mcp"
-          ]
-        },
-        {
-          "id": "year_2025",
-          "label": "2025",
-          "show": [
-            "tl_hub",
-            "tl_react",
-            "tl_baby",
-            "tl_fc",
-            "tl_ag",
-            "tl_lg",
-            "tl_gr",
             "tl_mcp",
-            "tl_op",
+            "tl_responses",
             "tl_a2a"
           ],
           "focus": [
-            "tl_op",
+            "tl_hub",
+            "tl_react",
+            "tl_baby",
+            "tl_lg",
+            "tl_fc",
+            "tl_mcp",
+            "tl_responses",
             "tl_a2a"
           ],
           "revealOrder": [
-            "tl_op",
+            "tl_fc",
+            "tl_mcp",
+            "tl_responses",
             "tl_a2a"
           ]
         },
         {
-          "id": "year_2026",
-          "label": "2026 view",
+          "id": "state",
+          "label": "State, knowledge, and environment",
           "show": [
             "tl_hub",
             "tl_react",
             "tl_baby",
-            "tl_fc",
-            "tl_ag",
             "tl_lg",
-            "tl_gr",
+            "tl_fc",
             "tl_mcp",
-            "tl_op",
+            "tl_responses",
             "tl_a2a",
-            "tl_skills",
-            "tl_aaif"
+            "tl_ag",
+            "tl_gr",
+            "tl_op"
           ],
           "focus": [
-            "tl_skills",
-            "tl_aaif"
+            "tl_hub",
+            "tl_react",
+            "tl_baby",
+            "tl_lg",
+            "tl_fc",
+            "tl_mcp",
+            "tl_responses",
+            "tl_a2a",
+            "tl_ag",
+            "tl_gr",
+            "tl_op"
           ],
           "revealOrder": [
-            "tl_skills",
-            "tl_aaif"
+            "tl_ag",
+            "tl_gr",
+            "tl_op"
           ]
         }
       ],
       "layout": {
-        "fitMargin": 200,
-        "minReadableScale": 0.48
+        "fitMargin": 120,
+        "minReadableScale": 0.36
       }
     },
     {
       "id": "inversion",
-      "title": "Invert the ontology workflow",
-      "caption": "A model-first ontology is still valuable in stable domains. The inversion is useful when observed behavior changes faster than the model.",
+      "title": "The inversion",
+      "caption": "the ontology doesn’t disappear — it moves from the front of a dead-end pipeline into the loop itself",
       "anchor": [
         3084,
         901
@@ -2978,26 +2722,30 @@ globalThis.PREZOGRAPH_DECK = {
           "id": "inversion_edge_4",
           "from": "inv_use_new",
           "to": "inv_prop",
-          "kind": "cycle"
+          "kind": "cycle",
+          "curve": -40
         },
         {
           "id": "inversion_edge_5",
           "from": "inv_prop",
           "to": "inv_val",
-          "kind": "cycle"
+          "kind": "cycle",
+          "curve": -40
         },
         {
           "id": "inversion_edge_6",
           "from": "inv_val",
           "to": "inv_ont_new",
-          "kind": "cycle"
+          "kind": "cycle",
+          "curve": -40
         },
         {
           "id": "inversion_edge_7",
           "from": "inv_ont_new",
           "to": "inv_use_new",
           "label": ":next_run",
-          "kind": "cycle"
+          "kind": "cycle",
+          "curve": -40
         },
         {
           "id": "inversion_edge_8",
@@ -3009,53 +2757,8 @@ globalThis.PREZOGRAPH_DECK = {
       ],
       "beats": [
         {
-          "id": "model-first",
-          "label": "Model first",
-          "show": [
-            "inv_g_old",
-            "inv_ont_old",
-            "inv_ing",
-            "inv_use_old",
-            "inv_decay"
-          ],
-          "focus": [
-            "inv_g_old",
-            "inv_ont_old",
-            "inv_ing",
-            "inv_use_old",
-            "inv_decay"
-          ]
-        },
-        {
-          "id": "observe",
-          "label": "Observe use",
-          "show": [
-            "inv_g_old",
-            "inv_ont_old",
-            "inv_ing",
-            "inv_use_old",
-            "inv_decay",
-            "inv_g_new",
-            "inv_use_new",
-            "inv_prop",
-            "inv_val"
-          ],
-          "focus": [
-            "inv_g_new",
-            "inv_use_new",
-            "inv_prop",
-            "inv_val"
-          ],
-          "revealOrder": [
-            "inv_g_new",
-            "inv_use_new",
-            "inv_prop",
-            "inv_val"
-          ]
-        },
-        {
-          "id": "govern",
-          "label": "Govern the living model",
+          "id": "cue_1",
+          "label": "Opening view",
           "show": [
             "inv_g_old",
             "inv_ont_old",
@@ -3069,23 +2772,39 @@ globalThis.PREZOGRAPH_DECK = {
             "inv_ont_new"
           ],
           "focus": [
+            "inv_g_old",
+            "inv_ont_old",
+            "inv_ing",
+            "inv_use_old",
+            "inv_decay",
+            "inv_g_new",
+            "inv_use_new",
+            "inv_prop",
             "inv_val",
             "inv_ont_new"
           ],
           "revealOrder": [
+            "inv_g_old",
+            "inv_ont_old",
+            "inv_ing",
+            "inv_use_old",
+            "inv_decay",
+            "inv_g_new",
+            "inv_use_new",
+            "inv_prop",
+            "inv_val",
             "inv_ont_new"
           ]
         }
       ],
       "layout": {
-        "fitMargin": 150,
-        "minReadableScale": 0.48
+        "minReadableScale": 0.36
       }
     },
     {
-      "id": "new-job",
-      "title": "The new job is continuous relationship governance",
-      "caption": "Five durable questions turn a changing graph into a usable system.",
+      "id": "job",
+      "title": "The job, before and after",
+      "caption": "press next: the old job becomes a new one — then meet the state it tends, and its five questions",
       "anchor": [
         2589,
         1058
@@ -3214,28 +2933,36 @@ globalThis.PREZOGRAPH_DECK = {
       ],
       "beats": [
         {
-          "id": "before",
-          "label": "Before",
+          "id": "cue_1",
+          "label": "Opening view",
           "show": [
             "st_before"
           ],
           "focus": [
             "st_before"
+          ],
+          "revealOrder": [
+            "st_before"
           ]
         },
         {
-          "id": "after",
-          "label": "After",
+          "id": "cue_2",
+          "label": "Reveal 1",
           "show": [
+            "st_before",
             "st_after"
           ],
           "focus": [
+            "st_before",
+            "st_after"
+          ],
+          "revealOrder": [
             "st_after"
           ]
         },
         {
-          "id": "questions",
-          "label": "Five questions",
+          "id": "cue_3",
+          "label": "Reveal 2",
           "show": [
             "st_before",
             "st_after",
@@ -3247,6 +2974,8 @@ globalThis.PREZOGRAPH_DECK = {
             "st_corr"
           ],
           "focus": [
+            "st_before",
+            "st_after",
             "st_hub",
             "st_id",
             "st_perm",
@@ -3265,14 +2994,13 @@ globalThis.PREZOGRAPH_DECK = {
         }
       ],
       "layout": {
-        "fitMargin": 150,
-        "minReadableScale": 0.48
+        "minReadableScale": 0.36
       }
     },
     {
       "id": "market",
-      "title": "A market forms around the questions",
-      "caption": "Market segments monetize infrastructure layers and recurring relationship workloads; the mapping is illustrative, not exclusive.",
+      "title": "The market organizes around the same questions",
+      "caption": "six segments — each one sells an answer to a question this talk already asked",
       "anchor": [
         2027,
         1846
@@ -3347,51 +3075,6 @@ globalThis.PREZOGRAPH_DECK = {
           ],
           "kind": "ink",
           "w": 215
-        },
-        {
-          "id": "market_identity",
-          "entity": "st_id",
-          "pos": [
-            -260,
-            365
-          ],
-          "kind": "question"
-        },
-        {
-          "id": "market_time",
-          "entity": "st_time",
-          "pos": [
-            470,
-            65
-          ],
-          "kind": "question"
-        },
-        {
-          "id": "market_provenance",
-          "entity": "st_prov",
-          "pos": [
-            -230,
-            305
-          ],
-          "kind": "question"
-        },
-        {
-          "id": "market_correction",
-          "entity": "st_corr",
-          "pos": [
-            218,
-            -367
-          ],
-          "kind": "question"
-        },
-        {
-          "id": "market_permission",
-          "entity": "st_perm",
-          "pos": [
-            -710,
-            -312
-          ],
-          "kind": "question"
         }
       ],
       "edges": [
@@ -3424,42 +3107,12 @@ globalThis.PREZOGRAPH_DECK = {
           "id": "market_edge_6",
           "from": "mk_hub",
           "to": "seg_viz"
-        },
-        {
-          "id": "market_q1",
-          "from": "seg_er",
-          "to": "market_identity",
-          "label": ":resolves"
-        },
-        {
-          "id": "market_q2",
-          "from": "seg_mem",
-          "to": "market_time",
-          "label": ":remembers"
-        },
-        {
-          "id": "market_q3",
-          "from": "seg_kg",
-          "to": "market_provenance",
-          "label": ":explains"
-        },
-        {
-          "id": "market_q4",
-          "from": "seg_build",
-          "to": "market_correction",
-          "label": ":maintains"
-        },
-        {
-          "id": "market_q5",
-          "from": "seg_db",
-          "to": "market_permission",
-          "label": ":governs"
         }
       ],
       "beats": [
         {
-          "id": "layers",
-          "label": "Infrastructure layers",
+          "id": "cue_1",
+          "label": "Opening view",
           "show": [
             "mk_hub",
             "seg_db",
@@ -3477,118 +3130,31 @@ globalThis.PREZOGRAPH_DECK = {
             "seg_kg",
             "seg_er",
             "seg_viz"
-          ]
-        },
-        {
-          "id": "workloads",
-          "label": "Relationship workloads",
-          "show": [
-            "mk_hub",
-            "seg_db",
-            "seg_build",
-            "seg_mem",
-            "seg_kg",
-            "seg_er",
-            "seg_viz",
-            "market_identity",
-            "market_time",
-            "market_provenance",
-            "market_correction",
-            "market_permission"
-          ],
-          "focus": [
-            "market_identity",
-            "market_time",
-            "market_provenance",
-            "market_correction",
-            "market_permission"
           ],
           "revealOrder": [
-            "market_identity",
-            "market_time",
-            "market_provenance",
-            "market_correction",
-            "market_permission"
+            "mk_hub",
+            "seg_db",
+            "seg_build",
+            "seg_mem",
+            "seg_kg",
+            "seg_er",
+            "seg_viz"
           ]
         }
       ],
       "layout": {
-        "fitMargin": 180,
-        "minReadableScale": 0.48
+        "minReadableScale": 0.36
       }
     },
     {
       "id": "companies",
-      "title": "The company landscape",
-      "caption": "Illustrative landscape as of July 24, 2026. ◈ marks the speaker's disclosed portfolio; platform products are included alongside independent vendors.",
+      "title": "…and who is building it",
+      "caption": "15 selected independent graph companies · names on stage, sourced details on focus · reviewed July 24, 2026",
       "anchor": [
         2027,
         1846
       ],
       "instances": [
-        {
-          "id": "companies_hub",
-          "entity": "mk_hub",
-          "pos": [
-            28,
-            -416
-          ],
-          "kind": "hub ink"
-        },
-        {
-          "id": "companies_seg_db",
-          "entity": "seg_db",
-          "pos": [
-            -490,
-            -162
-          ],
-          "kind": "ink"
-        },
-        {
-          "id": "companies_seg_build",
-          "entity": "seg_build",
-          "pos": [
-            -12,
-            -217
-          ],
-          "kind": "green"
-        },
-        {
-          "id": "companies_seg_mem",
-          "entity": "seg_mem",
-          "pos": [
-            470,
-            -155
-          ],
-          "kind": "green"
-        },
-        {
-          "id": "companies_seg_kg",
-          "entity": "seg_kg",
-          "pos": [
-            -470,
-            145
-          ],
-          "kind": "tan"
-        },
-        {
-          "id": "companies_seg_er",
-          "entity": "seg_er",
-          "pos": [
-            0,
-            185
-          ],
-          "kind": "indigo"
-        },
-        {
-          "id": "companies_seg_viz",
-          "entity": "seg_viz",
-          "pos": [
-            470,
-            145
-          ],
-          "kind": "ink"
-        },
         {
           "id": "co_neo4j",
           "entity": "co_neo4j",
@@ -3598,46 +3164,6 @@ globalThis.PREZOGRAPH_DECK = {
           ],
           "kind": "tiny ink",
           "w": 88
-        },
-        {
-          "id": "co_tigergraph",
-          "entity": "co_tigergraph",
-          "pos": [
-            -660,
-            -155
-          ],
-          "kind": "tiny ink",
-          "w": 106
-        },
-        {
-          "id": "co_memgraph",
-          "entity": "co_memgraph",
-          "pos": [
-            -642,
-            -235
-          ],
-          "kind": "tiny ink",
-          "w": 90
-        },
-        {
-          "id": "co_arangodb",
-          "entity": "co_arangodb",
-          "pos": [
-            -592,
-            -301
-          ],
-          "kind": "tiny ink",
-          "w": 90
-        },
-        {
-          "id": "co_hypermodedgrap",
-          "entity": "co_hypermodedgrap",
-          "pos": [
-            -515,
-            -320
-          ],
-          "kind": "tiny ink",
-          "w": 170
         },
         {
           "id": "co_falkordb",
@@ -3650,26 +3176,6 @@ globalThis.PREZOGRAPH_DECK = {
           "w": 90
         },
         {
-          "id": "co_nebulagraph",
-          "entity": "co_nebulagraph",
-          "pos": [
-            -770,
-            -210
-          ],
-          "kind": "tiny ink",
-          "w": 114
-        },
-        {
-          "id": "co_ultipa",
-          "entity": "co_ultipa",
-          "pos": [
-            -708,
-            -346
-          ],
-          "kind": "tiny ink",
-          "w": 88
-        },
-        {
           "id": "co_puppygraph",
           "entity": "co_puppygraph",
           "pos": [
@@ -3678,36 +3184,6 @@ globalThis.PREZOGRAPH_DECK = {
           ],
           "kind": "tiny ink",
           "w": 106
-        },
-        {
-          "id": "co_diffbot",
-          "entity": "co_diffbot",
-          "pos": [
-            -145,
-            -345
-          ],
-          "kind": "tiny green",
-          "w": 88
-        },
-        {
-          "id": "co_lettria",
-          "entity": "co_lettria",
-          "pos": [
-            -67,
-            -363
-          ],
-          "kind": "tiny green",
-          "w": 88
-        },
-        {
-          "id": "co_graphlit",
-          "entity": "co_graphlit",
-          "pos": [
-            110,
-            -422
-          ],
-          "kind": "tiny green",
-          "w": 90
         },
         {
           "id": "co_mem0",
@@ -3738,46 +3214,6 @@ globalThis.PREZOGRAPH_DECK = {
           ],
           "kind": "tiny tan",
           "w": 186
-        },
-        {
-          "id": "co_franzallegrogr",
-          "entity": "co_franzallegrogr",
-          "pos": [
-            -658,
-            173
-          ],
-          "kind": "tiny tan",
-          "w": 186
-        },
-        {
-          "id": "co_eccenca",
-          "entity": "co_eccenca",
-          "pos": [
-            -609,
-            84
-          ],
-          "kind": "tiny tan",
-          "w": 88
-        },
-        {
-          "id": "co_metaphacts",
-          "entity": "co_metaphacts",
-          "pos": [
-            -579,
-            430
-          ],
-          "kind": "tiny tan",
-          "w": 106
-        },
-        {
-          "id": "co_timbrai",
-          "entity": "co_timbrai",
-          "pos": [
-            -746,
-            274
-          ],
-          "kind": "tiny tan",
-          "w": 90
         },
         {
           "id": "co_relationalai",
@@ -3850,373 +3286,174 @@ globalThis.PREZOGRAPH_DECK = {
           "w": 106
         },
         {
-          "id": "companies_zep",
+          "id": "companies_mk_hub",
+          "entity": "mk_hub",
+          "pos": [
+            0,
+            -520
+          ],
+          "kind": "hub ink",
+          "w": 230
+        },
+        {
+          "id": "companies_seg_db",
+          "entity": "seg_db",
+          "pos": [
+            -570,
+            -300
+          ],
+          "kind": "ink",
+          "w": 195
+        },
+        {
+          "id": "companies_seg_mem",
+          "entity": "seg_mem",
+          "pos": [
+            350,
+            -300
+          ],
+          "kind": "green",
+          "w": 195
+        },
+        {
+          "id": "companies_seg_kg",
+          "entity": "seg_kg",
+          "pos": [
+            -570,
+            270
+          ],
+          "kind": "tan",
+          "w": 205
+        },
+        {
+          "id": "companies_seg_er",
+          "entity": "seg_er",
+          "pos": [
+            0,
+            300
+          ],
+          "kind": "indigo",
+          "w": 190
+        },
+        {
+          "id": "companies_seg_viz",
+          "entity": "seg_viz",
+          "pos": [
+            570,
+            270
+          ],
+          "kind": "ink",
+          "w": 215
+        },
+        {
+          "id": "companies_t_zep",
           "entity": "t_zep",
           "pos": [
-            800,
-            55
+            770,
+            -300
           ],
-          "kind": "company"
+          "kind": "company tiny",
+          "w": 160
         },
         {
-          "id": "co_neptune",
-          "entity": "co_neptune",
+          "id": "co_cognee",
+          "entity": "co_cognee",
           "pos": [
-            -840,
-            -392
+            110,
+            -422
           ],
-          "kind": "company"
-        },
-        {
-          "id": "co_spanner_graph",
-          "entity": "co_spanner_graph",
-          "pos": [
-            -140,
-            -392
-          ],
-          "kind": "company"
+          "kind": "tiny green",
+          "w": 90
         }
       ],
       "edges": [
         {
-          "id": "companies_market_edge_1",
-          "from": "companies_hub",
-          "to": "companies_seg_db"
-        },
-        {
-          "id": "companies_market_edge_2",
-          "from": "companies_hub",
-          "to": "companies_seg_build"
-        },
-        {
-          "id": "companies_market_edge_3",
-          "from": "companies_hub",
-          "to": "companies_seg_mem"
-        },
-        {
-          "id": "companies_market_edge_4",
-          "from": "companies_hub",
-          "to": "companies_seg_kg"
-        },
-        {
-          "id": "companies_market_edge_5",
-          "from": "companies_hub",
-          "to": "companies_seg_er"
-        },
-        {
-          "id": "companies_market_edge_6",
-          "from": "companies_hub",
-          "to": "companies_seg_viz"
-        },
-        {
-          "id": "companies_companies_edge_1",
+          "id": "companies_edge_1",
           "from": "companies_seg_db",
           "to": "co_neo4j"
         },
         {
-          "id": "companies_companies_edge_2",
-          "from": "companies_seg_db",
-          "to": "co_tigergraph"
-        },
-        {
-          "id": "companies_companies_edge_3",
-          "from": "companies_seg_db",
-          "to": "co_memgraph"
-        },
-        {
-          "id": "companies_companies_edge_4",
-          "from": "companies_seg_db",
-          "to": "co_arangodb"
-        },
-        {
-          "id": "companies_companies_edge_5",
-          "from": "companies_seg_db",
-          "to": "co_hypermodedgrap"
-        },
-        {
-          "id": "companies_companies_edge_6",
+          "id": "companies_edge_6",
           "from": "companies_seg_db",
           "to": "co_falkordb"
         },
         {
-          "id": "companies_companies_edge_7",
-          "from": "companies_seg_db",
-          "to": "co_nebulagraph"
-        },
-        {
-          "id": "companies_companies_edge_8",
-          "from": "companies_seg_db",
-          "to": "co_ultipa"
-        },
-        {
-          "id": "companies_companies_edge_9",
+          "id": "companies_edge_9",
           "from": "companies_seg_db",
           "to": "co_puppygraph"
         },
         {
-          "id": "companies_companies_edge_10",
-          "from": "companies_seg_build",
-          "to": "co_diffbot"
-        },
-        {
-          "id": "companies_companies_edge_11",
-          "from": "companies_seg_build",
-          "to": "co_lettria"
-        },
-        {
-          "id": "companies_companies_edge_12",
-          "from": "companies_seg_build",
-          "to": "co_graphlit"
-        },
-        {
-          "id": "companies_companies_edge_14",
+          "id": "companies_edge_13",
           "from": "companies_seg_mem",
           "to": "co_mem0"
         },
         {
-          "id": "companies_companies_edge_15",
+          "id": "companies_edge_14",
           "from": "companies_seg_kg",
           "to": "co_stardog"
         },
         {
-          "id": "companies_companies_edge_16",
+          "id": "companies_edge_15",
           "from": "companies_seg_kg",
           "to": "co_graphwiseontot"
         },
         {
-          "id": "companies_companies_edge_17",
-          "from": "companies_seg_kg",
-          "to": "co_franzallegrogr"
-        },
-        {
-          "id": "companies_companies_edge_18",
-          "from": "companies_seg_kg",
-          "to": "co_eccenca"
-        },
-        {
-          "id": "companies_companies_edge_19",
-          "from": "companies_seg_kg",
-          "to": "co_metaphacts"
-        },
-        {
-          "id": "companies_companies_edge_20",
-          "from": "companies_seg_kg",
-          "to": "co_timbrai"
-        },
-        {
-          "id": "companies_companies_edge_21",
+          "id": "companies_edge_20",
           "from": "companies_seg_kg",
           "to": "co_relationalai"
         },
         {
-          "id": "companies_companies_edge_22",
+          "id": "companies_edge_21",
           "from": "companies_seg_er",
           "to": "co_quantexa"
         },
         {
-          "id": "companies_companies_edge_23",
+          "id": "companies_edge_22",
           "from": "companies_seg_er",
           "to": "co_senzing"
         },
         {
-          "id": "companies_companies_edge_24",
+          "id": "companies_edge_23",
           "from": "companies_seg_er",
           "to": "co_tilores"
         },
         {
-          "id": "companies_companies_edge_25",
+          "id": "companies_edge_24",
           "from": "companies_seg_viz",
           "to": "co_linkurious"
         },
         {
-          "id": "companies_companies_edge_26",
+          "id": "companies_edge_25",
           "from": "companies_seg_viz",
           "to": "co_cambridgeintel"
         },
         {
-          "id": "companies_companies_edge_27",
+          "id": "companies_edge_26",
           "from": "companies_seg_viz",
           "to": "co_graphistry"
         },
         {
-          "id": "companies_companies_edge_28",
+          "id": "companies_edge_27",
           "from": "companies_seg_mem",
-          "to": "companies_zep"
+          "to": "companies_t_zep"
         },
         {
-          "id": "companies_neptune_edge",
-          "from": "companies_seg_db",
-          "to": "co_neptune",
-          "label": ":platform"
-        },
-        {
-          "id": "companies_spanner_edge",
-          "from": "companies_seg_db",
-          "to": "co_spanner_graph",
-          "label": ":platform"
-        },
-        {
-          "id": "companies_zep_edge",
+          "id": "companies_cognee",
           "from": "companies_seg_mem",
-          "to": "companies_zep",
-          "label": ":product"
+          "to": "co_cognee"
         }
       ],
       "beats": [
         {
-          "id": "databases",
-          "label": "Graph databases",
-          "show": [
-            "companies_hub",
-            "companies_seg_db",
-            "co_neo4j",
-            "co_tigergraph",
-            "co_memgraph",
-            "co_arangodb",
-            "co_hypermodedgrap",
-            "co_falkordb",
-            "co_nebulagraph",
-            "co_ultipa",
-            "co_puppygraph",
-            "co_neptune",
-            "co_spanner_graph"
-          ],
-          "focus": [
-            "companies_seg_db",
-            "co_neo4j",
-            "co_tigergraph",
-            "co_memgraph",
-            "co_arangodb",
-            "co_hypermodedgrap",
-            "co_falkordb",
-            "co_nebulagraph",
-            "co_ultipa",
-            "co_puppygraph",
-            "co_neptune",
-            "co_spanner_graph"
-          ]
-        },
-        {
-          "id": "construction",
-          "label": "Graph construction",
-          "show": [
-            "companies_hub",
-            "companies_seg_build",
-            "co_diffbot",
-            "co_lettria",
-            "co_graphlit"
-          ],
-          "focus": [
-            "companies_seg_build",
-            "co_diffbot",
-            "co_lettria",
-            "co_graphlit"
-          ]
-        },
-        {
-          "id": "memory",
-          "label": "Agent memory",
-          "show": [
-            "companies_hub",
-            "companies_seg_mem",
-            "co_mem0",
-            "companies_zep"
-          ],
-          "focus": [
-            "companies_seg_mem",
-            "co_mem0",
-            "companies_zep"
-          ]
-        },
-        {
-          "id": "semantic",
-          "label": "Semantic layer",
-          "show": [
-            "companies_hub",
-            "companies_seg_kg",
-            "co_stardog",
-            "co_graphwiseontot",
-            "co_franzallegrogr",
-            "co_eccenca",
-            "co_metaphacts",
-            "co_timbrai",
-            "co_relationalai"
-          ],
-          "focus": [
-            "companies_seg_kg",
-            "co_stardog",
-            "co_graphwiseontot",
-            "co_franzallegrogr",
-            "co_eccenca",
-            "co_metaphacts",
-            "co_timbrai",
-            "co_relationalai"
-          ]
-        },
-        {
-          "id": "resolution",
-          "label": "Entity resolution",
-          "show": [
-            "companies_hub",
-            "companies_seg_er",
-            "co_quantexa",
-            "co_senzing",
-            "co_tilores"
-          ],
-          "focus": [
-            "companies_seg_er",
-            "co_quantexa",
-            "co_senzing",
-            "co_tilores"
-          ]
-        },
-        {
-          "id": "visualization",
-          "label": "Visualization",
-          "show": [
-            "companies_hub",
-            "companies_seg_viz",
-            "co_linkurious",
-            "co_cambridgeintel",
-            "co_graphistry"
-          ],
-          "focus": [
-            "companies_seg_viz",
-            "co_linkurious",
-            "co_cambridgeintel",
-            "co_graphistry"
-          ]
-        },
-        {
           "id": "landscape",
-          "label": "Whole landscape",
+          "label": "Representative landscape",
           "show": [
-            "companies_hub",
-            "companies_seg_db",
-            "companies_seg_build",
-            "companies_seg_mem",
-            "companies_seg_kg",
-            "companies_seg_er",
-            "companies_seg_viz",
             "co_neo4j",
-            "co_tigergraph",
-            "co_memgraph",
-            "co_arangodb",
-            "co_hypermodedgrap",
             "co_falkordb",
-            "co_nebulagraph",
-            "co_ultipa",
             "co_puppygraph",
-            "co_diffbot",
-            "co_lettria",
-            "co_graphlit",
             "co_mem0",
             "co_stardog",
             "co_graphwiseontot",
-            "co_franzallegrogr",
-            "co_eccenca",
-            "co_metaphacts",
-            "co_timbrai",
             "co_relationalai",
             "co_quantexa",
             "co_senzing",
@@ -4224,37 +3461,22 @@ globalThis.PREZOGRAPH_DECK = {
             "co_linkurious",
             "co_cambridgeintel",
             "co_graphistry",
-            "companies_zep",
-            "co_neptune",
-            "co_spanner_graph"
+            "companies_mk_hub",
+            "companies_seg_db",
+            "companies_seg_mem",
+            "companies_seg_kg",
+            "companies_seg_er",
+            "companies_seg_viz",
+            "companies_t_zep",
+            "co_cognee"
           ],
           "focus": [
-            "companies_hub",
-            "companies_seg_db",
-            "companies_seg_build",
-            "companies_seg_mem",
-            "companies_seg_kg",
-            "companies_seg_er",
-            "companies_seg_viz",
             "co_neo4j",
-            "co_tigergraph",
-            "co_memgraph",
-            "co_arangodb",
-            "co_hypermodedgrap",
             "co_falkordb",
-            "co_nebulagraph",
-            "co_ultipa",
             "co_puppygraph",
-            "co_diffbot",
-            "co_lettria",
-            "co_graphlit",
             "co_mem0",
             "co_stardog",
             "co_graphwiseontot",
-            "co_franzallegrogr",
-            "co_eccenca",
-            "co_metaphacts",
-            "co_timbrai",
             "co_relationalai",
             "co_quantexa",
             "co_senzing",
@@ -4262,21 +3484,48 @@ globalThis.PREZOGRAPH_DECK = {
             "co_linkurious",
             "co_cambridgeintel",
             "co_graphistry",
-            "companies_zep",
-            "co_neptune",
-            "co_spanner_graph"
+            "companies_mk_hub",
+            "companies_seg_db",
+            "companies_seg_mem",
+            "companies_seg_kg",
+            "companies_seg_er",
+            "companies_seg_viz",
+            "companies_t_zep",
+            "co_cognee"
+          ],
+          "revealOrder": [
+            "co_neo4j",
+            "co_falkordb",
+            "co_puppygraph",
+            "co_mem0",
+            "co_stardog",
+            "co_graphwiseontot",
+            "co_relationalai",
+            "co_quantexa",
+            "co_senzing",
+            "co_tilores",
+            "co_linkurious",
+            "co_cambridgeintel",
+            "co_graphistry",
+            "companies_mk_hub",
+            "companies_seg_db",
+            "companies_seg_mem",
+            "companies_seg_kg",
+            "companies_seg_er",
+            "companies_seg_viz",
+            "companies_t_zep",
+            "co_cognee"
           ]
         }
       ],
       "layout": {
-        "fitMargin": 210,
-        "minReadableScale": 0.42
+        "minReadableScale": 0.36
       }
     },
     {
       "id": "map",
-      "title": "Pick a relationship-shaped problem",
-      "caption": "Start with one consequential relationship, make it inspectable, then widen only when the use case demands it.",
+      "title": "Pick your graph",
+      "caption": "six routes, one column each — the idea, then press next: what to build, then where to beat SOTA",
       "anchor": [
         2252,
         1193
@@ -4495,34 +3744,6 @@ globalThis.PREZOGRAPH_DECK = {
       ],
       "edges": [
         {
-          "id": "timeline_edge_17",
-          "from": "ex_reason",
-          "to": "ex_world",
-          "label": ":then",
-          "kind": "cross"
-        },
-        {
-          "id": "timeline_edge_18",
-          "from": "ex_world",
-          "to": "ex_know",
-          "label": ":then",
-          "kind": "cross"
-        },
-        {
-          "id": "timeline_edge_19",
-          "from": "ex_know",
-          "to": "ex_teams",
-          "label": ":then",
-          "kind": "cross"
-        },
-        {
-          "id": "timeline_edge_22",
-          "from": "ex_tools",
-          "to": "ex_traces",
-          "label": ":result_in",
-          "kind": "cross"
-        },
-        {
           "id": "map_edge_1",
           "from": "ex_hub",
           "to": "ex_teams"
@@ -4639,8 +3860,8 @@ globalThis.PREZOGRAPH_DECK = {
       ],
       "beats": [
         {
-          "id": "map",
-          "label": "Map the space",
+          "id": "cue_1",
+          "label": "Opening view",
           "show": [
             "ex_hub",
             "ex_reason",
@@ -4653,6 +3874,17 @@ globalThis.PREZOGRAPH_DECK = {
             "t_lsmith"
           ],
           "focus": [
+            "ex_hub",
+            "ex_reason",
+            "ex_world",
+            "ex_know",
+            "ex_teams",
+            "ex_tools",
+            "ex_traces",
+            "t_zep",
+            "t_lsmith"
+          ],
+          "revealOrder": [
             "ex_hub",
             "ex_reason",
             "ex_world",
@@ -4665,8 +3897,8 @@ globalThis.PREZOGRAPH_DECK = {
           ]
         },
         {
-          "id": "build",
-          "label": "Build one",
+          "id": "cue_2",
+          "label": "Reveal 1",
           "show": [
             "ex_hub",
             "ex_reason",
@@ -4675,22 +3907,31 @@ globalThis.PREZOGRAPH_DECK = {
             "ex_teams",
             "ex_tools",
             "ex_traces",
-            "t_zep",
-            "t_lsmith",
             "b_reason",
             "b_world",
             "b_know",
             "b_teams",
             "b_tools",
-            "b_traces"
+            "b_traces",
+            "t_zep",
+            "t_lsmith"
           ],
           "focus": [
+            "ex_hub",
+            "ex_reason",
+            "ex_world",
+            "ex_know",
+            "ex_teams",
+            "ex_tools",
+            "ex_traces",
             "b_reason",
             "b_world",
             "b_know",
             "b_teams",
             "b_tools",
-            "b_traces"
+            "b_traces",
+            "t_zep",
+            "t_lsmith"
           ],
           "revealOrder": [
             "b_reason",
@@ -4702,8 +3943,8 @@ globalThis.PREZOGRAPH_DECK = {
           ]
         },
         {
-          "id": "frontier",
-          "label": "Open frontier",
+          "id": "cue_3",
+          "label": "Reveal 2",
           "show": [
             "ex_hub",
             "ex_reason",
@@ -4728,12 +3969,27 @@ globalThis.PREZOGRAPH_DECK = {
             "t_lsmith"
           ],
           "focus": [
+            "ex_hub",
+            "ex_reason",
+            "ex_world",
+            "ex_know",
+            "ex_teams",
+            "ex_tools",
+            "ex_traces",
+            "b_reason",
+            "b_world",
+            "b_know",
+            "b_teams",
+            "b_tools",
+            "b_traces",
             "s_reason",
             "s_world",
             "s_know",
             "s_teams",
             "s_tools",
-            "s_traces"
+            "s_traces",
+            "t_zep",
+            "t_lsmith"
           ],
           "revealOrder": [
             "s_reason",
@@ -4746,187 +4002,261 @@ globalThis.PREZOGRAPH_DECK = {
         }
       ],
       "layout": {
-        "fitMargin": 150,
-        "minReadableScale": 0.48
+        "minReadableScale": 0.36
       }
     },
     {
-      "id": "open-source",
-      "title": "This deck is a graph",
-      "caption": "Prezograph separates reusable facts from local visual instances, then uses explicit beats to control the narrative.",
+      "id": "loops",
+      "title": "The loop above the loop",
+      "caption": "agents improve by running; communities improve by sharing; you improve by shortening your own learning cycle",
       "anchor": [
         3332,
         1148
       ],
       "instances": [
         {
-          "id": "oss_hub",
-          "entity": "oss_hub",
+          "id": "lp_agent",
+          "entity": "lp_agent",
           "pos": [
-            0,
-            0
+            -50,
+            -150
           ],
-          "kind": "hub",
-          "r": 56
+          "kind": "ring indigo",
+          "r": 88
         },
         {
-          "id": "oss_json",
-          "entity": "oss_json",
+          "id": "lp_comm",
+          "entity": "lp_comm",
           "pos": [
-            -430,
-            0
+            93,
+            -7
           ],
-          "visual": "jsonSnippet",
-          "w": 300
+          "kind": "ring green",
+          "r": 114
         },
         {
-          "id": "oss_entities",
-          "entity": "oss_entities",
+          "id": "lp_dev",
+          "entity": "lp_dev",
           "pos": [
-            -120,
-            -260
-          ]
-        },
-        {
-          "id": "oss_scenes",
-          "entity": "oss_scenes",
-          "pos": [
-            190,
-            -250
-          ]
-        },
-        {
-          "id": "oss_beats",
-          "entity": "oss_beats",
-          "pos": [
-            400,
-            20
-          ]
-        },
-        {
-          "id": "oss_camera",
-          "entity": "oss_camera",
-          "pos": [
-            160,
-            280
-          ]
-        },
-        {
-          "id": "oss_repo",
-          "entity": "oss_repo",
-          "pos": [
-            -230,
-            280
+            -27,
+            218
           ],
-          "kind": "company",
-          "w": 270
+          "kind": "ring tan",
+          "r": 142
+        },
+        {
+          "id": "lp_obs",
+          "entity": "lp_obs",
+          "pos": [
+            -50,
+            -238
+          ],
+          "kind": "tiny indigo",
+          "w": 88
+        },
+        {
+          "id": "lp_rsn",
+          "entity": "lp_rsn",
+          "pos": [
+            26,
+            -106
+          ],
+          "kind": "tiny indigo",
+          "w": 84
+        },
+        {
+          "id": "lp_act",
+          "entity": "lp_act",
+          "pos": [
+            -126,
+            -106
+          ],
+          "kind": "tiny indigo",
+          "w": 64
+        },
+        {
+          "id": "lp_trc",
+          "entity": "lp_trc",
+          "pos": [
+            93,
+            -121
+          ],
+          "kind": "tiny green",
+          "w": 80
+        },
+        {
+          "id": "lp_pat",
+          "entity": "lp_pat",
+          "pos": [
+            192,
+            50
+          ],
+          "kind": "tiny green",
+          "w": 92
+        },
+        {
+          "id": "lp_std",
+          "entity": "lp_std",
+          "pos": [
+            -6,
+            50
+          ],
+          "kind": "tiny green",
+          "w": 98
+        },
+        {
+          "id": "lp_ins",
+          "entity": "lp_ins",
+          "pos": [
+            -27,
+            76
+          ],
+          "kind": "tiny tan",
+          "w": 104
+        },
+        {
+          "id": "lp_cmp",
+          "entity": "lp_cmp",
+          "pos": [
+            96,
+            289
+          ],
+          "kind": "tiny tan",
+          "w": 94
+        },
+        {
+          "id": "lp_shr",
+          "entity": "lp_shr",
+          "pos": [
+            -150,
+            289
+          ],
+          "kind": "tiny tan",
+          "w": 74
         }
       ],
       "edges": [
         {
-          "id": "oss_e1",
-          "from": "oss_json",
-          "to": "oss_hub",
-          "label": ":loads"
+          "id": "loops_edge_1",
+          "from": "lp_obs",
+          "to": "lp_rsn",
+          "kind": "loopi",
+          "curve": -28
         },
         {
-          "id": "oss_e2",
-          "from": "oss_hub",
-          "to": "oss_entities",
-          "label": ":defines"
+          "id": "loops_edge_2",
+          "from": "lp_rsn",
+          "to": "lp_act",
+          "kind": "loopi",
+          "curve": -28
         },
         {
-          "id": "oss_e3",
-          "from": "oss_hub",
-          "to": "oss_scenes",
-          "label": ":groups"
+          "id": "loops_edge_3",
+          "from": "lp_act",
+          "to": "lp_obs",
+          "kind": "loopi",
+          "curve": -28
         },
         {
-          "id": "oss_e4",
-          "from": "oss_hub",
-          "to": "oss_beats",
-          "label": ":sequences"
+          "id": "loops_edge_4",
+          "from": "lp_trc",
+          "to": "lp_pat",
+          "kind": "loopg",
+          "curve": -34
         },
         {
-          "id": "oss_e5",
-          "from": "oss_beats",
-          "to": "oss_camera",
-          "label": ":drives"
+          "id": "loops_edge_5",
+          "from": "lp_pat",
+          "to": "lp_std",
+          "kind": "loopg",
+          "curve": -34
         },
         {
-          "id": "oss_e6",
-          "from": "oss_repo",
-          "to": "oss_json",
-          "label": ":ships"
+          "id": "loops_edge_6",
+          "from": "lp_std",
+          "to": "lp_trc",
+          "kind": "loopg",
+          "curve": -34
+        },
+        {
+          "id": "loops_edge_7",
+          "from": "lp_ins",
+          "to": "lp_cmp",
+          "kind": "loopt",
+          "curve": -42
+        },
+        {
+          "id": "loops_edge_8",
+          "from": "lp_cmp",
+          "to": "lp_shr",
+          "kind": "loopt",
+          "curve": -42
+        },
+        {
+          "id": "loops_edge_9",
+          "from": "lp_shr",
+          "to": "lp_ins",
+          "kind": "loopt",
+          "curve": -42
         }
       ],
       "beats": [
         {
-          "id": "json",
-          "label": "JSON source",
+          "id": "cue_1",
+          "label": "Opening view",
           "show": [
-            "oss_hub",
-            "oss_json"
+            "lp_agent",
+            "lp_comm",
+            "lp_dev",
+            "lp_obs",
+            "lp_rsn",
+            "lp_act",
+            "lp_trc",
+            "lp_pat",
+            "lp_std",
+            "lp_ins",
+            "lp_cmp",
+            "lp_shr"
           ],
           "focus": [
-            "oss_hub",
-            "oss_json"
-          ]
-        },
-        {
-          "id": "system",
-          "label": "Graph-native system",
-          "show": [
-            "oss_hub",
-            "oss_json",
-            "oss_entities",
-            "oss_scenes",
-            "oss_beats",
-            "oss_camera"
-          ],
-          "focus": [
-            "oss_entities",
-            "oss_scenes",
-            "oss_beats",
-            "oss_camera"
+            "lp_agent",
+            "lp_comm",
+            "lp_dev",
+            "lp_obs",
+            "lp_rsn",
+            "lp_act",
+            "lp_trc",
+            "lp_pat",
+            "lp_std",
+            "lp_ins",
+            "lp_cmp",
+            "lp_shr"
           ],
           "revealOrder": [
-            "oss_entities",
-            "oss_scenes",
-            "oss_beats",
-            "oss_camera"
-          ]
-        },
-        {
-          "id": "repo",
-          "label": "Open source",
-          "show": [
-            "oss_hub",
-            "oss_json",
-            "oss_entities",
-            "oss_scenes",
-            "oss_beats",
-            "oss_camera",
-            "oss_repo"
-          ],
-          "focus": [
-            "oss_repo"
-          ],
-          "revealOrder": [
-            "oss_repo"
+            "lp_agent",
+            "lp_comm",
+            "lp_dev",
+            "lp_obs",
+            "lp_rsn",
+            "lp_act",
+            "lp_trc",
+            "lp_pat",
+            "lp_std",
+            "lp_ins",
+            "lp_cmp",
+            "lp_shr"
           ]
         }
       ],
       "layout": {
-        "fitMargin": 150,
         "floatAmp": 5,
-        "minReadableScale": 0.48
+        "minReadableScale": 0.36
       }
     },
     {
       "id": "close",
-      "title": "You are a graph person",
-      "caption": "The graph is not the decoration. It is the presentation model.",
+      "title": "(you)-[:builds]->(graphs)",
+      "caption": "thank you — go draw the edges",
       "anchor": [
         3242,
         1441
@@ -4951,16 +4281,6 @@ globalThis.PREZOGRAPH_DECK = {
           ],
           "kind": "tiny indigo",
           "w": 100
-        },
-        {
-          "id": "yg_repo",
-          "entity": "yg_repo",
-          "pos": [
-            120,
-            310
-          ],
-          "kind": "company",
-          "w": 330
         }
       ],
       "edges": [
@@ -4969,145 +4289,263 @@ globalThis.PREZOGRAPH_DECK = {
           "from": "yg_you",
           "to": "yg_graphs",
           "label": ":builds"
-        },
-        {
-          "id": "close_repo",
-          "from": "yg_graphs",
-          "to": "yg_repo",
-          "label": ":fork_it"
         }
       ],
       "beats": [
         {
-          "id": "close",
-          "label": "Build yours",
+          "id": "cue_1",
+          "label": "Opening view",
           "show": [
             "yg_you",
-            "yg_graphs",
-            "yg_repo"
+            "yg_graphs"
           ],
           "focus": [
             "yg_you",
-            "yg_graphs",
-            "yg_repo"
+            "yg_graphs"
           ],
           "revealOrder": [
-            "yg_repo"
+            "yg_you",
+            "yg_graphs"
           ]
         }
       ],
       "layout": {
         "fitMargin": 230,
         "zoomMax": 0.85,
-        "minReadableScale": 0.48
+        "minReadableScale": 0.36
       }
     }
   ],
   "connections": [
     {
-      "id": "spine_01",
-      "from": "t_hub",
-      "to": "oc_data",
-      "label": ":reframes",
-      "kind": "spine"
-    },
-    {
-      "id": "spine_02",
-      "from": "oc_data",
-      "to": "ev_hub",
-      "label": ":generalizes",
-      "kind": "spine"
-    },
-    {
-      "id": "spine_03",
-      "from": "ev_hub",
-      "to": "ag_trace_hub",
-      "label": ":appears_in",
-      "kind": "spine"
-    },
-    {
-      "id": "spine_04",
-      "from": "ag_trace_hub",
-      "to": "tl_hub",
-      "label": ":becomes_visible",
-      "kind": "spine"
-    },
-    {
-      "id": "spine_05",
-      "from": "tl_aaif",
-      "to": "inv_ont_old",
-      "label": ":pressures",
-      "kind": "spine"
-    },
-    {
-      "id": "spine_06",
-      "from": "inv_ont_new",
-      "to": "st_after",
-      "label": ":creates",
-      "kind": "spine"
-    },
-    {
-      "id": "spine_07",
-      "from": "st_after",
-      "to": "mk_hub",
-      "label": ":funds",
-      "kind": "spine"
-    },
-    {
-      "id": "spine_08",
-      "from": "mk_hub",
-      "to": "ex_hub",
-      "label": ":opens",
-      "kind": "spine"
-    },
-    {
-      "id": "spine_09",
-      "from": "ex_hub",
-      "to": "oss_hub",
-      "label": ":demonstrated_by",
-      "kind": "spine"
-    },
-    {
-      "id": "spine_10",
-      "from": "oss_repo",
-      "to": "yg_you",
-      "label": ":invites",
-      "kind": "spine"
-    },
-    {
-      "id": "loop_close",
-      "from": "yg_graphs",
-      "to": "t_hub",
-      "label": ":loops_to",
-      "kind": "spine"
-    },
-    {
-      "id": "cross_baby",
-      "from": "y_babyagi",
-      "to": "tl_baby",
-      "label": ":appears_on_timeline",
+      "id": "connection_1",
+      "from": "re_rows",
+      "to": "oc_chaos",
+      "label": ":same_shape",
       "kind": "cross"
     },
     {
-      "id": "cross_time",
-      "from": "y_active",
-      "to": "st_time",
-      "label": ":raises_question",
+      "id": "connection_2",
+      "from": "re_edges",
+      "to": "oc_order",
+      "label": ":same_shape",
       "kind": "cross"
     },
     {
-      "id": "cross_correction",
+      "id": "connection_3",
       "from": "st_corr",
       "to": "inv_val",
-      "label": ":requires",
+      "label": ":same_muscle",
       "kind": "cross"
     },
     {
-      "id": "cross_provenance",
+      "id": "connection_4",
+      "from": "inv_decay",
+      "to": "st_after",
+      "label": ":creates_the_job",
+      "kind": "cross"
+    },
+    {
+      "id": "connection_5",
+      "from": "st_hub",
+      "to": "ev_hub",
+      "label": ":one_world_graph",
+      "kind": "cross"
+    },
+    {
+      "id": "connection_6",
+      "from": "y_babyagi",
+      "to": "tl_baby",
+      "label": ":that_babyagi",
+      "kind": "cross"
+    },
+    {
+      "id": "connection_7",
+      "from": "y_active",
+      "to": "st_time",
+      "label": ":obsessed_with",
+      "kind": "cross"
+    },
+    {
+      "id": "connection_8",
       "from": "st_prov",
       "to": "ev_beliefs",
-      "label": ":grounds",
+      "label": ":same_question",
       "kind": "cross"
+    },
+    {
+      "id": "connection_9",
+      "from": "st_id",
+      "to": "ex_know",
+      "label": ":benchmarked_by",
+      "kind": "cross"
+    },
+    {
+      "id": "connection_10",
+      "from": "inv_ont_new",
+      "to": "st_hub",
+      "label": ":governs",
+      "kind": "cross"
+    },
+    {
+      "id": "connection_11",
+      "from": "lp_agent",
+      "to": "tl_react",
+      "label": ":since_2022",
+      "kind": "cross"
+    },
+    {
+      "id": "connection_12",
+      "from": "lp_agent",
+      "to": "st_hub",
+      "label": ":writes",
+      "kind": "cross"
+    },
+    {
+      "id": "connection_13",
+      "from": "lp_std",
+      "to": "tl_mcp",
+      "label": ":example",
+      "kind": "cross"
+    },
+    {
+      "id": "connection_14",
+      "from": "lp_trc",
+      "to": "ex_traces",
+      "label": ":fuel",
+      "kind": "cross"
+    },
+    {
+      "id": "connection_15",
+      "from": "lp_dev",
+      "to": "yg_you",
+      "label": ":is_yours",
+      "kind": "cross"
+    },
+    {
+      "id": "connection_16",
+      "from": "yg_graphs",
+      "to": "t_hub",
+      "label": ":are_awesome",
+      "kind": "cross"
+    },
+    {
+      "id": "connection_17",
+      "from": "t_hub",
+      "to": "oc_data",
+      "label": ":begins",
+      "kind": "spine"
+    },
+    {
+      "id": "connection_18",
+      "from": "oc_data",
+      "to": "ev_hub",
+      "kind": "spine"
+    },
+    {
+      "id": "connection_19",
+      "from": "ev_hub",
+      "to": "tl_hub",
+      "kind": "spine"
+    },
+    {
+      "id": "connection_20",
+      "from": "tl_op",
+      "to": "inv_ont_old",
+      "kind": "spine"
+    },
+    {
+      "id": "connection_21",
+      "from": "inv_ont_new",
+      "to": "st_after",
+      "kind": "spine"
+    },
+    {
+      "id": "connection_22",
+      "from": "ex_hub",
+      "to": "lp_dev",
+      "kind": "spine"
+    },
+    {
+      "id": "connection_23",
+      "from": "lp_comm",
+      "to": "yg_you",
+      "kind": "spine"
+    },
+    {
+      "id": "connection_24",
+      "from": "seg_er",
+      "to": "st_id",
+      "label": ":answers",
+      "kind": "cross"
+    },
+    {
+      "id": "connection_25",
+      "from": "seg_mem",
+      "to": "st_time",
+      "label": ":answers",
+      "kind": "cross"
+    },
+    {
+      "id": "connection_26",
+      "from": "seg_kg",
+      "to": "st_prov",
+      "label": ":answers",
+      "kind": "cross"
+    },
+    {
+      "id": "connection_27",
+      "from": "seg_kg",
+      "to": "inv_ont_old",
+      "label": ":lineage",
+      "kind": "cross"
+    },
+    {
+      "id": "connection_28",
+      "from": "seg_build",
+      "to": "inv_prop",
+      "label": ":industrializes",
+      "kind": "cross"
+    },
+    {
+      "id": "connection_29",
+      "from": "seg_viz",
+      "to": "oc_order",
+      "label": ":sells_order",
+      "kind": "cross"
+    },
+    {
+      "id": "connection_30",
+      "from": "seg_db",
+      "to": "ev_hub",
+      "label": ":persists",
+      "kind": "cross"
+    },
+    {
+      "id": "connection_31",
+      "from": "st_before",
+      "to": "inv_ont_old",
+      "label": ":made_this",
+      "kind": "cross"
+    },
+    {
+      "id": "connection_32",
+      "from": "co_neo4j",
+      "to": "ex_know",
+      "label": ":also_try",
+      "kind": "cross"
+    },
+    {
+      "id": "connection_33",
+      "from": "st_after",
+      "to": "mk_hub",
+      "kind": "spine"
+    },
+    {
+      "id": "connection_34",
+      "from": "mk_hub",
+      "to": "ex_hub",
+      "kind": "spine"
     }
   ]
 };
@@ -5401,19 +4839,30 @@ function fitBounds(bounds, viewport, layout, options = {}) {
   const mobile = viewport.width < 700;
   const pad = mobile ? Math.min(layout.fitMargin, 54) : layout.fitMargin;
   const cardSpace = options.cardSpace ?? 0;
-  const availableWidth = Math.max(1, viewport.width - (options.editorWidth ?? 0));
-  const availableHeight = Math.max(1, viewport.height);
+  const safe = {
+    top: options.safeArea?.top ?? 0,
+    right: options.safeArea?.right ?? 0,
+    bottom: options.safeArea?.bottom ?? 0,
+    left: options.safeArea?.left ?? 0,
+  };
+  const availableWidth = Math.max(1, viewport.width - safe.left - safe.right);
+  const availableHeight = Math.max(1, viewport.height - safe.top - safe.bottom);
   const ideal = Math.min(
     availableWidth / (bounds.width + pad * 2),
     availableHeight / (bounds.height + pad * 2 + cardSpace),
     layout.zoomMax
   );
-  const mobileFloor = Math.max(layout.minReadableScale, 0.8);
-  const floor = mobile ? mobileFloor : layout.minReadableScale;
+  const floor = mobile
+    ? Math.min(layout.minReadableScale, options.mobileEmergencyFloor ?? 0.18)
+    : layout.minReadableScale;
   const scale = Math.max(floor, ideal);
+  const safeCenterX = safe.left + availableWidth / 2;
+  const safeCenterY = safe.top + availableHeight / 2;
   return {
-    x: (bounds.x0 + bounds.x1) / 2,
-    y: (bounds.y0 + bounds.y1) / 2 - (cardSpace ? cardSpace / (2 * scale) : 0),
+    x: (bounds.x0 + bounds.x1) / 2 - (safeCenterX - viewport.width / 2) / scale,
+    y: (bounds.y0 + bounds.y1) / 2
+      - (safeCenterY - viewport.height / 2) / scale
+      - (cardSpace ? cardSpace / (2 * scale) : 0),
     scale,
     idealScale: ideal,
     overflow: ideal < floor,
@@ -5582,13 +5031,6 @@ function createVisual(type) {
 
 
 const SVG_NS = "http://www.w3.org/2000/svg";
-const LAYOUT_SCHEMA = [
-  ["floatAmp", 0, 12, 0.5, "float"],
-  ["fitMargin", 20, 340, 10, "fit margin"],
-  ["pushMargin", 0, 420, 10, "push margin"],
-  ["zoomMax", 0.5, 1.8, 0.05, "max zoom"],
-  ["minReadableScale", 0.35, 1.2, 0.05, "min readable scale"]
-];
 
 function element(name, className, text) {
   const node = document.createElement(name);
@@ -5622,47 +5064,38 @@ function template() {
       <span style="--dot:var(--pz-tan)">old way</span>
       <span style="--dot:var(--pz-light)">things</span>
     </div>
-    <div class="pz-hint" aria-hidden="true">← → navigate · drag pan · scroll zoom<br>e edit · o overview · f fit · hover or focus for detail</div>
+    <div class="pz-hint" aria-hidden="true">← → navigate · drag pan · scroll zoom<br>o overview · f fit · hover or focus for detail</div>
     <div class="pz-progress"></div>
     <div class="pz-dots" aria-label="Scenes"></div>
     <div class="pz-overflow">Readable scale preserved · drag to explore</div>
     <nav class="pz-nav" aria-label="Presentation controls">
-      <button class="pz-control optional" data-action="edit" type="button" aria-pressed="false">edit</button>
+      <button class="pz-control" data-action="decks" type="button">decks</button>
       <button class="pz-control" data-action="overview" type="button" aria-pressed="false">whole graph</button>
       <button class="pz-control optional" data-action="autoplay" type="button" aria-pressed="false">autoplay</button>
       <button class="pz-control is-icon" data-action="previous" type="button" aria-label="Previous beat">‹</button>
       <button class="pz-control is-icon" data-action="next" type="button" aria-label="Next beat">›</button>
     </nav>
-    <aside class="pz-panel" aria-label="Deck editor" aria-hidden="true">
-      <h2>Deck editor</h2>
-      <p class="pz-panel-scene"></p>
-      <div class="pz-sliders"></div>
-      <div class="pz-panel-actions">
-        <button type="button" data-editor-action="undo">undo</button>
-        <button type="button" data-editor-action="redo">redo</button>
-        <button type="button" data-editor-action="fit">fit scene</button>
-        <button type="button" data-editor-action="copy">copy deck JSON</button>
-        <button type="button" data-editor-action="view">view / paste JSON</button>
-        <button type="button" data-editor-action="load">load .json file</button>
-        <button type="button" data-editor-action="download">download deck.json</button>
+    <section class="pz-deck-picker" role="dialog" aria-modal="true" aria-labelledby="pz-deck-picker-title" hidden>
+      <div class="pz-deck-picker-box">
+        <h2 id="pz-deck-picker-title">Select a deck</h2>
+        <p>Choose a reviewed example or load a local, schema-valid JSON file. Deck content is treated as untrusted data.</p>
+        <label>
+          Built-in deck
+          <select aria-label="Built-in deck"></select>
+        </label>
+        <div class="pz-deck-actions">
+          <button type="button" data-deck-action="load">load selected</button>
+          <button type="button" data-deck-action="file">choose local JSON</button>
+          <button type="button" data-deck-action="close">cancel</button>
+        </div>
+        <pre class="pz-deck-error" aria-live="polite"></pre>
+        <input type="file" accept=".json,application/json" hidden>
       </div>
-      <p class="pz-panel-note">Drag an active node to reposition it. Layout changes are undoable. Imported decks are schema-validated before replacing the current deck.</p>
-      <input class="pz-file-input" type="file" accept=".json,application/json" hidden>
-    </aside>
+    </section>
     <section class="pz-tip" role="dialog" aria-label="Node detail" hidden>
       <button class="pz-tip-close" type="button" aria-label="Close node detail">×</button>
       <div class="pz-tip-text"></div>
       <a class="pz-tip-source" target="_blank" rel="noopener noreferrer" hidden>source</a>
-    </section>
-    <section class="pz-modal" role="dialog" aria-modal="true" aria-label="Deck JSON" hidden>
-      <div class="pz-modal-box">
-        <textarea spellcheck="false" aria-label="Deck JSON"></textarea>
-        <pre class="pz-modal-error" aria-live="polite"></pre>
-        <div class="pz-modal-actions">
-          <button type="button" data-modal-action="apply">apply</button>
-          <button type="button" data-modal-action="close">close</button>
-        </div>
-      </div>
     </section>
     <div class="pz-toast" role="status" aria-live="polite"></div>
     <div class="pz-sr-only pz-live" aria-live="polite" aria-atomic="true"></div>
@@ -5679,7 +5112,6 @@ class PrezographPlayer extends EventTarget {
     this.sceneIndex = 0;
     this.beatIndex = 0;
     this.overview = false;
-    this.editorOpen = false;
     this.autoplayTimer = null;
     this.revealTimers = [];
     this.measurements = new Map();
@@ -5692,7 +5124,6 @@ class PrezographPlayer extends EventTarget {
     this.pushContext = null;
     this.freeCamera = false;
     this.lastFrame = 0;
-    this.drag = null;
     this.pan = null;
     this.touches = new Map();
     this.pinch = null;
@@ -5716,14 +5147,13 @@ class PrezographPlayer extends EventTarget {
     this.progress = $(".pz-progress");
     this.dots = $(".pz-dots");
     this.overflowNotice = $(".pz-overflow");
-    this.panel = $(".pz-panel");
     this.tip = $(".pz-tip");
     this.tipText = $(".pz-tip-text");
     this.tipSource = $(".pz-tip-source");
     this.toastElement = $(".pz-toast");
     this.live = $(".pz-live");
     this.controls = {
-      edit: $('[data-action="edit"]'),
+      decks: $('[data-action="decks"]'),
       overview: $('[data-action="overview"]'),
       autoplay: $('[data-action="autoplay"]'),
       previous: $('[data-action="previous"]'),
@@ -5736,7 +5166,6 @@ class PrezographPlayer extends EventTarget {
     this.controls.next.addEventListener("click", () => this.advance());
     this.controls.overview.addEventListener("click", () => this.toggleOverview());
     this.controls.autoplay.addEventListener("click", () => this.toggleAutoplay());
-    this.controls.edit.addEventListener("click", () => this.setEditorOpen(!this.editorOpen));
     this.tip.querySelector(".pz-tip-close").addEventListener("click", () => this.hideTip());
 
     globalThis.addEventListener("keydown", (event) => {
@@ -5750,13 +5179,10 @@ class PrezographPlayer extends EventTarget {
         this.back();
       } else if (event.key.toLowerCase() === "o") {
         this.toggleOverview();
-      } else if (event.key.toLowerCase() === "e") {
-        this.setEditorOpen(!this.editorOpen);
       } else if (event.key.toLowerCase() === "f") {
         this.fitCurrent({ snap: this.reducedMotion });
       } else if (event.key === "Escape") {
         this.hideTip();
-        this.setEditorOpen(false);
       }
     });
 
@@ -5772,12 +5198,13 @@ class PrezographPlayer extends EventTarget {
   }
 
   loadDeck(deck, options = {}) {
+    const compiled = compileDeck(deck);
     const previousSceneId = !options.initial ? this.currentScene()?.id : null;
     this.stopAutoplay();
     this.hideTip();
     this.revealTimers.forEach(clearTimeout);
     this.revealTimers = [];
-    this.compiled = compileDeck(deck);
+    this.compiled = compiled;
     this.applyTheme();
     this.buildGraph();
     this.buildSceneDots();
@@ -5876,41 +5303,7 @@ class PrezographPlayer extends EventTarget {
 
   bindNode(view) {
     const node = view.element;
-    node.addEventListener("pointerdown", (event) => {
-      event.stopPropagation();
-      if (!this.editorOpen || !this.currentFocus.has(view.instance.id)) return;
-      this.drag = {
-        view,
-        pointerId: event.pointerId,
-        startX: event.clientX,
-        startY: event.clientY,
-        origin: [...view.instance.pos],
-        moved: false
-      };
-      node.setPointerCapture?.(event.pointerId);
-      this.dispatchEvent(new CustomEvent("editstart", { detail: { type: "position", instance: view.instance.id } }));
-    });
-    node.addEventListener("pointermove", (event) => {
-      if (!this.drag || this.drag.view !== view) return;
-      const dx = (event.clientX - this.drag.startX) / this.camera.scale;
-      const dy = (event.clientY - this.drag.startY) / this.camera.scale;
-      if (Math.abs(dx) + Math.abs(dy) > 3) this.drag.moved = true;
-      if (!this.drag.moved) return;
-      view.instance.pos[0] = this.drag.origin[0] + dx;
-      view.instance.pos[1] = this.drag.origin[1] + dy;
-    });
-    node.addEventListener("pointerup", () => {
-      if (this.drag?.view === view) {
-        const moved = this.drag.moved;
-        this.drag = null;
-        if (moved) {
-          this.fitCurrent();
-          this.dispatchEvent(new CustomEvent("editcommit", { detail: { type: "position", instance: view.instance.id } }));
-          return;
-        }
-      }
-      this.activateNode(view);
-    });
+    node.addEventListener("click", () => this.activateNode(view));
     node.addEventListener("focus", () => this.showTip(view, { persistent: false }));
     node.addEventListener("blur", (event) => {
       if (!this.tip.contains(event.relatedTarget)) this.hideTip();
@@ -6128,8 +5521,10 @@ class PrezographPlayer extends EventTarget {
       width: innerWidth,
       height: innerHeight
     }, layout, {
-      editorWidth: this.editorOpen ? this.panel.offsetWidth : 0,
-      cardSpace
+      cardSpace,
+      safeArea: innerWidth < 700
+        ? { top: 84, right: 14, bottom: 112, left: 14 }
+        : { top: 24, right: 24, bottom: 82, left: 24 },
     });
     this.cameraTarget = { x: fit.x, y: fit.y, scale: fit.scale };
     this.overflowNotice.classList.toggle("is-visible", !this.overview && fit.overflow);
@@ -6198,16 +5593,6 @@ class PrezographPlayer extends EventTarget {
     this.tipView = null;
   }
 
-  setEditorOpen(open) {
-    this.editorOpen = Boolean(open);
-    this.panel.classList.toggle("is-open", this.editorOpen);
-    this.panel.setAttribute("aria-hidden", String(!this.editorOpen));
-    this.controls.edit.setAttribute("aria-pressed", String(this.editorOpen));
-    this.controls.edit.textContent = this.editorOpen ? "done" : "edit";
-    this.fitCurrent({ snap: this.reducedMotion });
-    this.dispatchEvent(new CustomEvent("editormode", { detail: { open: this.editorOpen } }));
-  }
-
   toggleAutoplay() {
     if (this.autoplayTimer) this.stopAutoplay();
     else {
@@ -6228,7 +5613,7 @@ class PrezographPlayer extends EventTarget {
   }
 
   onViewportPointerDown(event) {
-    if (event.target.closest?.(".pz-node, .pz-nav, .pz-panel, .pz-tip")) return;
+    if (event.target.closest?.(".pz-node, .pz-nav, .pz-deck-picker, .pz-tip")) return;
     this.hideTip();
     this.touches.set(event.pointerId, { x: event.clientX, y: event.clientY });
     if (this.touches.size === 1) {
@@ -6339,9 +5724,7 @@ class PrezographPlayer extends EventTarget {
   }
 
   renderWorldTransform() {
-    const editorWidth = this.editorOpen ? this.panel.offsetWidth : 0;
-    const viewportWidth = innerWidth - editorWidth;
-    this.world.style.transform = `translate(${viewportWidth / 2 - this.camera.x * this.camera.scale}px, ${innerHeight / 2 - this.camera.y * this.camera.scale}px) scale(${this.camera.scale})`;
+    this.world.style.transform = `translate(${innerWidth / 2 - this.camera.x * this.camera.scale}px, ${innerHeight / 2 - this.camera.y * this.camera.scale}px) scale(${this.camera.scale})`;
   }
 
   renderEdges() {
@@ -6385,208 +5768,10 @@ class PrezographPlayer extends EventTarget {
 }
 
 
-
-
-
-
-function attachEditor(player) {
-  const panel = player.panel;
-  const sliders = panel.querySelector(".pz-sliders");
-  const sceneName = panel.querySelector(".pz-panel-scene");
-  const fileInput = panel.querySelector(".pz-file-input");
-  const modal = player.shell.querySelector(".pz-modal");
-  const textarea = modal.querySelector("textarea");
-  const modalError = modal.querySelector(".pz-modal-error");
-  const undoStack = [];
-  const redoStack = [];
-  let editStartSnapshot = null;
-  let sliderStartSnapshot = null;
-
-  function snapshot() {
-    return serializeDeck(player.compiled);
-  }
-
-  function restore(serialized, message) {
-    const state = { sceneId: player.currentScene()?.id, beatIndex: player.beatIndex };
-    player.loadDeck(JSON.parse(serialized));
-    const sceneIndex = player.compiled.scenes.findIndex((scene) => scene.id === state.sceneId);
-    if (sceneIndex >= 0) player.goScene(sceneIndex, {
-      beat: Math.min(state.beatIndex, player.compiled.scenes[sceneIndex].beats.length - 1),
-      snap: true
-    });
-    player.setEditorOpen(true);
-    player.toast(message);
-  }
-
-  function commit(previous, label) {
-    if (!previous || previous === snapshot()) return;
-    undoStack.push(previous);
-    redoStack.length = 0;
-    updateButtons();
-    player.toast(`${label} saved`);
-  }
-
-  function updateButtons() {
-    panel.querySelector('[data-editor-action="undo"]').disabled = undoStack.length === 0;
-    panel.querySelector('[data-editor-action="redo"]').disabled = redoStack.length === 0;
-  }
-
-  function refresh() {
-    const scene = player.currentScene();
-    sceneName.textContent = player.overview ? "overview — choose a scene to edit" : `scene: ${scene.id}`;
-    sliders.replaceChildren();
-    if (player.overview) return;
-    for (const [key, min, max, step, label] of LAYOUT_SCHEMA) {
-      const row = document.createElement("div");
-      row.className = "pz-slider";
-      const labelElement = document.createElement("label");
-      const text = document.createElement("span");
-      const output = document.createElement("output");
-      const input = document.createElement("input");
-      text.textContent = label;
-      output.textContent = String(scene.layout[key]);
-      input.type = "range";
-      input.min = String(min);
-      input.max = String(max);
-      input.step = String(step);
-      input.value = String(scene.layout[key]);
-      input.addEventListener("pointerdown", () => {
-        sliderStartSnapshot = snapshot();
-      });
-      input.addEventListener("input", () => {
-        const value = Number(input.value);
-        scene.layout[key] = value;
-        const deckScene = player.compiled.deck.scenes.find((candidate) => candidate.id === scene.id);
-        deckScene.layout = { ...(deckScene.layout ?? {}), [key]: value };
-        output.textContent = input.value;
-        player.fitCurrent();
-      });
-      input.addEventListener("change", () => {
-        commit(sliderStartSnapshot, label);
-        sliderStartSnapshot = null;
-      });
-      labelElement.append(text, output);
-      row.append(labelElement, input);
-      sliders.appendChild(row);
-    }
-    updateButtons();
-  }
-
-  player.addEventListener("scenechange", refresh);
-  player.addEventListener("editormode", refresh);
-  player.addEventListener("editstart", () => {
-    editStartSnapshot = snapshot();
-  });
-  player.addEventListener("editcommit", () => {
-    commit(editStartSnapshot, "position");
-    editStartSnapshot = null;
-  });
-  player.addEventListener("deckchange", refresh);
-
-  panel.addEventListener("click", async (event) => {
-    const action = event.target.closest("[data-editor-action]")?.dataset.editorAction;
-    if (!action) return;
-    if (action === "undo" && undoStack.length) {
-      redoStack.push(snapshot());
-      restore(undoStack.pop(), "Undid last edit");
-    } else if (action === "redo" && redoStack.length) {
-      undoStack.push(snapshot());
-      restore(redoStack.pop(), "Redid edit");
-    } else if (action === "fit") {
-      player.freeCamera = false;
-      player.fitCurrent({ snap: player.reducedMotion });
-      player.toast("Scene fitted");
-    } else if (action === "copy") {
-      try {
-        await navigator.clipboard.writeText(snapshot());
-        player.toast("Deck JSON copied");
-      } catch {
-        openModal();
-      }
-    } else if (action === "view") {
-      openModal();
-    } else if (action === "load") {
-      fileInput.click();
-    } else if (action === "download") {
-      const blob = new Blob([snapshot()], { type: "application/json" });
-      const url = URL.createObjectURL(blob);
-      const anchor = document.createElement("a");
-      anchor.href = url;
-      anchor.download = `${player.compiled.meta.slug ?? "deck"}.json`;
-      anchor.click();
-      URL.revokeObjectURL(url);
-      player.toast("Deck downloaded");
-    }
-  });
-
-  function openModal() {
-    textarea.value = snapshot();
-    modalError.textContent = "";
-    modal.hidden = false;
-    textarea.focus();
-  }
-
-  function closeModal() {
-    modal.hidden = true;
-    modalError.textContent = "";
-    player.controls.edit.focus();
-  }
-
-  modal.querySelector('[data-modal-action="close"]').addEventListener("click", closeModal);
-  modal.querySelector('[data-modal-action="apply"]').addEventListener("click", () => {
-    try {
-      const deck = JSON.parse(textarea.value);
-      const result = validateDeck(deck);
-      if (!result.valid) {
-        modalError.textContent = formatIssues(result.issues);
-        return;
-      }
-      undoStack.push(snapshot());
-      redoStack.length = 0;
-      player.loadDeck(deck);
-      player.setEditorOpen(true);
-      modal.hidden = true;
-      player.toast("Validated deck loaded");
-    } catch (error) {
-      modalError.textContent = `JSON parse error: ${error.message}`;
-    }
-  });
-
-  fileInput.addEventListener("change", async () => {
-    const file = fileInput.files?.[0];
-    if (!file) return;
-    if (file.size > 5_000_000) {
-      player.toast("Deck rejected: file exceeds 5 MB");
-      return;
-    }
-    try {
-      const deck = JSON.parse(await file.text());
-      const result = validateDeck(deck);
-      if (!result.valid) throw new Error(formatIssues(result.issues));
-      undoStack.push(snapshot());
-      redoStack.length = 0;
-      player.loadDeck(deck);
-      player.setEditorOpen(true);
-      player.toast(`Loaded ${file.name}`);
-    } catch (error) {
-      textarea.value = "";
-      modalError.textContent = error.message;
-      modal.hidden = false;
-    } finally {
-      fileInput.value = "";
-    }
-  });
-
-  updateButtons();
-  refresh();
-  return { refresh };
-}
-
-
 const app = document.querySelector("#app");
 
 const player = new PrezographPlayer(app, globalThis.PREZOGRAPH_DECK);
 
-attachEditor(player);</script>
+player.controls.decks.hidden = true;</script>
 </body>
 </html>

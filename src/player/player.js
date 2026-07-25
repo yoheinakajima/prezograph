@@ -3,13 +3,6 @@ import { borderPoint, boundsFor, fitBounds } from "../core/geometry.js";
 import { createVisual } from "./visuals.js";
 
 const SVG_NS = "http://www.w3.org/2000/svg";
-const LAYOUT_SCHEMA = [
-  ["floatAmp", 0, 12, 0.5, "float"],
-  ["fitMargin", 20, 340, 10, "fit margin"],
-  ["pushMargin", 0, 420, 10, "push margin"],
-  ["zoomMax", 0.5, 1.8, 0.05, "max zoom"],
-  ["minReadableScale", 0.35, 1.2, 0.05, "min readable scale"]
-];
 
 function element(name, className, text) {
   const node = document.createElement(name);
@@ -43,47 +36,38 @@ function template() {
       <span style="--dot:var(--pz-tan)">old way</span>
       <span style="--dot:var(--pz-light)">things</span>
     </div>
-    <div class="pz-hint" aria-hidden="true">← → navigate · drag pan · scroll zoom<br>e edit · o overview · f fit · hover or focus for detail</div>
+    <div class="pz-hint" aria-hidden="true">← → navigate · drag pan · scroll zoom<br>o overview · f fit · hover or focus for detail</div>
     <div class="pz-progress"></div>
     <div class="pz-dots" aria-label="Scenes"></div>
     <div class="pz-overflow">Readable scale preserved · drag to explore</div>
     <nav class="pz-nav" aria-label="Presentation controls">
-      <button class="pz-control optional" data-action="edit" type="button" aria-pressed="false">edit</button>
+      <button class="pz-control" data-action="decks" type="button">decks</button>
       <button class="pz-control" data-action="overview" type="button" aria-pressed="false">whole graph</button>
       <button class="pz-control optional" data-action="autoplay" type="button" aria-pressed="false">autoplay</button>
       <button class="pz-control is-icon" data-action="previous" type="button" aria-label="Previous beat">‹</button>
       <button class="pz-control is-icon" data-action="next" type="button" aria-label="Next beat">›</button>
     </nav>
-    <aside class="pz-panel" aria-label="Deck editor" aria-hidden="true">
-      <h2>Deck editor</h2>
-      <p class="pz-panel-scene"></p>
-      <div class="pz-sliders"></div>
-      <div class="pz-panel-actions">
-        <button type="button" data-editor-action="undo">undo</button>
-        <button type="button" data-editor-action="redo">redo</button>
-        <button type="button" data-editor-action="fit">fit scene</button>
-        <button type="button" data-editor-action="copy">copy deck JSON</button>
-        <button type="button" data-editor-action="view">view / paste JSON</button>
-        <button type="button" data-editor-action="load">load .json file</button>
-        <button type="button" data-editor-action="download">download deck.json</button>
+    <section class="pz-deck-picker" role="dialog" aria-modal="true" aria-labelledby="pz-deck-picker-title" hidden>
+      <div class="pz-deck-picker-box">
+        <h2 id="pz-deck-picker-title">Select a deck</h2>
+        <p>Choose a reviewed example or load a local, schema-valid JSON file. Deck content is treated as untrusted data.</p>
+        <label>
+          Built-in deck
+          <select aria-label="Built-in deck"></select>
+        </label>
+        <div class="pz-deck-actions">
+          <button type="button" data-deck-action="load">load selected</button>
+          <button type="button" data-deck-action="file">choose local JSON</button>
+          <button type="button" data-deck-action="close">cancel</button>
+        </div>
+        <pre class="pz-deck-error" aria-live="polite"></pre>
+        <input type="file" accept=".json,application/json" hidden>
       </div>
-      <p class="pz-panel-note">Drag an active node to reposition it. Layout changes are undoable. Imported decks are schema-validated before replacing the current deck.</p>
-      <input class="pz-file-input" type="file" accept=".json,application/json" hidden>
-    </aside>
+    </section>
     <section class="pz-tip" role="dialog" aria-label="Node detail" hidden>
       <button class="pz-tip-close" type="button" aria-label="Close node detail">×</button>
       <div class="pz-tip-text"></div>
       <a class="pz-tip-source" target="_blank" rel="noopener noreferrer" hidden>source</a>
-    </section>
-    <section class="pz-modal" role="dialog" aria-modal="true" aria-label="Deck JSON" hidden>
-      <div class="pz-modal-box">
-        <textarea spellcheck="false" aria-label="Deck JSON"></textarea>
-        <pre class="pz-modal-error" aria-live="polite"></pre>
-        <div class="pz-modal-actions">
-          <button type="button" data-modal-action="apply">apply</button>
-          <button type="button" data-modal-action="close">close</button>
-        </div>
-      </div>
     </section>
     <div class="pz-toast" role="status" aria-live="polite"></div>
     <div class="pz-sr-only pz-live" aria-live="polite" aria-atomic="true"></div>
@@ -100,7 +84,6 @@ export class PrezographPlayer extends EventTarget {
     this.sceneIndex = 0;
     this.beatIndex = 0;
     this.overview = false;
-    this.editorOpen = false;
     this.autoplayTimer = null;
     this.revealTimers = [];
     this.measurements = new Map();
@@ -113,7 +96,6 @@ export class PrezographPlayer extends EventTarget {
     this.pushContext = null;
     this.freeCamera = false;
     this.lastFrame = 0;
-    this.drag = null;
     this.pan = null;
     this.touches = new Map();
     this.pinch = null;
@@ -137,14 +119,13 @@ export class PrezographPlayer extends EventTarget {
     this.progress = $(".pz-progress");
     this.dots = $(".pz-dots");
     this.overflowNotice = $(".pz-overflow");
-    this.panel = $(".pz-panel");
     this.tip = $(".pz-tip");
     this.tipText = $(".pz-tip-text");
     this.tipSource = $(".pz-tip-source");
     this.toastElement = $(".pz-toast");
     this.live = $(".pz-live");
     this.controls = {
-      edit: $('[data-action="edit"]'),
+      decks: $('[data-action="decks"]'),
       overview: $('[data-action="overview"]'),
       autoplay: $('[data-action="autoplay"]'),
       previous: $('[data-action="previous"]'),
@@ -157,7 +138,6 @@ export class PrezographPlayer extends EventTarget {
     this.controls.next.addEventListener("click", () => this.advance());
     this.controls.overview.addEventListener("click", () => this.toggleOverview());
     this.controls.autoplay.addEventListener("click", () => this.toggleAutoplay());
-    this.controls.edit.addEventListener("click", () => this.setEditorOpen(!this.editorOpen));
     this.tip.querySelector(".pz-tip-close").addEventListener("click", () => this.hideTip());
 
     globalThis.addEventListener("keydown", (event) => {
@@ -171,13 +151,10 @@ export class PrezographPlayer extends EventTarget {
         this.back();
       } else if (event.key.toLowerCase() === "o") {
         this.toggleOverview();
-      } else if (event.key.toLowerCase() === "e") {
-        this.setEditorOpen(!this.editorOpen);
       } else if (event.key.toLowerCase() === "f") {
         this.fitCurrent({ snap: this.reducedMotion });
       } else if (event.key === "Escape") {
         this.hideTip();
-        this.setEditorOpen(false);
       }
     });
 
@@ -193,12 +170,13 @@ export class PrezographPlayer extends EventTarget {
   }
 
   loadDeck(deck, options = {}) {
+    const compiled = compileDeck(deck);
     const previousSceneId = !options.initial ? this.currentScene()?.id : null;
     this.stopAutoplay();
     this.hideTip();
     this.revealTimers.forEach(clearTimeout);
     this.revealTimers = [];
-    this.compiled = compileDeck(deck);
+    this.compiled = compiled;
     this.applyTheme();
     this.buildGraph();
     this.buildSceneDots();
@@ -297,41 +275,7 @@ export class PrezographPlayer extends EventTarget {
 
   bindNode(view) {
     const node = view.element;
-    node.addEventListener("pointerdown", (event) => {
-      event.stopPropagation();
-      if (!this.editorOpen || !this.currentFocus.has(view.instance.id)) return;
-      this.drag = {
-        view,
-        pointerId: event.pointerId,
-        startX: event.clientX,
-        startY: event.clientY,
-        origin: [...view.instance.pos],
-        moved: false
-      };
-      node.setPointerCapture?.(event.pointerId);
-      this.dispatchEvent(new CustomEvent("editstart", { detail: { type: "position", instance: view.instance.id } }));
-    });
-    node.addEventListener("pointermove", (event) => {
-      if (!this.drag || this.drag.view !== view) return;
-      const dx = (event.clientX - this.drag.startX) / this.camera.scale;
-      const dy = (event.clientY - this.drag.startY) / this.camera.scale;
-      if (Math.abs(dx) + Math.abs(dy) > 3) this.drag.moved = true;
-      if (!this.drag.moved) return;
-      view.instance.pos[0] = this.drag.origin[0] + dx;
-      view.instance.pos[1] = this.drag.origin[1] + dy;
-    });
-    node.addEventListener("pointerup", () => {
-      if (this.drag?.view === view) {
-        const moved = this.drag.moved;
-        this.drag = null;
-        if (moved) {
-          this.fitCurrent();
-          this.dispatchEvent(new CustomEvent("editcommit", { detail: { type: "position", instance: view.instance.id } }));
-          return;
-        }
-      }
-      this.activateNode(view);
-    });
+    node.addEventListener("click", () => this.activateNode(view));
     node.addEventListener("focus", () => this.showTip(view, { persistent: false }));
     node.addEventListener("blur", (event) => {
       if (!this.tip.contains(event.relatedTarget)) this.hideTip();
@@ -549,8 +493,10 @@ export class PrezographPlayer extends EventTarget {
       width: innerWidth,
       height: innerHeight
     }, layout, {
-      editorWidth: this.editorOpen ? this.panel.offsetWidth : 0,
-      cardSpace
+      cardSpace,
+      safeArea: innerWidth < 700
+        ? { top: 84, right: 14, bottom: 112, left: 14 }
+        : { top: 24, right: 24, bottom: 82, left: 24 },
     });
     this.cameraTarget = { x: fit.x, y: fit.y, scale: fit.scale };
     this.overflowNotice.classList.toggle("is-visible", !this.overview && fit.overflow);
@@ -619,16 +565,6 @@ export class PrezographPlayer extends EventTarget {
     this.tipView = null;
   }
 
-  setEditorOpen(open) {
-    this.editorOpen = Boolean(open);
-    this.panel.classList.toggle("is-open", this.editorOpen);
-    this.panel.setAttribute("aria-hidden", String(!this.editorOpen));
-    this.controls.edit.setAttribute("aria-pressed", String(this.editorOpen));
-    this.controls.edit.textContent = this.editorOpen ? "done" : "edit";
-    this.fitCurrent({ snap: this.reducedMotion });
-    this.dispatchEvent(new CustomEvent("editormode", { detail: { open: this.editorOpen } }));
-  }
-
   toggleAutoplay() {
     if (this.autoplayTimer) this.stopAutoplay();
     else {
@@ -649,7 +585,7 @@ export class PrezographPlayer extends EventTarget {
   }
 
   onViewportPointerDown(event) {
-    if (event.target.closest?.(".pz-node, .pz-nav, .pz-panel, .pz-tip")) return;
+    if (event.target.closest?.(".pz-node, .pz-nav, .pz-deck-picker, .pz-tip")) return;
     this.hideTip();
     this.touches.set(event.pointerId, { x: event.clientX, y: event.clientY });
     if (this.touches.size === 1) {
@@ -760,9 +696,7 @@ export class PrezographPlayer extends EventTarget {
   }
 
   renderWorldTransform() {
-    const editorWidth = this.editorOpen ? this.panel.offsetWidth : 0;
-    const viewportWidth = innerWidth - editorWidth;
-    this.world.style.transform = `translate(${viewportWidth / 2 - this.camera.x * this.camera.scale}px, ${innerHeight / 2 - this.camera.y * this.camera.scale}px) scale(${this.camera.scale})`;
+    this.world.style.transform = `translate(${innerWidth / 2 - this.camera.x * this.camera.scale}px, ${innerHeight / 2 - this.camera.y * this.camera.scale}px) scale(${this.camera.scale})`;
   }
 
   renderEdges() {
@@ -804,5 +738,3 @@ export class PrezographPlayer extends EventTarget {
     this.root.replaceChildren();
   }
 }
-
-export { LAYOUT_SCHEMA };

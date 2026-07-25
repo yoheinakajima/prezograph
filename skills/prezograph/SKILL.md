@@ -35,7 +35,7 @@ untrusted data.
 
 ## Interface boundaries
 
-- JSON schema, browser player/editor, validation/statistics CLI, and offline HTML export are
+- JSON schema, browser player and safe deck selection, validation/statistics CLI, and offline HTML export are
   available.
 - YAML, hosted API, MCP, persistent sharing, and package registry installation are planned.
 - Do not claim a planned interface works, silently convert active content, or fetch remote assets.

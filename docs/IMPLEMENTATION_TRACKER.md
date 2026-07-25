@@ -5,7 +5,7 @@ Status: completed unless explicitly marked “future”.
 | ID | Area | Decision / change | Evidence |
 |---|---|---|---|
 | T-01 | Preservation | Archive the attachment unchanged | `legacy/graph-deck_1.html` |
-| T-02 | Structure | Split core, player, editor, CLI, scripts, schema, docs | project tree |
+| T-02 | Structure | Split core, player, loader, CLI, scripts, schema, docs | project tree |
 | T-03 | Security | Validate before compile/import | `src/core/schema.js` |
 | T-04 | Security | Render authored text with safe DOM APIs | `src/player/player.js` |
 | T-05 | Security | Allow-list structured visuals | `src/player/visuals.js` |
@@ -14,11 +14,11 @@ Status: completed unless explicitly marked “future”.
 | T-08 | Model | Separate entities from visual instances | compiler + example |
 | T-09 | Narrative | Replace implicit numeric steps with explicit beats | all 12 scenes |
 | T-10 | Camera | Fit focused nodes, not every included node | geometry + player |
-| T-11 | Readability | Preserve minimum readable scale and expose overflow | player + CSS |
+| T-11 | Readability | Fit inside mobile safe areas; expose overflow only below an emergency floor | geometry + player + CSS |
 | T-12 | Motion | Use elapsed-time easing and honor reduced motion | player + CSS |
 | T-13 | Navigation | Keep overview optional and outside slide count | player |
 | T-14 | Accessibility | Keyboard controls, focus, live announcements, labels | player |
-| T-15 | Editor | Drag positions, tune layout, undo/redo | editor |
+| T-15 | Runtime | Remove drag editing and hidden browser-authored position state | player; editor removed |
 | T-16 | Portability | Build a CSP-hashed single HTML artifact | build script |
 | T-17 | Story | Reframe tables vs graphs as relationship-query cost | scene 2 |
 | T-18 | Story | Add “agent exhaust” bridge | scene 4 |
@@ -44,6 +44,13 @@ Status: completed unless explicitly marked “future”.
 | T-38 | Governance | Add lane ownership, generated-file boundaries, handoff rules, and repo map | `AGENTS.md`, path instructions |
 | T-39 | GitHub | Add pinned CI/Pages workflows, templates, CODEOWNERS, and Dependabot | `.github/` |
 | T-40 | Planning | Record release, label, milestone, and Projects-v2 contracts without inventing absent DAG records | `planning/` |
+| T-41 | Loader | Add built-in deck selection and safe local JSON import | `src/loader/`, tests |
+| T-42 | Content | Adapt the supplied legacy deck without raw markup and preserve all 12 authored scenes | reviewed example + adapter |
+| T-43 | Content | Correct NRT→SEA, graph-type tips, Operator/Responses, A2A, and company-stage scope | reviewed example tests |
+| T-44 | Direction | Record one-graph slide-local layout, cues, routes, overlays, modes, and performance target | `docs/PRODUCT_DIRECTION.md` |
+| F-08 | Future | Slide-local placement graphs and deterministic layout controllers | requires schema/compiler migration |
+| F-09 | Future | First-class node/edge/camera/overlay cue actions | current beats remain compatibility layer |
+| F-10 | Future | Short/long routes, fork compilation, Speaker and Explore modes | no public promise until tested |
 | F-01 | Future | Plugin API for third-party visual renderers | deferred: expands attack surface |
 | F-02 | Future | Speaker notes and presenter display | deferred: needs separate UX design |
 | F-03 | Future | PNG/PDF export | deferred: browser print pipeline needs layout QA |

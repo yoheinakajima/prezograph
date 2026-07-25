@@ -7,7 +7,7 @@ import { escapeInlineScript } from "../src/core/escape.js";
 
 const root = path.resolve(import.meta.dirname, "..");
 const output = path.join(root, "dist/prezograph.html");
-const deckPath = path.resolve(process.argv[2] || path.join(root, "examples/graphs-are-awesome/deck.json"));
+const deckPath = path.resolve(process.argv[2] || path.join(root, "examples/graphs-are-awesome/reviewed.deck.json"));
 
 const modulePaths = [
   "src/core/schema.js",
@@ -15,7 +15,6 @@ const modulePaths = [
   "src/core/compile.js",
   "src/player/visuals.js",
   "src/player/player.js",
-  "src/editor/editor.js",
 ];
 
 const stripModuleSyntax = (code) =>
@@ -36,7 +35,7 @@ const script = escapeInlineScript([
   ...modules.map(stripModuleSyntax),
   `const app = document.querySelector("#app");`,
   `const player = new PrezographPlayer(app, globalThis.PREZOGRAPH_DECK);`,
-  `attachEditor(player);`,
+  `player.controls.decks.hidden = true;`,
 ].join("\n\n"));
 
 const digest = (value) => createHash("sha256").update(value).digest("base64");

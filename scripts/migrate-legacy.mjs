@@ -366,7 +366,7 @@ Object.assign(entities, {
   oss_repo: {
     title: "Prezograph",
     sub: "JSON → graph-native presentation",
-    body: "Validate it, present it, edit positions, and export a portable single-file deck.",
+    body: "Validate it, select it, present it, and export a portable single-file deck.",
     ...sourceRef("https://github.com/yoheinakajima/prezograph", "2026-07-24"),
   },
   yg_repo: {

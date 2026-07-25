@@ -4,8 +4,9 @@ Run date: July 24, 2026
 
 ## Automated
 
-- `npm run validate` — passed: schema 2.0, 12 scenes, 136 rendered entities.
-- `npm test` — passed: 19/19 schema, security, compilation, geometry, content, hostile-input,
+- `npm run validate` — passed for both schema-v2 examples; the reviewed adaptation contains 12
+  scenes, 133 semantic entities, and 131 rendered instances.
+- `npm test` — passed: 25/25 schema, security, loader, compilation, geometry, content, hostile-input,
   public-copy, agent-surface, and workflow-policy assertions.
 - `npm run build` — passed: CSP-hashed portable `dist/prezograph.html`.
 - `npm run build:site` — passed: static Pages artifact with home, app, agent, raw source,
@@ -19,17 +20,18 @@ Run date: July 24, 2026
 
 ## Browser
 
-- Development shell loaded 151 instances with no console errors.
-- Portable single-file build loaded 151 instances with no console errors or CSP violations.
-- Walked all 38 desktop beats across all 12 scenes.
-- Walked all 38 beats inside a 390 px mobile viewport.
-- Inspected first scene, company segment, complete company landscape, ending, and whole-graph view.
+- Development shell loaded the reviewed 131-instance adaptation.
+- Walked all 23 reviewed cues at 1440×900; every active node remained inside the safe area and no
+  scene entered overflow.
+- Walked all 23 reviewed cues at 390×844; every active node remained inside the safe area and no
+  scene entered overflow.
+- Inspected the opening and mobile deck-selection bottom sheet visually.
 - Confirmed the ending remains scene 12; overview is optional and reports “overview · 12 scenes.”
-- Confirmed active-node scale never dropped below each scene's configured readability floor.
-- Confirmed mobile overflow is explicit and pannable rather than silently shrinking text.
-- Opened the editor, verified five layout controls, and confirmed undo begins disabled.
-- Opened the JSON editor and confirmed an invalid deck is rejected without replacing the active deck.
-- Confirmed the generated single-file deck begins at `01 / 12 · 1/4`.
+- Confirmed the camera scales content below the former 0.8 mobile floor when needed, while retaining
+  an emergency floor and explicit overflow behavior for genuinely unfit content.
+- Switched between the reviewed and technical-preview decks from the selector and confirmed the
+  active title and URL update.
+- Confirmed the reviewed deck begins at `01 / 12 · 1/5`.
 - Confirmed the launch homepage has a complete discovery path, a truthful available/planned split,
   six durable example actions, and no dead-end footer.
 - Confirmed `/agents/` instructs agents to return inert JSON and labels YAML, API, and MCP as planned.
@@ -48,4 +50,7 @@ single-file tabs both had empty browser logs.
 
 - Corrected the camera's vertical card offset so dense-scene titles clear the fixed header.
 - Centered scene cards over focused bounds so mobile titles do not clip offscreen.
-- Preserved the mobile readable-scale notice and touch/pan controls.
+- Added fixed-chrome safe areas to camera fitting.
+- Removed the 0.8 mobile scale floor that caused horizontal clipping.
+- Compressed the reviewed three-lane timeline until all three cue states fit at 390×844.
+- Replaced the manual editor with a schema-validating deck selector and local file input.

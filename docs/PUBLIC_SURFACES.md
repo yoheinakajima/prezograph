@@ -16,8 +16,8 @@ Every public user or agent entry point must expose or link to:
 
 ## Canonical technical-preview copy
 
-- **GitHub About:** Open-source graph-based presentations from versioned JSON. Build and edit in the
-  browser, validate with the local CLI, and export offline.
+- **GitHub About:** Open-source graph-based presentations from versioned JSON. Select and present
+  in the browser, validate with the local CLI, and export offline.
 - **Visible first sentence:** Prezograph is an open-source graph-based presentation tool for
   creating interactive presentations from versioned JSON—in the browser, with local CLI validation
   and portable single-file export.
@@ -37,7 +37,7 @@ Every published example exposes:
 - **Live** — rendered example;
 - **Source** — repository file;
 - **Raw** — immutable text form;
-- **Remix** — opens the source in the browser editor;
+- **Remix** — opens the source in the browser player and deck selector;
 - **Schema** — exact document contract;
 - **Version** — tool and schema version.
 
@@ -49,7 +49,7 @@ flowchart TD
   H --> R["Repository"]
   H --> A["Agent instructions"]
   L --> S["JSON source"]
-  L --> M["Remix/editor"]
+  L --> M["Remix/deck selector"]
   S --> C["Schema"]
   R --> D["Docs"]
   R --> Q["Security + support"]

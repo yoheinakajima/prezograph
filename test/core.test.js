@@ -35,7 +35,7 @@ test("compiler resolves one entity into independent visual instances", () => {
   assert.equal(miniDeck.scenes[0].instances[0].pos[0], 0, "caller data remains immutable");
 });
 
-test("bounds and camera fit honor scene anchors and readable floors", () => {
+test("bounds and camera fit honor scene anchors and mobile safe areas", () => {
   const compiled = compileDeck(miniDeck);
   for (const scene of compiled.scenes) {
     for (const instance of scene.instances) instance.sceneAnchor = scene.anchor;
@@ -45,8 +45,23 @@ test("bounds and camera fit honor scene anchors and readable floors", () => {
   ]));
   assert.deepEqual(bounds, { x0: 50, y0: 170, x1: 150, y1: 230, width: 100, height: 60 });
 
-  const fit = fitBounds(bounds, { width: 320, height: 480 }, compiled.scenes[0].layout);
-  assert.ok(fit.scale >= 0.8, "mobile keeps a readable scale");
+  const safeArea = { top: 84, right: 14, bottom: 112, left: 14 };
+  const denseBounds = { x0: 0, y0: 0, x1: 620, y1: 260, width: 620, height: 260 };
+  const fit = fitBounds(
+    denseBounds,
+    { width: 390, height: 844 },
+    compiled.scenes[0].layout,
+    { safeArea },
+  );
+  assert.ok(fit.scale < 0.8, "mobile may scale below the former clipping floor");
+  assert.equal(fit.overflow, false);
+
+  const projectX = (x) => 390 / 2 + (x - fit.x) * fit.scale;
+  const projectY = (y) => 844 / 2 + (y - fit.y) * fit.scale;
+  assert.ok(projectX(denseBounds.x0) >= safeArea.left);
+  assert.ok(projectX(denseBounds.x1) <= 390 - safeArea.right);
+  assert.ok(projectY(denseBounds.y0) >= safeArea.top);
+  assert.ok(projectY(denseBounds.y1) <= 844 - safeArea.bottom);
 });
 
 test("edge endpoints stop at node borders", () => {

@@ -7,8 +7,9 @@
 Prezograph is an open-source graph-based presentation tool for creating interactive presentations
 from versioned JSON—in the browser, with local CLI validation and portable single-file export.
 
-Facts live in reusable entities; scenes place local visual instances; beats explicitly control what
-appears and what the camera frames.
+The product direction is: **one graph, many views, many routes**. The current schema keeps facts in
+reusable entities, places them locally per scene, and uses explicit beats to control what appears
+and what the camera frames.
 
 [Live site](https://yoheinakajima.github.io/prezograph/) ·
 [Open the example](https://yoheinakajima.github.io/prezograph/app/) ·
@@ -16,12 +17,19 @@ appears and what the camera frames.
 [Security](SECURITY.md) ·
 [Roadmap](docs/RELEASE_PROFILES.md)
 
-> **Technical preview:** JSON presentation, browser editing, CLI validation/statistics, and offline
+> **Technical preview:** JSON presentation, safe deck selection/import, CLI validation/statistics, and offline
 > export work today. YAML, hosted API, MCP, persistent sharing, and package registries are planned
 > interfaces and are not part of the current public promise.
 
-The included “Graphs Are Awesome” deck is both an example and a dogfood test: its source is
-[examples/graphs-are-awesome/deck.json](examples/graphs-are-awesome/deck.json).
+The default “Graphs Are Awesome” deck is a reviewed, safe adaptation of the supplied graph-deck
+source: [reviewed.deck.json](examples/graphs-are-awesome/reviewed.deck.json). The earlier technical
+preview remains at [deck.json](examples/graphs-are-awesome/deck.json).
+
+Adapt another legacy graph-deck file without copying raw markup:
+
+```bash
+npm run adapt:legacy -- path/to/legacy.deck.json path/to/reviewed.deck.json
+```
 
 ## Quick start
 
@@ -31,8 +39,9 @@ Requires Node.js 20 or newer.
 npm run serve
 ```
 
-Open `http://127.0.0.1:4173`. Use the arrow keys to advance, `o` for the whole graph, `f` to refit,
-and `e` to edit. No install step or runtime dependency is required.
+Open `http://127.0.0.1:4173`. Use the **decks** control to choose a reviewed example or a local
+schema-valid JSON file. Use the arrow keys to advance, `o` for the whole graph, and `f` to refit.
+No install step or runtime dependency is required.
 
 Validate a deck:
 
@@ -66,7 +75,7 @@ pass the same validator as a human-authored deck. See
 
 | Interface | Current status | Truthful action |
 |---|---|---|
-| Browser player/editor | Available | `npm run serve` |
+| Browser player + safe deck loader | Available | `npm run serve` |
 | JSON schema | Available, v2.0 | `schemas/deck.schema.json` |
 | CLI validation/statistics | Available | `node cli/prezograph.mjs --help` |
 | Offline single-file export | Available | `npm run build` |
@@ -110,17 +119,18 @@ The complete machine-readable contract is [schemas/deck.schema.json](schemas/dec
 ## Design principles
 
 - Deck content never enters the DOM through `innerHTML`; text is rendered with safe DOM APIs.
-- Schema validation happens before a deck is compiled or imported.
+- Schema validation happens before a deck is compiled, selected, or imported.
 - Entity identity and visual placement are separate, so one fact can appear locally in many scenes.
 - Beats use explicit `show`, `focus`, and `revealOrder` lists instead of hidden numeric step rules.
 - The whole-graph view is optional and is not counted as an extra slide or forced after the ending.
-- Reduced-motion preferences, keyboard navigation, focus states, and readable-scale floors are built in.
+- Mobile camera fitting honors the fixed header and controls before falling back to explicit overflow.
+- Reduced-motion preferences, keyboard navigation, focus states, and emergency readable-scale floors are built in.
 
 ## Project map
 
 - `src/core/` — validation, compilation, geometry
 - `src/player/` — renderer, camera, interaction, built-in visuals
-- `src/editor/` — position/layout editing, undo/redo, JSON import/export
+- `src/loader/` — same-origin catalog loading and validated local JSON import
 - `cli/` — validation and deck statistics
 - `scripts/` — local server, legacy migration, single-file build
 - `site/` — static public discovery and agent pages
@@ -132,4 +142,4 @@ The complete machine-readable contract is [schemas/deck.schema.json](schemas/dec
 - `legacy/` — the original attached prototype, preserved unchanged
 
 See [CONTRIBUTING.md](CONTRIBUTING.md), [SECURITY.md](SECURITY.md), and
-[docs/AUDIT_REPORT.md](docs/AUDIT_REPORT.md) before making structural changes.
+[docs/PRODUCT_DIRECTION.md](docs/PRODUCT_DIRECTION.md) before making structural changes.

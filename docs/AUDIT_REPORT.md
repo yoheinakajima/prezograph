@@ -1,5 +1,10 @@
 # Prezograph audit and revision report
 
+> Historical note: this initial audit predates the binding decisions in
+> [PRODUCT_DIRECTION.md](PRODUCT_DIRECTION.md). Where they conflict, the newer direction controls:
+> preserve “Order versus chaos” and “Rows and edges,” keep one semantic graph with slide-local
+> targets, and do not ship a manual browser editor.
+
 Reviewed artifact: `graph-deck_1.html`
 Review date: July 24, 2026
 Scope: tool architecture, security, data model, interaction, accessibility, animation order,

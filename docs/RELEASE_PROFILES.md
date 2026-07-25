@@ -7,7 +7,7 @@ Public copy must describe the selected profile, not the intended end state.
 The first public repository promises:
 
 - graph-based browser presentations from schema-versioned JSON;
-- safe local JSON import and visual editing;
+- safe built-in deck selection and local JSON import;
 - validation and statistics through the local CLI;
 - a CSP-protected offline single-file export;
 - a static discovery site and example deck;

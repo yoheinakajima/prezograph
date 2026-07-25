@@ -12,7 +12,7 @@ validate it, then open it with Prezograph.
 5. Validate with `node cli/prezograph.mjs validate FILE`.
 6. Report sources, assumptions, validation evidence, and unsupported requested interfaces.
 
-Available today: versioned JSON, browser player/editor, local validation/statistics CLI, and offline
+Available today: versioned JSON, browser player and safe deck selection, local validation/statistics CLI, and offline
 single-file export.
 
 Planned: YAML, hosted API, MCP, persistent sharing, and registry installation.

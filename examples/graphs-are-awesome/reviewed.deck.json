@@ -1,0 +1,3810 @@
+{
+  "schemaVersion": "2.0",
+  "meta": {
+    "title": "Graphs Are Awesome · Reviewed graph-deck adaptation",
+    "author": "Yohei Nakajima",
+    "event": "GraphCon",
+    "date": "July 25, 2026",
+    "asOf": "2026-07-24",
+    "repository": "https://github.com/yoheinakajima/prezograph",
+    "source": "Adapted from the supplied graph-deck JSON; raw HTML assets removed"
+  },
+  "theme": {
+    "colors": {
+      "background": "#FCFBF7",
+      "surface": "#ffffff",
+      "ink": "#1D1F23",
+      "muted": "#62666F",
+      "light": "#9BA0A8",
+      "hair": "#E7E3D9",
+      "indigo": "#574ce3",
+      "green": "#47751f",
+      "tan": "#80551d"
+    }
+  },
+  "entities": {
+    "t_hub": {
+      "title": "Graphs are awesome",
+      "sub": "because relationships are where the meaning lives"
+    },
+    "t_speaker": {
+      "title": "Yohei Nakajima"
+    },
+    "t_conf": {
+      "title": "GraphCon · Jul 25 2026"
+    },
+    "n_invest": {
+      "title": "invest"
+    },
+    "n_build": {
+      "title": "build"
+    },
+    "n_untapped": {
+      "title": "Untapped Capital",
+      "sub": "pre-seed fund",
+      "tip": "Pre-seed venture fund backing unexpected founders — FalkorDB is in the portfolio."
+    },
+    "n_agentfund": {
+      "title": "Agent Fund",
+      "sub": "agents backing agents",
+      "tip": "Backing agent-native startups — Mem0 is in the portfolio."
+    },
+    "y_babyagi": {
+      "title": "BabyAGI",
+      "sub": "Mar 2023",
+      "body": "a task list that runs itself",
+      "tip": "The autonomous agent that started the task-loop wave — a task queue the agent creates, prioritizes, and executes. The tasks form a graph."
+    },
+    "y_insta": {
+      "title": "InstaGraph",
+      "sub": "Sep 2023",
+      "body": "text → instant knowledge graph",
+      "tip": "Paste text or a URL, get a knowledge graph. The moment converting anything into nodes and edges felt one-click."
+    },
+    "y_mind": {
+      "title": "MindGraph",
+      "sub": "Mar 2024",
+      "body": "graph-native memory starter kit",
+      "tip": "Open-source starter kit for graph-as-memory — an API-first proto-CRM where the graph is the database."
+    },
+    "y_pretty": {
+      "title": "PrettyGraph",
+      "sub": "2024",
+      "body": "text → pretty graphs",
+      "tip": "A small experiment in making text-to-graph output beautiful. Same data, better drawing — order from chaos."
+    },
+    "y_b2": {
+      "title": "BabyAGI 2",
+      "sub": "Sep 2024",
+      "body": "functionz — a self-building function graph",
+      "tip": "Rebuilt around a function registry: functions, their dependencies, and triggers stored as a graph the agent extends — the functiongraph."
+    },
+    "y_active": {
+      "title": "ActiveGraph",
+      "sub": "2025 – 26",
+      "body": "event + context graphs for agents",
+      "tip": "Current work: event-sourced context graphs — the living state layer this talk keeps circling back to."
+    },
+    "oc_data": {
+      "title": "same data",
+      "sub": "seven nodes · seven edges"
+    },
+    "oc_order": {
+      "title": "Order",
+      "sub": "drawn as a graph — the topology is visible"
+    },
+    "oc_chaos": {
+      "title": "Chaos",
+      "sub": "stored as tables — the topology is hidden"
+    },
+    "ev_hub": {
+      "title": "Everything is a graph"
+    },
+    "ev_social": {
+      "title": "Social",
+      "sub": "people · trust · influence",
+      "body": "(alice)-[:follows]->(bob)"
+    },
+    "ev_business": {
+      "title": "Business",
+      "sub": "companies · deals · funds",
+      "body": "(fund)-[:invested]->(acme)"
+    },
+    "ev_objects": {
+      "title": "Objects",
+      "sub": "parts · dependencies",
+      "body": "(wheel)-[:part_of]->(car)"
+    },
+    "ev_places": {
+      "title": "Places",
+      "sub": "locations · routes",
+      "body": "(nrt)-[:flight]->(sea)"
+    },
+    "ev_beliefs": {
+      "title": "Beliefs",
+      "sub": "claims · evidence · revision",
+      "body": "(claim)-[:based_on]->(src)"
+    },
+    "i_alice": {
+      "title": "alice"
+    },
+    "i_bob": {
+      "title": "bob"
+    },
+    "i_fund": {
+      "title": "a fund"
+    },
+    "i_acme": {
+      "title": "acme"
+    },
+    "i_car": {
+      "title": "car"
+    },
+    "i_wheel": {
+      "title": "wheel"
+    },
+    "i_nrt": {
+      "title": "nrt"
+    },
+    "i_sea": {
+      "title": "sea"
+    },
+    "i_claim": {
+      "title": "a claim"
+    },
+    "i_src": {
+      "title": "the source"
+    },
+    "re_edges": {
+      "title": "Edges",
+      "sub": "easy to reason about",
+      "body": "uses · paid_by · mentions · owns · limits"
+    },
+    "re_rows": {
+      "title": "Rows",
+      "sub": "easy to inspect, one by one",
+      "body": "customer · invoice · ticket · team · policy"
+    },
+    "tl_hub": {
+      "title": "Agents got graph-shaped",
+      "sub": "in public · 2022 – 2025"
+    },
+    "tl_react": {
+      "title": "ReAct",
+      "sub": "Oct 2022",
+      "body": "interleave reasoning + acting — the base loop"
+    },
+    "tl_baby": {
+      "title": "BabyAGI / AutoGPT / ToT",
+      "sub": "Mar – May 2023",
+      "body": "task queues + reasoning trees"
+    },
+    "tl_fc": {
+      "title": "Function calling",
+      "sub": "Jun 2023",
+      "body": "structured tool edges from the model"
+    },
+    "tl_ag": {
+      "title": "AutoGen / Assistants API",
+      "sub": "Sep – Nov 2023",
+      "body": "agent teams + threads as state"
+    },
+    "tl_lg": {
+      "title": "LangGraph",
+      "sub": "Jan 2024",
+      "body": "explicit nodes, edges, cycles, checkpoints"
+    },
+    "tl_gr": {
+      "title": "Microsoft GraphRAG",
+      "sub": "Jul 2024",
+      "body": "retrieval over an entity graph + community summaries"
+    },
+    "tl_mcp": {
+      "title": "MCP",
+      "sub": "Nov 2024",
+      "body": "open standard — tools + resources as a context graph"
+    },
+    "tl_op": {
+      "title": "Operator",
+      "sub": "Jan 23 2025",
+      "body": "Browser-acting research preview; later integrated into ChatGPT agent.",
+      "source": "https://openai.com/index/introducing-operator/",
+      "sourceDate": "2026-07-24"
+    },
+    "inv_g_old": {
+      "title": "graph-first"
+    },
+    "inv_ont_old": {
+      "title": "ontology",
+      "sub": "the prerequisite",
+      "body": "classes, relations, constraints — designed before use"
+    },
+    "inv_ing": {
+      "title": "ingestion & schema",
+      "sub": "built before anyone benefits"
+    },
+    "inv_use_old": {
+      "title": "usage",
+      "sub": "finally — if anyone still trusts it"
+    },
+    "inv_decay": {
+      "title": "trust decays",
+      "sub": "no correction loop · stale facts"
+    },
+    "inv_g_new": {
+      "title": "agent-first"
+    },
+    "inv_use_new": {
+      "title": "usage",
+      "sub": "agent workflows run day one"
+    },
+    "inv_prop": {
+      "title": "proposals",
+      "sub": "LLM extracts nodes + edges from traces"
+    },
+    "inv_val": {
+      "title": "validators",
+      "sub": "humans + rules approve or reject"
+    },
+    "inv_ont_new": {
+      "title": "ontology",
+      "sub": "the runtime contract",
+      "body": "hardened where correctness matters"
+    },
+    "st_before": {
+      "title": "the old job",
+      "sub": "finish the ontology",
+      "body": "model every fact before anyone benefits",
+      "tip": "Graph-first: months of modeling before the first user query. Ends in trust decay — see the inversion."
+    },
+    "st_after": {
+      "title": "the new job",
+      "sub": "keep living state trustworthy",
+      "body": "harden what agents actually use",
+      "tip": "Agent-first: the workflow runs from day one and the job becomes tending the graph it generates."
+    },
+    "st_hub": {
+      "title": "agent state",
+      "sub": "memory · context · action"
+    },
+    "st_id": {
+      "title": "identity",
+      "sub": "who is who?"
+    },
+    "st_perm": {
+      "title": "permissions",
+      "sub": "who can see or act?"
+    },
+    "st_time": {
+      "title": "temporal truth",
+      "sub": "what was true when?"
+    },
+    "st_prov": {
+      "title": "provenance",
+      "sub": "why believe this?"
+    },
+    "st_corr": {
+      "title": "correction loop",
+      "sub": "how does it improve?"
+    },
+    "mk_hub": {
+      "title": "The graph market",
+      "sub": "six segments · one stack",
+      "tip": "The picks-and-shovels layer forming around living graphs — hover any segment or company for what it does and how it is doing."
+    },
+    "seg_db": {
+      "title": "Graph databases",
+      "sub": "store the world graph",
+      "tip": "Databases purpose-built to store and traverse nodes and edges — the persistence layer for world graphs. Nine companies, from a ~$581M leader to fresh seeds."
+    },
+    "seg_build": {
+      "title": "KG construction",
+      "sub": "documents → nodes + edges",
+      "tip": "Turn unstructured stuff — documents, web pages, audio — into nodes and edges. The 'proposals' step of the agent-first loop, as an industry."
+    },
+    "seg_mem": {
+      "title": "Agent memory",
+      "sub": "temporal state for agents",
+      "tip": "Memory layers for agents built on temporal knowledge graphs — the living agent state this talk keeps pointing at. Already consolidating: Cognee wound down in 2026."
+    },
+    "seg_kg": {
+      "title": "Semantic KG platforms",
+      "sub": "the schema-first lineage",
+      "tip": "The graph-first tradition: RDF, ontologies, semantic layers — now selling provenance and governance to GenAI buyers."
+    },
+    "seg_er": {
+      "title": "Entity resolution",
+      "sub": "who is who, at scale",
+      "tip": "Deduplicating people and companies across messy records — the 'identity' question as a product."
+    },
+    "seg_viz": {
+      "title": "Graph viz & investigation",
+      "sub": "seeing the topology",
+      "tip": "Drawing the graph so humans can see the topology — investigation UIs and rendering SDKs. 'Order', productized."
+    },
+    "co_neo4j": {
+      "title": "Neo4j",
+      "tip": "Graph database and analytics company; it announced more than $200M in ARR in November 2024.",
+      "source": "https://neo4j.com/press-releases/neo4j-revenue-milestone-2024/",
+      "sourceDate": "2026-07-24"
+    },
+    "co_tigergraph": {
+      "title": "TigerGraph",
+      "tip": "Native MPP graph database for real-time multi-hop analytics at petabyte scale. JPMC, Mastercard, Amex."
+    },
+    "co_memgraph": {
+      "title": "Memgraph",
+      "tip": "In-memory, Cypher-compatible, streaming-first — the popular drop-in Neo4j alternative for agent workloads. M12-backed."
+    },
+    "co_arangodb": {
+      "title": "ArangoDB",
+      "tip": "Multi-model: graph + vector + document + search in one engine; AutoGraph KG construction coming. ~$47M raised."
+    },
+    "co_hypermodedgrap": {
+      "title": "Dgraph",
+      "tip": "Open-source graph database stewarded by Istari Digital since October 2025.",
+      "source": "https://discuss.dgraph.io/t/dgraph-welcome-to-istari/20021",
+      "sourceDate": "2026-07-24"
+    },
+    "co_falkordb": {
+      "title": "FalkorDB",
+      "tip": "Ultra-low-latency RedisGraph successor (sparse-matrix based), purpose-built for GraphRAG. Tel Aviv seed."
+    },
+    "co_nebulagraph": {
+      "title": "NebulaGraph",
+      "tip": "Distributed open-source graph DB with trillion-edge deployments — dominant in Chinese internet cos. ~$40M+."
+    },
+    "co_ultipa": {
+      "title": "Ultipa",
+      "tip": "HTAP graph DB claiming 10+ hop real-time traversal; FSI risk and fraud focus. $21M Series A."
+    },
+    "co_puppygraph": {
+      "title": "PuppyGraph",
+      "tip": "Zero-ETL graph query engine over Iceberg / Delta / Snowflake — query the lakehouse as a graph without moving it. Coinbase, eBay. $5M seed."
+    },
+    "co_diffbot": {
+      "title": "Diffbot",
+      "tip": "Crawls the whole web into a 10B-entity, 1T-fact knowledge graph, sold as APIs. Tencent-backed; famously capital-efficient."
+    },
+    "co_lettria": {
+      "title": "Lettria",
+      "tip": "No-code NLP that turns complex documents into auditable knowledge graphs; GraphRAG for regulated industries. Paris."
+    },
+    "co_graphlit": {
+      "title": "Graphlit",
+      "tip": "Historical landscape entry only. Active product operations are winding down, new signups are closed, and customer offboarding is underway.",
+      "source": "https://www.graphlit.com/legal/sunset",
+      "sourceDate": "2026-07-24"
+    },
+    "co_whyhowai": {
+      "title": "WhyHow.AI",
+      "tip": "SDK for small, schema-controlled knowledge graphs — determinism for RAG and agent pipelines."
+    },
+    "co_mem0": {
+      "title": "Mem0",
+      "tip": "The company announced $24M across Seed and Series A and selection as the AWS Agent SDK memory provider.",
+      "source": "https://mem0.ai/series-a",
+      "sourceDate": "2026-07-24"
+    },
+    "co_stardog": {
+      "title": "Stardog",
+      "tip": "Enterprise KG that virtualizes data without moving it; Voicebox markets 'hallucination-free' semantic parsing. NASA, Morgan Stanley."
+    },
+    "co_graphwiseontot": {
+      "title": "Graphwise",
+      "tip": "The combined company formed by Ontotext and Semantic Web Company; GraphDB and PoolParty remain product lineages.",
+      "source": "https://graphwise.ai/blog/graphwise-merger-swc-ontotext/",
+      "sourceDate": "2026-07-24"
+    },
+    "co_franzallegrogr": {
+      "title": "Franz (AllegroGraph)",
+      "tip": "RDF + OWL reasoning + vectors for neuro-symbolic AI since 1984. Founder-owned; gov, pharma, intel."
+    },
+    "co_eccenca": {
+      "title": "eccenca",
+      "tip": "Corporate Memory — governed semantic data fabrics on W3C standards. Siemens, Bosch, Airbus, Bayer."
+    },
+    "co_metaphacts": {
+      "title": "metaphacts",
+      "tip": "Acquired by Digital Science on January 23, 2023; metaphactory remains its semantic platform.",
+      "source": "https://metaphacts.com/metaphacts-joins-the-digital-science-technology-group-following-acquisition",
+      "sourceDate": "2026-07-24"
+    },
+    "co_timbrai": {
+      "title": "Timbr.ai",
+      "tip": "SQL-native semantic layer that turns existing warehouses into virtual knowledge graphs — ontologies in plain SQL."
+    },
+    "co_relationalai": {
+      "title": "RelationalAI",
+      "tip": "Relational knowledge graphs as a Snowflake-native coprocessor — rules, reasoning, and graph analytics over enterprise data."
+    },
+    "co_quantexa": {
+      "title": "Quantexa",
+      "tip": "Decision-intelligence platform using entity resolution and graph analytics.",
+      "source": "https://www.quantexa.com/",
+      "sourceDate": "2026-07-24"
+    },
+    "co_senzing": {
+      "title": "Senzing",
+      "tip": "Jeff Jonas's entity-resolution engine, embedded in customer infra, validated to ~100B records; OEM'd by IBM and Esri."
+    },
+    "co_tilores": {
+      "title": "Tilores",
+      "tip": "Serverless real-time entity-resolution API; IdentityRAG grounds LLMs in resolved customer data. Berlin."
+    },
+    "co_linkurious": {
+      "title": "Linkurious",
+      "tip": "Graph investigation and visualization product acquired by Nuix.",
+      "source": "https://www.nuix.com/news/completion-linkurious-acquisition-and-updated-full-year-acv-guidance-range",
+      "sourceDate": "2026-07-24"
+    },
+    "co_cambridgeintel": {
+      "title": "Cambridge Intelligence",
+      "tip": "KeyLines / ReGraph JavaScript SDKs for graph visualization in mission-critical intel and security apps. Bootstrapped, profitable."
+    },
+    "co_graphistry": {
+      "title": "Graphistry",
+      "tip": "GPU-accelerated graph visualization — a million nodes in-browser; Louie.ai adds GenAI-native investigation. In-Q-Tel, NVIDIA."
+    },
+    "ex_hub": {
+      "title": "Pick your graph",
+      "sub": "idea → build it → beat SOTA"
+    },
+    "ex_reason": {
+      "title": "Reasoning / plans",
+      "sub": "branches, search, dependencies",
+      "tip": "Branch, score, and select across reasoning trees, plans, and dependency DAGs."
+    },
+    "ex_world": {
+      "title": "World / UI",
+      "sub": "agents map the interface",
+      "tip": "State-transition and affordance graphs describe screens, actions, and changing environments."
+    },
+    "ex_know": {
+      "title": "Knowledge / memory",
+      "sub": "retrieval becomes durable context",
+      "tip": "The core idea: memory is an event-sourced knowledge graph — facts carry provenance and time."
+    },
+    "ex_teams": {
+      "title": "Agent teams",
+      "sub": "workers, roles, handoffs",
+      "tip": "Roles, messages, delegation, review, escalation, and handoffs form a collaboration graph."
+    },
+    "ex_tools": {
+      "title": "Tools / skills",
+      "sub": "skills + code as dependency graphs",
+      "tip": "Typed registries connect skills, dependencies, capabilities, inputs, outputs, and permissions."
+    },
+    "ex_traces": {
+      "title": "Traces / evals",
+      "sub": "logs that look like a graph",
+      "tip": "The core idea: an agent run is a graph you can replay, fork, and diff."
+    },
+    "b_reason": {
+      "title": "branch → score → select planner",
+      "sub": "build this"
+    },
+    "b_world": {
+      "title": "affordance graph of one site",
+      "sub": "build this"
+    },
+    "b_know": {
+      "title": "temporal KG of your inbox",
+      "sub": "build this"
+    },
+    "b_teams": {
+      "title": "handoff graph for 3 agents",
+      "sub": "build this"
+    },
+    "b_tools": {
+      "title": "typed registry + permissions",
+      "sub": "build this"
+    },
+    "b_traces": {
+      "title": "replayable trace of one agent",
+      "sub": "build this"
+    },
+    "s_reason": {
+      "title": "verifier-guided search",
+      "sub": "beat SOTA here"
+    },
+    "s_world": {
+      "title": "cross-app state abstraction",
+      "sub": "beat SOTA here"
+    },
+    "s_know": {
+      "title": "identity + time benchmarks",
+      "sub": "beat SOTA here"
+    },
+    "s_teams": {
+      "title": "learned team topologies",
+      "sub": "beat SOTA here"
+    },
+    "s_tools": {
+      "title": "skill discovery + safety invariants",
+      "sub": "beat SOTA here"
+    },
+    "s_traces": {
+      "title": "replay / fork / diff loops",
+      "sub": "beat SOTA here"
+    },
+    "t_zep": {
+      "title": "Zep / Graphiti",
+      "sub": "temporal memory graphs",
+      "tip": "Agent memory built on Graphiti, an open-source temporal knowledge-graph engine."
+    },
+    "t_lsmith": {
+      "title": "LangSmith / Phoenix",
+      "sub": "trace observability",
+      "tip": "Trace tooling — the raw material for treating runs as replayable graphs."
+    },
+    "lp_agent": {
+      "title": "agent loop"
+    },
+    "lp_comm": {
+      "title": "community loop"
+    },
+    "lp_dev": {
+      "title": "developer loop"
+    },
+    "lp_obs": {
+      "title": "observe"
+    },
+    "lp_rsn": {
+      "title": "reason"
+    },
+    "lp_act": {
+      "title": "act"
+    },
+    "lp_trc": {
+      "title": "traces"
+    },
+    "lp_pat": {
+      "title": "patterns"
+    },
+    "lp_std": {
+      "title": "standards"
+    },
+    "lp_ins": {
+      "title": "instrument"
+    },
+    "lp_cmp": {
+      "title": "compare"
+    },
+    "lp_shr": {
+      "title": "share"
+    },
+    "yg_you": {
+      "title": "you"
+    },
+    "yg_graphs": {
+      "title": "graphs"
+    },
+    "co_cognee": {
+      "title": "Cognee",
+      "tip": "Active open-source memory platform for AI agents; Cognee 1.0 launched June 26, 2026.",
+      "source": "https://www.cognee.ai/blog/cognee-news/cognee-1-0-announcement",
+      "sourceDate": "2026-07-24"
+    },
+    "tl_responses": {
+      "title": "Responses API + Agents SDK",
+      "sub": "Mar 11 2025",
+      "body": "A separate platform milestone for tool use, orchestration, tracing, and agent applications.",
+      "source": "https://openai.com/index/new-tools-for-building-agents/",
+      "sourceDate": "2026-07-24"
+    },
+    "tl_a2a": {
+      "title": "Agent2Agent (A2A)",
+      "sub": "Apr 9 2025",
+      "body": "An open protocol for interoperable communication between agents.",
+      "source": "https://developers.googleblog.com/en/a2a-a-new-era-of-agent-interoperability/",
+      "sourceDate": "2026-07-24"
+    }
+  },
+  "scenes": [
+    {
+      "id": "title",
+      "title": "Graphs are awesome",
+      "caption": "because relationships are where the meaning lives — I invest in graphs, and I build graphs (press next)",
+      "anchor": [
+        1689,
+        1238
+      ],
+      "instances": [
+        {
+          "id": "t_hub",
+          "entity": "t_hub",
+          "pos": [
+            1,
+            -1
+          ],
+          "kind": "hub mega ink",
+          "w": 300
+        },
+        {
+          "id": "t_speaker",
+          "entity": "t_speaker",
+          "pos": [
+            -327,
+            191
+          ],
+          "kind": "tiny indigo",
+          "w": 150
+        },
+        {
+          "id": "t_conf",
+          "entity": "t_conf",
+          "pos": [
+            259,
+            163
+          ],
+          "kind": "tiny ink",
+          "w": 175
+        },
+        {
+          "id": "n_invest",
+          "entity": "n_invest",
+          "pos": [
+            -620,
+            300
+          ],
+          "kind": "tiny indigo",
+          "w": 88
+        },
+        {
+          "id": "n_build",
+          "entity": "n_build",
+          "pos": [
+            30,
+            330
+          ],
+          "kind": "tiny indigo",
+          "w": 80
+        },
+        {
+          "id": "n_untapped",
+          "entity": "n_untapped",
+          "pos": [
+            -920,
+            440
+          ],
+          "kind": "ink",
+          "w": 175
+        },
+        {
+          "id": "n_agentfund",
+          "entity": "n_agentfund",
+          "pos": [
+            -560,
+            500
+          ],
+          "kind": "ink",
+          "w": 165
+        },
+        {
+          "id": "y_babyagi",
+          "entity": "y_babyagi",
+          "pos": [
+            -51,
+            488
+          ],
+          "kind": "ink",
+          "w": 165
+        },
+        {
+          "id": "y_insta",
+          "entity": "y_insta",
+          "pos": [
+            -344,
+            640
+          ],
+          "kind": "ink",
+          "w": 180
+        },
+        {
+          "id": "y_mind",
+          "entity": "y_mind",
+          "pos": [
+            -20,
+            700
+          ],
+          "kind": "ink",
+          "w": 185
+        },
+        {
+          "id": "y_pretty",
+          "entity": "y_pretty",
+          "pos": [
+            250,
+            640
+          ],
+          "kind": "ink",
+          "w": 160
+        },
+        {
+          "id": "y_b2",
+          "entity": "y_b2",
+          "pos": [
+            403,
+            485
+          ],
+          "kind": "ink",
+          "w": 195
+        },
+        {
+          "id": "y_active",
+          "entity": "y_active",
+          "pos": [
+            650,
+            650
+          ],
+          "kind": "ink",
+          "w": 190
+        },
+        {
+          "id": "title_co_falkordb",
+          "entity": "co_falkordb",
+          "pos": [
+            -760,
+            585
+          ],
+          "kind": "tiny ink",
+          "w": 90
+        },
+        {
+          "id": "title_co_mem0",
+          "entity": "co_mem0",
+          "pos": [
+            -400,
+            645
+          ],
+          "kind": "tiny green",
+          "w": 88
+        }
+      ],
+      "edges": [
+        {
+          "id": "title_edge_1",
+          "from": "t_hub",
+          "to": "t_speaker",
+          "label": ":presented_by"
+        },
+        {
+          "id": "title_edge_2",
+          "from": "t_hub",
+          "to": "t_conf",
+          "label": ":at"
+        },
+        {
+          "id": "title_edge_3",
+          "from": "t_speaker",
+          "to": "n_invest",
+          "label": ":does"
+        },
+        {
+          "id": "title_edge_4",
+          "from": "t_speaker",
+          "to": "n_build",
+          "label": ":does"
+        },
+        {
+          "id": "title_edge_5",
+          "from": "n_invest",
+          "to": "n_untapped",
+          "label": ":runs"
+        },
+        {
+          "id": "title_edge_6",
+          "from": "n_invest",
+          "to": "n_agentfund",
+          "label": ":runs"
+        },
+        {
+          "id": "title_edge_7",
+          "from": "n_untapped",
+          "to": "title_co_falkordb",
+          "label": ":backed"
+        },
+        {
+          "id": "title_edge_8",
+          "from": "n_agentfund",
+          "to": "title_co_mem0",
+          "label": ":backed"
+        },
+        {
+          "id": "title_edge_9",
+          "from": "n_build",
+          "to": "y_babyagi",
+          "label": ":shipped"
+        },
+        {
+          "id": "title_edge_10",
+          "from": "y_babyagi",
+          "to": "y_insta",
+          "label": ":then"
+        },
+        {
+          "id": "title_edge_11",
+          "from": "y_babyagi",
+          "to": "y_mind",
+          "label": ":then"
+        },
+        {
+          "id": "title_edge_12",
+          "from": "y_babyagi",
+          "to": "y_pretty",
+          "label": ":then"
+        },
+        {
+          "id": "title_edge_13",
+          "from": "y_babyagi",
+          "to": "y_b2",
+          "label": ":rebuilt_as"
+        },
+        {
+          "id": "title_edge_14",
+          "from": "y_b2",
+          "to": "y_active",
+          "label": ":then"
+        }
+      ],
+      "beats": [
+        {
+          "id": "cue_1",
+          "label": "Opening view",
+          "show": [
+            "t_hub",
+            "t_speaker",
+            "t_conf"
+          ],
+          "focus": [
+            "t_hub",
+            "t_speaker",
+            "t_conf"
+          ],
+          "revealOrder": [
+            "t_hub",
+            "t_speaker",
+            "t_conf"
+          ]
+        },
+        {
+          "id": "cue_2",
+          "label": "Reveal 1",
+          "show": [
+            "t_hub",
+            "t_speaker",
+            "t_conf",
+            "n_invest"
+          ],
+          "focus": [
+            "t_hub",
+            "t_speaker",
+            "t_conf",
+            "n_invest"
+          ],
+          "revealOrder": [
+            "n_invest"
+          ]
+        },
+        {
+          "id": "cue_3",
+          "label": "Reveal 2",
+          "show": [
+            "t_hub",
+            "t_speaker",
+            "t_conf",
+            "n_invest",
+            "n_build"
+          ],
+          "focus": [
+            "t_hub",
+            "t_speaker",
+            "t_conf",
+            "n_invest",
+            "n_build"
+          ],
+          "revealOrder": [
+            "n_build"
+          ]
+        },
+        {
+          "id": "cue_4",
+          "label": "Reveal 3",
+          "show": [
+            "t_hub",
+            "t_speaker",
+            "t_conf",
+            "n_invest",
+            "n_build",
+            "n_untapped",
+            "n_agentfund",
+            "title_co_falkordb",
+            "title_co_mem0"
+          ],
+          "focus": [
+            "t_hub",
+            "t_speaker",
+            "t_conf",
+            "n_invest",
+            "n_build",
+            "n_untapped",
+            "n_agentfund",
+            "title_co_falkordb",
+            "title_co_mem0"
+          ],
+          "revealOrder": [
+            "n_untapped",
+            "n_agentfund",
+            "title_co_falkordb",
+            "title_co_mem0"
+          ]
+        },
+        {
+          "id": "cue_5",
+          "label": "Reveal 4",
+          "show": [
+            "t_hub",
+            "t_speaker",
+            "t_conf",
+            "n_invest",
+            "n_build",
+            "n_untapped",
+            "n_agentfund",
+            "y_babyagi",
+            "y_insta",
+            "y_mind",
+            "y_pretty",
+            "y_b2",
+            "y_active",
+            "title_co_falkordb",
+            "title_co_mem0"
+          ],
+          "focus": [
+            "t_hub",
+            "t_speaker",
+            "t_conf",
+            "n_invest",
+            "n_build",
+            "n_untapped",
+            "n_agentfund",
+            "y_babyagi",
+            "y_insta",
+            "y_mind",
+            "y_pretty",
+            "y_b2",
+            "y_active",
+            "title_co_falkordb",
+            "title_co_mem0"
+          ],
+          "revealOrder": [
+            "y_babyagi",
+            "y_insta",
+            "y_mind",
+            "y_pretty",
+            "y_b2",
+            "y_active"
+          ]
+        }
+      ],
+      "layout": {
+        "fitMargin": 190,
+        "zoomMax": 1,
+        "noCard": true,
+        "minReadableScale": 0.36
+      }
+    },
+    {
+      "id": "order-chaos",
+      "title": "Order vs chaos",
+      "caption": "the same seven nodes and seven edges — drawn, the structure is obvious; listed, it is invisible",
+      "anchor": [
+        1577,
+        869
+      ],
+      "instances": [
+        {
+          "id": "oc_data",
+          "entity": "oc_data",
+          "pos": [
+            -12,
+            -160
+          ],
+          "kind": "ink",
+          "w": 165
+        },
+        {
+          "id": "oc_order",
+          "entity": "oc_order",
+          "pos": [
+            -230,
+            79
+          ],
+          "kind": "img green",
+          "w": 260,
+          "visual": "network7"
+        },
+        {
+          "id": "oc_chaos",
+          "entity": "oc_chaos",
+          "pos": [
+            213,
+            70
+          ],
+          "kind": "img tan",
+          "w": 245,
+          "visual": "table7"
+        }
+      ],
+      "edges": [
+        {
+          "id": "order-chaos_edge_1",
+          "from": "oc_data",
+          "to": "oc_order",
+          "label": ":drawn_as"
+        },
+        {
+          "id": "order-chaos_edge_2",
+          "from": "oc_data",
+          "to": "oc_chaos",
+          "label": ":stored_as"
+        }
+      ],
+      "beats": [
+        {
+          "id": "cue_1",
+          "label": "Opening view",
+          "show": [
+            "oc_data",
+            "oc_order",
+            "oc_chaos"
+          ],
+          "focus": [
+            "oc_data",
+            "oc_order",
+            "oc_chaos"
+          ],
+          "revealOrder": [
+            "oc_data",
+            "oc_order",
+            "oc_chaos"
+          ]
+        }
+      ],
+      "layout": {
+        "minReadableScale": 0.36
+      }
+    },
+    {
+      "id": "everything",
+      "title": "Everything is a graph",
+      "caption": "press next: ten real things, five domains, one interwoven graph",
+      "anchor": [
+        2128,
+        811
+      ],
+      "instances": [
+        {
+          "id": "ev_hub",
+          "entity": "ev_hub",
+          "pos": [
+            -38,
+            184
+          ],
+          "kind": "hub indigo",
+          "w": 230
+        },
+        {
+          "id": "ev_social",
+          "entity": "ev_social",
+          "pos": [
+            -463,
+            -145
+          ],
+          "kind": "indigo",
+          "w": 190
+        },
+        {
+          "id": "ev_business",
+          "entity": "ev_business",
+          "pos": [
+            -245,
+            -210
+          ],
+          "kind": "indigo",
+          "w": 195
+        },
+        {
+          "id": "ev_objects",
+          "entity": "ev_objects",
+          "pos": [
+            -5,
+            -230
+          ],
+          "kind": "indigo",
+          "w": 190
+        },
+        {
+          "id": "ev_places",
+          "entity": "ev_places",
+          "pos": [
+            235,
+            -190
+          ],
+          "kind": "indigo",
+          "w": 180
+        },
+        {
+          "id": "ev_beliefs",
+          "entity": "ev_beliefs",
+          "pos": [
+            509,
+            -62
+          ],
+          "kind": "indigo",
+          "w": 200
+        },
+        {
+          "id": "i_alice",
+          "entity": "i_alice",
+          "pos": [
+            -600,
+            430
+          ],
+          "kind": "tiny ink",
+          "w": 76
+        },
+        {
+          "id": "i_bob",
+          "entity": "i_bob",
+          "pos": [
+            -367,
+            556
+          ],
+          "kind": "tiny ink",
+          "w": 70
+        },
+        {
+          "id": "i_fund",
+          "entity": "i_fund",
+          "pos": [
+            -361,
+            330
+          ],
+          "kind": "tiny ink",
+          "w": 86
+        },
+        {
+          "id": "i_acme",
+          "entity": "i_acme",
+          "pos": [
+            -70,
+            450
+          ],
+          "kind": "tiny ink",
+          "w": 80
+        },
+        {
+          "id": "i_car",
+          "entity": "i_car",
+          "pos": [
+            196,
+            572
+          ],
+          "kind": "tiny ink",
+          "w": 66
+        },
+        {
+          "id": "i_wheel",
+          "entity": "i_wheel",
+          "pos": [
+            440,
+            450
+          ],
+          "kind": "tiny ink",
+          "w": 82
+        },
+        {
+          "id": "i_nrt",
+          "entity": "i_nrt",
+          "pos": [
+            456,
+            627
+          ],
+          "kind": "tiny ink",
+          "w": 64
+        },
+        {
+          "id": "i_sea",
+          "entity": "i_sea",
+          "pos": [
+            180,
+            330
+          ],
+          "kind": "tiny ink",
+          "w": 66
+        },
+        {
+          "id": "i_claim",
+          "entity": "i_claim",
+          "pos": [
+            -622,
+            627
+          ],
+          "kind": "tiny ink",
+          "w": 90
+        },
+        {
+          "id": "i_src",
+          "entity": "i_src",
+          "pos": [
+            -110,
+            717
+          ],
+          "kind": "tiny ink",
+          "w": 110
+        }
+      ],
+      "edges": [
+        {
+          "id": "everything_edge_1",
+          "from": "ev_hub",
+          "to": "ev_social"
+        },
+        {
+          "id": "everything_edge_2",
+          "from": "ev_hub",
+          "to": "ev_business"
+        },
+        {
+          "id": "everything_edge_3",
+          "from": "ev_hub",
+          "to": "ev_objects"
+        },
+        {
+          "id": "everything_edge_4",
+          "from": "ev_hub",
+          "to": "ev_places"
+        },
+        {
+          "id": "everything_edge_5",
+          "from": "ev_hub",
+          "to": "ev_beliefs"
+        },
+        {
+          "id": "everything_edge_6",
+          "from": "ev_business",
+          "to": "ev_social",
+          "label": ":founders_are_people"
+        },
+        {
+          "id": "everything_edge_7",
+          "from": "ev_business",
+          "to": "ev_places",
+          "label": ":hq_at"
+        },
+        {
+          "id": "everything_edge_8",
+          "from": "ev_beliefs",
+          "to": "ev_social",
+          "label": ":held_by"
+        },
+        {
+          "id": "everything_edge_9",
+          "from": "ev_social",
+          "to": "i_alice",
+          "label": ":e_g"
+        },
+        {
+          "id": "everything_edge_10",
+          "from": "ev_business",
+          "to": "i_fund",
+          "label": ":e_g"
+        },
+        {
+          "id": "everything_edge_11",
+          "from": "ev_beliefs",
+          "to": "i_claim",
+          "label": ":e_g"
+        },
+        {
+          "id": "everything_edge_12",
+          "from": "i_alice",
+          "to": "i_bob",
+          "label": ":follows"
+        },
+        {
+          "id": "everything_edge_13",
+          "from": "i_fund",
+          "to": "i_acme",
+          "label": ":invested"
+        },
+        {
+          "id": "everything_edge_14",
+          "from": "i_bob",
+          "to": "i_acme",
+          "label": ":works_at"
+        },
+        {
+          "id": "everything_edge_15",
+          "from": "i_acme",
+          "to": "i_sea",
+          "label": ":hq_at"
+        },
+        {
+          "id": "everything_edge_16",
+          "from": "i_acme",
+          "to": "i_car",
+          "label": ":makes"
+        },
+        {
+          "id": "everything_edge_17",
+          "from": "i_wheel",
+          "to": "i_car",
+          "label": ":part_of"
+        },
+        {
+          "id": "everything_edge_18",
+          "from": "i_car",
+          "to": "i_nrt",
+          "label": ":parked_at"
+        },
+        {
+          "id": "everything_edge_19",
+          "from": "i_alice",
+          "to": "i_nrt",
+          "label": ":flew_to"
+        },
+        {
+          "id": "everything_edge_20",
+          "from": "i_claim",
+          "to": "i_alice",
+          "label": ":held_by"
+        },
+        {
+          "id": "everything_edge_21",
+          "from": "i_claim",
+          "to": "i_src",
+          "label": ":based_on"
+        },
+        {
+          "id": "everything_edge_22",
+          "from": "i_bob",
+          "to": "i_src",
+          "label": ":wrote"
+        },
+        {
+          "id": "everything_nrt_sea",
+          "from": "i_nrt",
+          "to": "i_sea",
+          "label": ":flight"
+        }
+      ],
+      "beats": [
+        {
+          "id": "cue_1",
+          "label": "Opening view",
+          "show": [
+            "ev_hub",
+            "ev_social",
+            "ev_business",
+            "ev_objects",
+            "ev_places",
+            "ev_beliefs"
+          ],
+          "focus": [
+            "ev_hub",
+            "ev_social",
+            "ev_business",
+            "ev_objects",
+            "ev_places",
+            "ev_beliefs"
+          ],
+          "revealOrder": [
+            "ev_hub",
+            "ev_social",
+            "ev_business",
+            "ev_objects",
+            "ev_places",
+            "ev_beliefs"
+          ]
+        },
+        {
+          "id": "cue_2",
+          "label": "Reveal 1",
+          "show": [
+            "ev_hub",
+            "ev_social",
+            "ev_business",
+            "ev_objects",
+            "ev_places",
+            "ev_beliefs",
+            "i_alice",
+            "i_bob",
+            "i_fund",
+            "i_acme",
+            "i_car",
+            "i_wheel",
+            "i_nrt",
+            "i_sea",
+            "i_claim",
+            "i_src"
+          ],
+          "focus": [
+            "ev_hub",
+            "ev_social",
+            "ev_business",
+            "ev_objects",
+            "ev_places",
+            "ev_beliefs",
+            "i_alice",
+            "i_bob",
+            "i_fund",
+            "i_acme",
+            "i_car",
+            "i_wheel",
+            "i_nrt",
+            "i_sea",
+            "i_claim",
+            "i_src"
+          ],
+          "revealOrder": [
+            "i_alice",
+            "i_bob",
+            "i_fund",
+            "i_acme",
+            "i_car",
+            "i_wheel",
+            "i_nrt",
+            "i_sea",
+            "i_claim",
+            "i_src"
+          ]
+        }
+      ],
+      "layout": {
+        "minReadableScale": 0.36
+      }
+    },
+    {
+      "id": "rows-edges",
+      "title": "Rows and edges",
+      "caption": "same node, two views — Rows are the Chaos tables, Edges are the Order drawing",
+      "anchor": [
+        1577,
+        955
+      ],
+      "instances": [
+        {
+          "id": "re_edges",
+          "entity": "re_edges",
+          "pos": [
+            -295,
+            106
+          ],
+          "kind": "green",
+          "w": 195
+        },
+        {
+          "id": "re_rows",
+          "entity": "re_rows",
+          "pos": [
+            316,
+            59
+          ],
+          "kind": "tan",
+          "w": 200
+        },
+        {
+          "id": "rows-edges_oc_data",
+          "entity": "oc_data",
+          "pos": [
+            0,
+            -250
+          ],
+          "kind": "ink",
+          "w": 165
+        },
+        {
+          "id": "rows-edges_oc_order",
+          "entity": "oc_order",
+          "pos": [
+            -330,
+            -60
+          ],
+          "kind": "img green",
+          "w": 260,
+          "visual": "network7"
+        },
+        {
+          "id": "rows-edges_oc_chaos",
+          "entity": "oc_chaos",
+          "pos": [
+            330,
+            -60
+          ],
+          "kind": "img tan",
+          "w": 245,
+          "visual": "table7"
+        }
+      ],
+      "edges": [
+        {
+          "id": "rows-edges_edge_1",
+          "from": "rows-edges_oc_data",
+          "to": "re_edges",
+          "label": ":as_edges"
+        },
+        {
+          "id": "rows-edges_edge_2",
+          "from": "rows-edges_oc_data",
+          "to": "re_rows",
+          "label": ":as_rows"
+        }
+      ],
+      "beats": [
+        {
+          "id": "cue_1",
+          "label": "Opening view",
+          "show": [
+            "re_edges",
+            "re_rows",
+            "rows-edges_oc_data",
+            "rows-edges_oc_order",
+            "rows-edges_oc_chaos"
+          ],
+          "focus": [
+            "re_edges",
+            "re_rows",
+            "rows-edges_oc_data",
+            "rows-edges_oc_order",
+            "rows-edges_oc_chaos"
+          ],
+          "revealOrder": [
+            "re_edges",
+            "re_rows",
+            "rows-edges_oc_data",
+            "rows-edges_oc_order",
+            "rows-edges_oc_chaos"
+          ]
+        }
+      ],
+      "layout": {
+        "minReadableScale": 0.36
+      }
+    },
+    {
+      "id": "timeline",
+      "title": "Agents got graph-shaped in public",
+      "caption": "Reasoning, interoperability, and durable state converged in parallel",
+      "anchor": [
+        2004,
+        1436
+      ],
+      "instances": [
+        {
+          "id": "tl_hub",
+          "entity": "tl_hub",
+          "pos": [
+            -820,
+            -420
+          ],
+          "kind": "hub ink",
+          "w": 215
+        },
+        {
+          "id": "tl_react",
+          "entity": "tl_react",
+          "pos": [
+            -600,
+            -180
+          ],
+          "kind": "ink",
+          "w": 165
+        },
+        {
+          "id": "tl_baby",
+          "entity": "tl_baby",
+          "pos": [
+            -200,
+            -180
+          ],
+          "kind": "ink",
+          "w": 205
+        },
+        {
+          "id": "tl_fc",
+          "entity": "tl_fc",
+          "pos": [
+            -600,
+            40
+          ],
+          "kind": "ink",
+          "w": 165
+        },
+        {
+          "id": "tl_ag",
+          "entity": "tl_ag",
+          "pos": [
+            -600,
+            260
+          ],
+          "kind": "ink",
+          "w": 190
+        },
+        {
+          "id": "tl_lg",
+          "entity": "tl_lg",
+          "pos": [
+            200,
+            -180
+          ],
+          "kind": "ink",
+          "w": 175
+        },
+        {
+          "id": "tl_gr",
+          "entity": "tl_gr",
+          "pos": [
+            -200,
+            260
+          ],
+          "kind": "ink",
+          "w": 190
+        },
+        {
+          "id": "tl_mcp",
+          "entity": "tl_mcp",
+          "pos": [
+            -200,
+            40
+          ],
+          "kind": "ink",
+          "w": 180
+        },
+        {
+          "id": "tl_op",
+          "entity": "tl_op",
+          "pos": [
+            200,
+            260
+          ],
+          "kind": "ink",
+          "w": 195
+        },
+        {
+          "id": "tl_responses",
+          "entity": "tl_responses",
+          "pos": [
+            200,
+            40
+          ],
+          "kind": "indigo",
+          "w": 230
+        },
+        {
+          "id": "tl_a2a",
+          "entity": "tl_a2a",
+          "pos": [
+            600,
+            40
+          ],
+          "kind": "indigo",
+          "w": 210
+        }
+      ],
+      "edges": [
+        {
+          "id": "timeline_reason_1",
+          "from": "tl_react",
+          "to": "tl_baby",
+          "label": ":develops"
+        },
+        {
+          "id": "timeline_reason_2",
+          "from": "tl_baby",
+          "to": "tl_lg",
+          "label": ":develops"
+        },
+        {
+          "id": "timeline_tools_1",
+          "from": "tl_fc",
+          "to": "tl_mcp",
+          "label": ":opens"
+        },
+        {
+          "id": "timeline_tools_2",
+          "from": "tl_mcp",
+          "to": "tl_responses",
+          "label": ":converges"
+        },
+        {
+          "id": "timeline_tools_3",
+          "from": "tl_responses",
+          "to": "tl_a2a",
+          "label": ":interoperates"
+        },
+        {
+          "id": "timeline_state_1",
+          "from": "tl_ag",
+          "to": "tl_gr",
+          "label": ":adds_state"
+        },
+        {
+          "id": "timeline_state_2",
+          "from": "tl_gr",
+          "to": "tl_op",
+          "label": ":acts_in_world"
+        },
+        {
+          "id": "timeline_cross_1",
+          "from": "tl_lg",
+          "to": "tl_responses",
+          "label": ":converges",
+          "kind": "cross"
+        },
+        {
+          "id": "timeline_cross_2",
+          "from": "tl_mcp",
+          "to": "tl_op",
+          "label": ":enables",
+          "kind": "cross"
+        }
+      ],
+      "beats": [
+        {
+          "id": "reasoning",
+          "label": "Reasoning and orchestration",
+          "show": [
+            "tl_hub",
+            "tl_react",
+            "tl_baby",
+            "tl_lg"
+          ],
+          "focus": [
+            "tl_hub",
+            "tl_react",
+            "tl_baby",
+            "tl_lg"
+          ],
+          "revealOrder": [
+            "tl_hub",
+            "tl_react",
+            "tl_baby",
+            "tl_lg"
+          ]
+        },
+        {
+          "id": "interoperability",
+          "label": "Tools and interoperability",
+          "show": [
+            "tl_hub",
+            "tl_react",
+            "tl_baby",
+            "tl_lg",
+            "tl_fc",
+            "tl_mcp",
+            "tl_responses",
+            "tl_a2a"
+          ],
+          "focus": [
+            "tl_hub",
+            "tl_react",
+            "tl_baby",
+            "tl_lg",
+            "tl_fc",
+            "tl_mcp",
+            "tl_responses",
+            "tl_a2a"
+          ],
+          "revealOrder": [
+            "tl_fc",
+            "tl_mcp",
+            "tl_responses",
+            "tl_a2a"
+          ]
+        },
+        {
+          "id": "state",
+          "label": "State, knowledge, and environment",
+          "show": [
+            "tl_hub",
+            "tl_react",
+            "tl_baby",
+            "tl_lg",
+            "tl_fc",
+            "tl_mcp",
+            "tl_responses",
+            "tl_a2a",
+            "tl_ag",
+            "tl_gr",
+            "tl_op"
+          ],
+          "focus": [
+            "tl_hub",
+            "tl_react",
+            "tl_baby",
+            "tl_lg",
+            "tl_fc",
+            "tl_mcp",
+            "tl_responses",
+            "tl_a2a",
+            "tl_ag",
+            "tl_gr",
+            "tl_op"
+          ],
+          "revealOrder": [
+            "tl_ag",
+            "tl_gr",
+            "tl_op"
+          ]
+        }
+      ],
+      "layout": {
+        "fitMargin": 120,
+        "minReadableScale": 0.36
+      }
+    },
+    {
+      "id": "inversion",
+      "title": "The inversion",
+      "caption": "the ontology doesn’t disappear — it moves from the front of a dead-end pipeline into the loop itself",
+      "anchor": [
+        3084,
+        901
+      ],
+      "instances": [
+        {
+          "id": "inv_g_old",
+          "entity": "inv_g_old",
+          "pos": [
+            -490,
+            -370
+          ],
+          "kind": "ghost tan",
+          "w": 140
+        },
+        {
+          "id": "inv_ont_old",
+          "entity": "inv_ont_old",
+          "pos": [
+            -524,
+            -238
+          ],
+          "kind": "tan",
+          "w": 190
+        },
+        {
+          "id": "inv_ing",
+          "entity": "inv_ing",
+          "pos": [
+            -491,
+            10
+          ],
+          "kind": "tan",
+          "w": 185
+        },
+        {
+          "id": "inv_use_old",
+          "entity": "inv_use_old",
+          "pos": [
+            -519,
+            211
+          ],
+          "kind": "tan",
+          "w": 180
+        },
+        {
+          "id": "inv_decay",
+          "entity": "inv_decay",
+          "pos": [
+            -208,
+            349
+          ],
+          "kind": "tan",
+          "w": 180
+        },
+        {
+          "id": "inv_g_new",
+          "entity": "inv_g_new",
+          "pos": [
+            300,
+            -370
+          ],
+          "kind": "ghost green",
+          "w": 140
+        },
+        {
+          "id": "inv_use_new",
+          "entity": "inv_use_new",
+          "pos": [
+            300,
+            -200
+          ],
+          "kind": "green",
+          "w": 180
+        },
+        {
+          "id": "inv_prop",
+          "entity": "inv_prop",
+          "pos": [
+            555,
+            -15
+          ],
+          "kind": "green",
+          "w": 185
+        },
+        {
+          "id": "inv_val",
+          "entity": "inv_val",
+          "pos": [
+            278,
+            167
+          ],
+          "kind": "green",
+          "w": 180
+        },
+        {
+          "id": "inv_ont_new",
+          "entity": "inv_ont_new",
+          "pos": [
+            45,
+            -15
+          ],
+          "kind": "indigo",
+          "w": 185
+        }
+      ],
+      "edges": [
+        {
+          "id": "inversion_edge_1",
+          "from": "inv_ont_old",
+          "to": "inv_ing",
+          "label": ":then",
+          "kind": "chain"
+        },
+        {
+          "id": "inversion_edge_2",
+          "from": "inv_ing",
+          "to": "inv_use_old",
+          "label": ":then",
+          "kind": "chain"
+        },
+        {
+          "id": "inversion_edge_3",
+          "from": "inv_use_old",
+          "to": "inv_decay",
+          "label": ":dead_end",
+          "kind": "chain"
+        },
+        {
+          "id": "inversion_edge_4",
+          "from": "inv_use_new",
+          "to": "inv_prop",
+          "kind": "cycle",
+          "curve": -40
+        },
+        {
+          "id": "inversion_edge_5",
+          "from": "inv_prop",
+          "to": "inv_val",
+          "kind": "cycle",
+          "curve": -40
+        },
+        {
+          "id": "inversion_edge_6",
+          "from": "inv_val",
+          "to": "inv_ont_new",
+          "kind": "cycle",
+          "curve": -40
+        },
+        {
+          "id": "inversion_edge_7",
+          "from": "inv_ont_new",
+          "to": "inv_use_new",
+          "label": ":next_run",
+          "kind": "cycle",
+          "curve": -40
+        },
+        {
+          "id": "inversion_edge_8",
+          "from": "inv_ont_old",
+          "to": "inv_ont_new",
+          "label": ":moves",
+          "kind": "moves"
+        }
+      ],
+      "beats": [
+        {
+          "id": "cue_1",
+          "label": "Opening view",
+          "show": [
+            "inv_g_old",
+            "inv_ont_old",
+            "inv_ing",
+            "inv_use_old",
+            "inv_decay",
+            "inv_g_new",
+            "inv_use_new",
+            "inv_prop",
+            "inv_val",
+            "inv_ont_new"
+          ],
+          "focus": [
+            "inv_g_old",
+            "inv_ont_old",
+            "inv_ing",
+            "inv_use_old",
+            "inv_decay",
+            "inv_g_new",
+            "inv_use_new",
+            "inv_prop",
+            "inv_val",
+            "inv_ont_new"
+          ],
+          "revealOrder": [
+            "inv_g_old",
+            "inv_ont_old",
+            "inv_ing",
+            "inv_use_old",
+            "inv_decay",
+            "inv_g_new",
+            "inv_use_new",
+            "inv_prop",
+            "inv_val",
+            "inv_ont_new"
+          ]
+        }
+      ],
+      "layout": {
+        "minReadableScale": 0.36
+      }
+    },
+    {
+      "id": "job",
+      "title": "The job, before and after",
+      "caption": "press next: the old job becomes a new one — then meet the state it tends, and its five questions",
+      "anchor": [
+        2589,
+        1058
+      ],
+      "instances": [
+        {
+          "id": "st_before",
+          "entity": "st_before",
+          "pos": [
+            -455,
+            -182
+          ],
+          "kind": "tan",
+          "w": 215
+        },
+        {
+          "id": "st_after",
+          "entity": "st_after",
+          "pos": [
+            121,
+            -170
+          ],
+          "kind": "green",
+          "w": 220
+        },
+        {
+          "id": "st_hub",
+          "entity": "st_hub",
+          "pos": [
+            82,
+            164
+          ],
+          "kind": "circle hub indigo",
+          "w": 200
+        },
+        {
+          "id": "st_id",
+          "entity": "st_id",
+          "pos": [
+            -330,
+            285
+          ],
+          "kind": "indigo",
+          "w": 145
+        },
+        {
+          "id": "st_perm",
+          "entity": "st_perm",
+          "pos": [
+            -90,
+            410
+          ],
+          "kind": "indigo",
+          "w": 165
+        },
+        {
+          "id": "st_time",
+          "entity": "st_time",
+          "pos": [
+            165,
+            451
+          ],
+          "kind": "indigo",
+          "w": 170
+        },
+        {
+          "id": "st_prov",
+          "entity": "st_prov",
+          "pos": [
+            432,
+            415
+          ],
+          "kind": "indigo",
+          "w": 160
+        },
+        {
+          "id": "st_corr",
+          "entity": "st_corr",
+          "pos": [
+            586,
+            274
+          ],
+          "kind": "indigo",
+          "w": 170
+        }
+      ],
+      "edges": [
+        {
+          "id": "job_edge_1",
+          "from": "st_before",
+          "to": "st_after",
+          "label": ":becomes",
+          "kind": "moves"
+        },
+        {
+          "id": "job_edge_2",
+          "from": "st_after",
+          "to": "st_hub",
+          "label": ":tends"
+        },
+        {
+          "id": "job_edge_3",
+          "from": "st_hub",
+          "to": "st_id"
+        },
+        {
+          "id": "job_edge_4",
+          "from": "st_hub",
+          "to": "st_perm"
+        },
+        {
+          "id": "job_edge_5",
+          "from": "st_hub",
+          "to": "st_time"
+        },
+        {
+          "id": "job_edge_6",
+          "from": "st_hub",
+          "to": "st_prov"
+        },
+        {
+          "id": "job_edge_7",
+          "from": "st_hub",
+          "to": "st_corr"
+        }
+      ],
+      "beats": [
+        {
+          "id": "cue_1",
+          "label": "Opening view",
+          "show": [
+            "st_before"
+          ],
+          "focus": [
+            "st_before"
+          ],
+          "revealOrder": [
+            "st_before"
+          ]
+        },
+        {
+          "id": "cue_2",
+          "label": "Reveal 1",
+          "show": [
+            "st_before",
+            "st_after"
+          ],
+          "focus": [
+            "st_before",
+            "st_after"
+          ],
+          "revealOrder": [
+            "st_after"
+          ]
+        },
+        {
+          "id": "cue_3",
+          "label": "Reveal 2",
+          "show": [
+            "st_before",
+            "st_after",
+            "st_hub",
+            "st_id",
+            "st_perm",
+            "st_time",
+            "st_prov",
+            "st_corr"
+          ],
+          "focus": [
+            "st_before",
+            "st_after",
+            "st_hub",
+            "st_id",
+            "st_perm",
+            "st_time",
+            "st_prov",
+            "st_corr"
+          ],
+          "revealOrder": [
+            "st_hub",
+            "st_id",
+            "st_perm",
+            "st_time",
+            "st_prov",
+            "st_corr"
+          ]
+        }
+      ],
+      "layout": {
+        "minReadableScale": 0.36
+      }
+    },
+    {
+      "id": "market",
+      "title": "The market organizes around the same questions",
+      "caption": "six segments — each one sells an answer to a question this talk already asked",
+      "anchor": [
+        2027,
+        1846
+      ],
+      "instances": [
+        {
+          "id": "mk_hub",
+          "entity": "mk_hub",
+          "pos": [
+            28,
+            -416
+          ],
+          "kind": "hub ink",
+          "w": 230
+        },
+        {
+          "id": "seg_db",
+          "entity": "seg_db",
+          "pos": [
+            -490,
+            -162
+          ],
+          "kind": "ink",
+          "w": 195
+        },
+        {
+          "id": "seg_build",
+          "entity": "seg_build",
+          "pos": [
+            -12,
+            -217
+          ],
+          "kind": "green",
+          "w": 200
+        },
+        {
+          "id": "seg_mem",
+          "entity": "seg_mem",
+          "pos": [
+            470,
+            -155
+          ],
+          "kind": "green",
+          "w": 195
+        },
+        {
+          "id": "seg_kg",
+          "entity": "seg_kg",
+          "pos": [
+            -470,
+            145
+          ],
+          "kind": "tan",
+          "w": 205
+        },
+        {
+          "id": "seg_er",
+          "entity": "seg_er",
+          "pos": [
+            0,
+            185
+          ],
+          "kind": "indigo",
+          "w": 190
+        },
+        {
+          "id": "seg_viz",
+          "entity": "seg_viz",
+          "pos": [
+            470,
+            145
+          ],
+          "kind": "ink",
+          "w": 215
+        }
+      ],
+      "edges": [
+        {
+          "id": "market_edge_1",
+          "from": "mk_hub",
+          "to": "seg_db"
+        },
+        {
+          "id": "market_edge_2",
+          "from": "mk_hub",
+          "to": "seg_build"
+        },
+        {
+          "id": "market_edge_3",
+          "from": "mk_hub",
+          "to": "seg_mem"
+        },
+        {
+          "id": "market_edge_4",
+          "from": "mk_hub",
+          "to": "seg_kg"
+        },
+        {
+          "id": "market_edge_5",
+          "from": "mk_hub",
+          "to": "seg_er"
+        },
+        {
+          "id": "market_edge_6",
+          "from": "mk_hub",
+          "to": "seg_viz"
+        }
+      ],
+      "beats": [
+        {
+          "id": "cue_1",
+          "label": "Opening view",
+          "show": [
+            "mk_hub",
+            "seg_db",
+            "seg_build",
+            "seg_mem",
+            "seg_kg",
+            "seg_er",
+            "seg_viz"
+          ],
+          "focus": [
+            "mk_hub",
+            "seg_db",
+            "seg_build",
+            "seg_mem",
+            "seg_kg",
+            "seg_er",
+            "seg_viz"
+          ],
+          "revealOrder": [
+            "mk_hub",
+            "seg_db",
+            "seg_build",
+            "seg_mem",
+            "seg_kg",
+            "seg_er",
+            "seg_viz"
+          ]
+        }
+      ],
+      "layout": {
+        "minReadableScale": 0.36
+      }
+    },
+    {
+      "id": "companies",
+      "title": "…and who is building it",
+      "caption": "15 selected independent graph companies · names on stage, sourced details on focus · reviewed July 24, 2026",
+      "anchor": [
+        2027,
+        1846
+      ],
+      "instances": [
+        {
+          "id": "co_neo4j",
+          "entity": "co_neo4j",
+          "pos": [
+            -642,
+            -75
+          ],
+          "kind": "tiny ink",
+          "w": 88
+        },
+        {
+          "id": "co_falkordb",
+          "entity": "co_falkordb",
+          "pos": [
+            -758,
+            -56
+          ],
+          "kind": "tiny ink",
+          "w": 90
+        },
+        {
+          "id": "co_puppygraph",
+          "entity": "co_puppygraph",
+          "pos": [
+            -584,
+            -446
+          ],
+          "kind": "tiny ink",
+          "w": 106
+        },
+        {
+          "id": "co_mem0",
+          "entity": "co_mem0",
+          "pos": [
+            677,
+            -232
+          ],
+          "kind": "tiny green",
+          "w": 88
+        },
+        {
+          "id": "co_stardog",
+          "entity": "co_stardog",
+          "pos": [
+            -519,
+            329
+          ],
+          "kind": "tiny tan",
+          "w": 88
+        },
+        {
+          "id": "co_graphwiseontot",
+          "entity": "co_graphwiseontot",
+          "pos": [
+            -612,
+            271
+          ],
+          "kind": "tiny tan",
+          "w": 186
+        },
+        {
+          "id": "co_relationalai",
+          "entity": "co_relationalai",
+          "pos": [
+            -777,
+            47
+          ],
+          "kind": "tiny tan",
+          "w": 122
+        },
+        {
+          "id": "co_quantexa",
+          "entity": "co_quantexa",
+          "pos": [
+            103,
+            350
+          ],
+          "kind": "tiny indigo",
+          "w": 90
+        },
+        {
+          "id": "co_senzing",
+          "entity": "co_senzing",
+          "pos": [
+            0,
+            380
+          ],
+          "kind": "tiny indigo",
+          "w": 88
+        },
+        {
+          "id": "co_tilores",
+          "entity": "co_tilores",
+          "pos": [
+            -103,
+            350
+          ],
+          "kind": "tiny indigo",
+          "w": 88
+        },
+        {
+          "id": "co_linkurious",
+          "entity": "co_linkurious",
+          "pos": [
+            664,
+            121
+          ],
+          "kind": "tiny ink",
+          "w": 106
+        },
+        {
+          "id": "co_cambridgeintel",
+          "entity": "co_cambridgeintel",
+          "pos": [
+            647,
+            227
+          ],
+          "kind": "tiny ink",
+          "w": 190
+        },
+        {
+          "id": "co_graphistry",
+          "entity": "co_graphistry",
+          "pos": [
+            576,
+            309
+          ],
+          "kind": "tiny ink",
+          "w": 106
+        },
+        {
+          "id": "companies_mk_hub",
+          "entity": "mk_hub",
+          "pos": [
+            0,
+            -520
+          ],
+          "kind": "hub ink",
+          "w": 230
+        },
+        {
+          "id": "companies_seg_db",
+          "entity": "seg_db",
+          "pos": [
+            -570,
+            -300
+          ],
+          "kind": "ink",
+          "w": 195
+        },
+        {
+          "id": "companies_seg_mem",
+          "entity": "seg_mem",
+          "pos": [
+            350,
+            -300
+          ],
+          "kind": "green",
+          "w": 195
+        },
+        {
+          "id": "companies_seg_kg",
+          "entity": "seg_kg",
+          "pos": [
+            -570,
+            270
+          ],
+          "kind": "tan",
+          "w": 205
+        },
+        {
+          "id": "companies_seg_er",
+          "entity": "seg_er",
+          "pos": [
+            0,
+            300
+          ],
+          "kind": "indigo",
+          "w": 190
+        },
+        {
+          "id": "companies_seg_viz",
+          "entity": "seg_viz",
+          "pos": [
+            570,
+            270
+          ],
+          "kind": "ink",
+          "w": 215
+        },
+        {
+          "id": "companies_t_zep",
+          "entity": "t_zep",
+          "pos": [
+            770,
+            -300
+          ],
+          "kind": "company tiny",
+          "w": 160
+        },
+        {
+          "id": "co_cognee",
+          "entity": "co_cognee",
+          "pos": [
+            110,
+            -422
+          ],
+          "kind": "tiny green",
+          "w": 90
+        }
+      ],
+      "edges": [
+        {
+          "id": "companies_edge_1",
+          "from": "companies_seg_db",
+          "to": "co_neo4j"
+        },
+        {
+          "id": "companies_edge_6",
+          "from": "companies_seg_db",
+          "to": "co_falkordb"
+        },
+        {
+          "id": "companies_edge_9",
+          "from": "companies_seg_db",
+          "to": "co_puppygraph"
+        },
+        {
+          "id": "companies_edge_13",
+          "from": "companies_seg_mem",
+          "to": "co_mem0"
+        },
+        {
+          "id": "companies_edge_14",
+          "from": "companies_seg_kg",
+          "to": "co_stardog"
+        },
+        {
+          "id": "companies_edge_15",
+          "from": "companies_seg_kg",
+          "to": "co_graphwiseontot"
+        },
+        {
+          "id": "companies_edge_20",
+          "from": "companies_seg_kg",
+          "to": "co_relationalai"
+        },
+        {
+          "id": "companies_edge_21",
+          "from": "companies_seg_er",
+          "to": "co_quantexa"
+        },
+        {
+          "id": "companies_edge_22",
+          "from": "companies_seg_er",
+          "to": "co_senzing"
+        },
+        {
+          "id": "companies_edge_23",
+          "from": "companies_seg_er",
+          "to": "co_tilores"
+        },
+        {
+          "id": "companies_edge_24",
+          "from": "companies_seg_viz",
+          "to": "co_linkurious"
+        },
+        {
+          "id": "companies_edge_25",
+          "from": "companies_seg_viz",
+          "to": "co_cambridgeintel"
+        },
+        {
+          "id": "companies_edge_26",
+          "from": "companies_seg_viz",
+          "to": "co_graphistry"
+        },
+        {
+          "id": "companies_edge_27",
+          "from": "companies_seg_mem",
+          "to": "companies_t_zep"
+        },
+        {
+          "id": "companies_cognee",
+          "from": "companies_seg_mem",
+          "to": "co_cognee"
+        }
+      ],
+      "beats": [
+        {
+          "id": "landscape",
+          "label": "Representative landscape",
+          "show": [
+            "co_neo4j",
+            "co_falkordb",
+            "co_puppygraph",
+            "co_mem0",
+            "co_stardog",
+            "co_graphwiseontot",
+            "co_relationalai",
+            "co_quantexa",
+            "co_senzing",
+            "co_tilores",
+            "co_linkurious",
+            "co_cambridgeintel",
+            "co_graphistry",
+            "companies_mk_hub",
+            "companies_seg_db",
+            "companies_seg_mem",
+            "companies_seg_kg",
+            "companies_seg_er",
+            "companies_seg_viz",
+            "companies_t_zep",
+            "co_cognee"
+          ],
+          "focus": [
+            "co_neo4j",
+            "co_falkordb",
+            "co_puppygraph",
+            "co_mem0",
+            "co_stardog",
+            "co_graphwiseontot",
+            "co_relationalai",
+            "co_quantexa",
+            "co_senzing",
+            "co_tilores",
+            "co_linkurious",
+            "co_cambridgeintel",
+            "co_graphistry",
+            "companies_mk_hub",
+            "companies_seg_db",
+            "companies_seg_mem",
+            "companies_seg_kg",
+            "companies_seg_er",
+            "companies_seg_viz",
+            "companies_t_zep",
+            "co_cognee"
+          ],
+          "revealOrder": [
+            "co_neo4j",
+            "co_falkordb",
+            "co_puppygraph",
+            "co_mem0",
+            "co_stardog",
+            "co_graphwiseontot",
+            "co_relationalai",
+            "co_quantexa",
+            "co_senzing",
+            "co_tilores",
+            "co_linkurious",
+            "co_cambridgeintel",
+            "co_graphistry",
+            "companies_mk_hub",
+            "companies_seg_db",
+            "companies_seg_mem",
+            "companies_seg_kg",
+            "companies_seg_er",
+            "companies_seg_viz",
+            "companies_t_zep",
+            "co_cognee"
+          ]
+        }
+      ],
+      "layout": {
+        "minReadableScale": 0.36
+      }
+    },
+    {
+      "id": "map",
+      "title": "Pick your graph",
+      "caption": "six routes, one column each — the idea, then press next: what to build, then where to beat SOTA",
+      "anchor": [
+        2252,
+        1193
+      ],
+      "instances": [
+        {
+          "id": "ex_hub",
+          "entity": "ex_hub",
+          "pos": [
+            10,
+            -332
+          ],
+          "kind": "hub ink",
+          "w": 235
+        },
+        {
+          "id": "ex_reason",
+          "entity": "ex_reason",
+          "pos": [
+            -650,
+            -110
+          ],
+          "kind": "indigo",
+          "w": 185
+        },
+        {
+          "id": "ex_world",
+          "entity": "ex_world",
+          "pos": [
+            -401,
+            -75
+          ],
+          "kind": "indigo",
+          "w": 175
+        },
+        {
+          "id": "ex_know",
+          "entity": "ex_know",
+          "pos": [
+            -121,
+            -80
+          ],
+          "kind": "indigo",
+          "w": 200
+        },
+        {
+          "id": "ex_teams",
+          "entity": "ex_teams",
+          "pos": [
+            130,
+            -130
+          ],
+          "kind": "indigo",
+          "w": 175
+        },
+        {
+          "id": "ex_tools",
+          "entity": "ex_tools",
+          "pos": [
+            419,
+            -121
+          ],
+          "kind": "indigo",
+          "w": 195
+        },
+        {
+          "id": "ex_traces",
+          "entity": "ex_traces",
+          "pos": [
+            650,
+            -130
+          ],
+          "kind": "indigo",
+          "w": 190
+        },
+        {
+          "id": "b_reason",
+          "entity": "b_reason",
+          "pos": [
+            -651,
+            151
+          ],
+          "kind": "green",
+          "w": 195
+        },
+        {
+          "id": "b_world",
+          "entity": "b_world",
+          "pos": [
+            -416,
+            220
+          ],
+          "kind": "green",
+          "w": 190
+        },
+        {
+          "id": "b_know",
+          "entity": "b_know",
+          "pos": [
+            -123,
+            141
+          ],
+          "kind": "green",
+          "w": 185
+        },
+        {
+          "id": "b_teams",
+          "entity": "b_teams",
+          "pos": [
+            148,
+            236
+          ],
+          "kind": "green",
+          "w": 185
+        },
+        {
+          "id": "b_tools",
+          "entity": "b_tools",
+          "pos": [
+            390,
+            150
+          ],
+          "kind": "green",
+          "w": 190
+        },
+        {
+          "id": "b_traces",
+          "entity": "b_traces",
+          "pos": [
+            681,
+            217
+          ],
+          "kind": "green",
+          "w": 195
+        },
+        {
+          "id": "s_reason",
+          "entity": "s_reason",
+          "pos": [
+            -649,
+            399
+          ],
+          "kind": "indigo",
+          "w": 175
+        },
+        {
+          "id": "s_world",
+          "entity": "s_world",
+          "pos": [
+            -390,
+            440
+          ],
+          "kind": "indigo",
+          "w": 190
+        },
+        {
+          "id": "s_know",
+          "entity": "s_know",
+          "pos": [
+            -123,
+            423
+          ],
+          "kind": "indigo",
+          "w": 185
+        },
+        {
+          "id": "s_teams",
+          "entity": "s_teams",
+          "pos": [
+            130,
+            440
+          ],
+          "kind": "indigo",
+          "w": 180
+        },
+        {
+          "id": "s_tools",
+          "entity": "s_tools",
+          "pos": [
+            359,
+            407
+          ],
+          "kind": "indigo",
+          "w": 200
+        },
+        {
+          "id": "s_traces",
+          "entity": "s_traces",
+          "pos": [
+            650,
+            440
+          ],
+          "kind": "indigo",
+          "w": 180
+        },
+        {
+          "id": "t_zep",
+          "entity": "t_zep",
+          "pos": [
+            -343,
+            16
+          ],
+          "kind": "green",
+          "w": 160
+        },
+        {
+          "id": "t_lsmith",
+          "entity": "t_lsmith",
+          "pos": [
+            529,
+            5
+          ],
+          "kind": "indigo",
+          "w": 175
+        }
+      ],
+      "edges": [
+        {
+          "id": "map_edge_1",
+          "from": "ex_hub",
+          "to": "ex_teams"
+        },
+        {
+          "id": "map_edge_2",
+          "from": "ex_hub",
+          "to": "ex_reason"
+        },
+        {
+          "id": "map_edge_3",
+          "from": "ex_hub",
+          "to": "ex_know"
+        },
+        {
+          "id": "map_edge_4",
+          "from": "ex_hub",
+          "to": "ex_tools"
+        },
+        {
+          "id": "map_edge_5",
+          "from": "ex_hub",
+          "to": "ex_world"
+        },
+        {
+          "id": "map_edge_6",
+          "from": "ex_hub",
+          "to": "ex_traces"
+        },
+        {
+          "id": "map_edge_7",
+          "from": "ex_teams",
+          "to": "b_teams",
+          "label": ":build"
+        },
+        {
+          "id": "map_edge_8",
+          "from": "ex_reason",
+          "to": "b_reason",
+          "label": ":build"
+        },
+        {
+          "id": "map_edge_9",
+          "from": "ex_know",
+          "to": "b_know",
+          "label": ":build"
+        },
+        {
+          "id": "map_edge_10",
+          "from": "ex_tools",
+          "to": "b_tools",
+          "label": ":build"
+        },
+        {
+          "id": "map_edge_11",
+          "from": "ex_world",
+          "to": "b_world",
+          "label": ":build"
+        },
+        {
+          "id": "map_edge_12",
+          "from": "ex_traces",
+          "to": "b_traces",
+          "label": ":build"
+        },
+        {
+          "id": "map_edge_13",
+          "from": "b_teams",
+          "to": "s_teams",
+          "label": ":then_beat"
+        },
+        {
+          "id": "map_edge_14",
+          "from": "b_reason",
+          "to": "s_reason",
+          "label": ":then_beat"
+        },
+        {
+          "id": "map_edge_15",
+          "from": "b_know",
+          "to": "s_know",
+          "label": ":then_beat"
+        },
+        {
+          "id": "map_edge_16",
+          "from": "b_tools",
+          "to": "s_tools",
+          "label": ":then_beat"
+        },
+        {
+          "id": "map_edge_17",
+          "from": "b_world",
+          "to": "s_world",
+          "label": ":then_beat"
+        },
+        {
+          "id": "map_edge_18",
+          "from": "b_traces",
+          "to": "s_traces",
+          "label": ":then_beat"
+        },
+        {
+          "id": "map_edge_19",
+          "from": "ex_know",
+          "to": "t_zep",
+          "label": ":try"
+        },
+        {
+          "id": "map_edge_20",
+          "from": "ex_traces",
+          "to": "t_lsmith",
+          "label": ":try"
+        }
+      ],
+      "beats": [
+        {
+          "id": "cue_1",
+          "label": "Opening view",
+          "show": [
+            "ex_hub",
+            "ex_reason",
+            "ex_world",
+            "ex_know",
+            "ex_teams",
+            "ex_tools",
+            "ex_traces",
+            "t_zep",
+            "t_lsmith"
+          ],
+          "focus": [
+            "ex_hub",
+            "ex_reason",
+            "ex_world",
+            "ex_know",
+            "ex_teams",
+            "ex_tools",
+            "ex_traces",
+            "t_zep",
+            "t_lsmith"
+          ],
+          "revealOrder": [
+            "ex_hub",
+            "ex_reason",
+            "ex_world",
+            "ex_know",
+            "ex_teams",
+            "ex_tools",
+            "ex_traces",
+            "t_zep",
+            "t_lsmith"
+          ]
+        },
+        {
+          "id": "cue_2",
+          "label": "Reveal 1",
+          "show": [
+            "ex_hub",
+            "ex_reason",
+            "ex_world",
+            "ex_know",
+            "ex_teams",
+            "ex_tools",
+            "ex_traces",
+            "b_reason",
+            "b_world",
+            "b_know",
+            "b_teams",
+            "b_tools",
+            "b_traces",
+            "t_zep",
+            "t_lsmith"
+          ],
+          "focus": [
+            "ex_hub",
+            "ex_reason",
+            "ex_world",
+            "ex_know",
+            "ex_teams",
+            "ex_tools",
+            "ex_traces",
+            "b_reason",
+            "b_world",
+            "b_know",
+            "b_teams",
+            "b_tools",
+            "b_traces",
+            "t_zep",
+            "t_lsmith"
+          ],
+          "revealOrder": [
+            "b_reason",
+            "b_world",
+            "b_know",
+            "b_teams",
+            "b_tools",
+            "b_traces"
+          ]
+        },
+        {
+          "id": "cue_3",
+          "label": "Reveal 2",
+          "show": [
+            "ex_hub",
+            "ex_reason",
+            "ex_world",
+            "ex_know",
+            "ex_teams",
+            "ex_tools",
+            "ex_traces",
+            "b_reason",
+            "b_world",
+            "b_know",
+            "b_teams",
+            "b_tools",
+            "b_traces",
+            "s_reason",
+            "s_world",
+            "s_know",
+            "s_teams",
+            "s_tools",
+            "s_traces",
+            "t_zep",
+            "t_lsmith"
+          ],
+          "focus": [
+            "ex_hub",
+            "ex_reason",
+            "ex_world",
+            "ex_know",
+            "ex_teams",
+            "ex_tools",
+            "ex_traces",
+            "b_reason",
+            "b_world",
+            "b_know",
+            "b_teams",
+            "b_tools",
+            "b_traces",
+            "s_reason",
+            "s_world",
+            "s_know",
+            "s_teams",
+            "s_tools",
+            "s_traces",
+            "t_zep",
+            "t_lsmith"
+          ],
+          "revealOrder": [
+            "s_reason",
+            "s_world",
+            "s_know",
+            "s_teams",
+            "s_tools",
+            "s_traces"
+          ]
+        }
+      ],
+      "layout": {
+        "minReadableScale": 0.36
+      }
+    },
+    {
+      "id": "loops",
+      "title": "The loop above the loop",
+      "caption": "agents improve by running; communities improve by sharing; you improve by shortening your own learning cycle",
+      "anchor": [
+        3332,
+        1148
+      ],
+      "instances": [
+        {
+          "id": "lp_agent",
+          "entity": "lp_agent",
+          "pos": [
+            -50,
+            -150
+          ],
+          "kind": "ring indigo",
+          "r": 88
+        },
+        {
+          "id": "lp_comm",
+          "entity": "lp_comm",
+          "pos": [
+            93,
+            -7
+          ],
+          "kind": "ring green",
+          "r": 114
+        },
+        {
+          "id": "lp_dev",
+          "entity": "lp_dev",
+          "pos": [
+            -27,
+            218
+          ],
+          "kind": "ring tan",
+          "r": 142
+        },
+        {
+          "id": "lp_obs",
+          "entity": "lp_obs",
+          "pos": [
+            -50,
+            -238
+          ],
+          "kind": "tiny indigo",
+          "w": 88
+        },
+        {
+          "id": "lp_rsn",
+          "entity": "lp_rsn",
+          "pos": [
+            26,
+            -106
+          ],
+          "kind": "tiny indigo",
+          "w": 84
+        },
+        {
+          "id": "lp_act",
+          "entity": "lp_act",
+          "pos": [
+            -126,
+            -106
+          ],
+          "kind": "tiny indigo",
+          "w": 64
+        },
+        {
+          "id": "lp_trc",
+          "entity": "lp_trc",
+          "pos": [
+            93,
+            -121
+          ],
+          "kind": "tiny green",
+          "w": 80
+        },
+        {
+          "id": "lp_pat",
+          "entity": "lp_pat",
+          "pos": [
+            192,
+            50
+          ],
+          "kind": "tiny green",
+          "w": 92
+        },
+        {
+          "id": "lp_std",
+          "entity": "lp_std",
+          "pos": [
+            -6,
+            50
+          ],
+          "kind": "tiny green",
+          "w": 98
+        },
+        {
+          "id": "lp_ins",
+          "entity": "lp_ins",
+          "pos": [
+            -27,
+            76
+          ],
+          "kind": "tiny tan",
+          "w": 104
+        },
+        {
+          "id": "lp_cmp",
+          "entity": "lp_cmp",
+          "pos": [
+            96,
+            289
+          ],
+          "kind": "tiny tan",
+          "w": 94
+        },
+        {
+          "id": "lp_shr",
+          "entity": "lp_shr",
+          "pos": [
+            -150,
+            289
+          ],
+          "kind": "tiny tan",
+          "w": 74
+        }
+      ],
+      "edges": [
+        {
+          "id": "loops_edge_1",
+          "from": "lp_obs",
+          "to": "lp_rsn",
+          "kind": "loopi",
+          "curve": -28
+        },
+        {
+          "id": "loops_edge_2",
+          "from": "lp_rsn",
+          "to": "lp_act",
+          "kind": "loopi",
+          "curve": -28
+        },
+        {
+          "id": "loops_edge_3",
+          "from": "lp_act",
+          "to": "lp_obs",
+          "kind": "loopi",
+          "curve": -28
+        },
+        {
+          "id": "loops_edge_4",
+          "from": "lp_trc",
+          "to": "lp_pat",
+          "kind": "loopg",
+          "curve": -34
+        },
+        {
+          "id": "loops_edge_5",
+          "from": "lp_pat",
+          "to": "lp_std",
+          "kind": "loopg",
+          "curve": -34
+        },
+        {
+          "id": "loops_edge_6",
+          "from": "lp_std",
+          "to": "lp_trc",
+          "kind": "loopg",
+          "curve": -34
+        },
+        {
+          "id": "loops_edge_7",
+          "from": "lp_ins",
+          "to": "lp_cmp",
+          "kind": "loopt",
+          "curve": -42
+        },
+        {
+          "id": "loops_edge_8",
+          "from": "lp_cmp",
+          "to": "lp_shr",
+          "kind": "loopt",
+          "curve": -42
+        },
+        {
+          "id": "loops_edge_9",
+          "from": "lp_shr",
+          "to": "lp_ins",
+          "kind": "loopt",
+          "curve": -42
+        }
+      ],
+      "beats": [
+        {
+          "id": "cue_1",
+          "label": "Opening view",
+          "show": [
+            "lp_agent",
+            "lp_comm",
+            "lp_dev",
+            "lp_obs",
+            "lp_rsn",
+            "lp_act",
+            "lp_trc",
+            "lp_pat",
+            "lp_std",
+            "lp_ins",
+            "lp_cmp",
+            "lp_shr"
+          ],
+          "focus": [
+            "lp_agent",
+            "lp_comm",
+            "lp_dev",
+            "lp_obs",
+            "lp_rsn",
+            "lp_act",
+            "lp_trc",
+            "lp_pat",
+            "lp_std",
+            "lp_ins",
+            "lp_cmp",
+            "lp_shr"
+          ],
+          "revealOrder": [
+            "lp_agent",
+            "lp_comm",
+            "lp_dev",
+            "lp_obs",
+            "lp_rsn",
+            "lp_act",
+            "lp_trc",
+            "lp_pat",
+            "lp_std",
+            "lp_ins",
+            "lp_cmp",
+            "lp_shr"
+          ]
+        }
+      ],
+      "layout": {
+        "floatAmp": 5,
+        "minReadableScale": 0.36
+      }
+    },
+    {
+      "id": "close",
+      "title": "(you)-[:builds]->(graphs)",
+      "caption": "thank you — go draw the edges",
+      "anchor": [
+        3242,
+        1441
+      ],
+      "instances": [
+        {
+          "id": "yg_you",
+          "entity": "yg_you",
+          "pos": [
+            -126,
+            -44
+          ],
+          "kind": "tiny ink",
+          "w": 90
+        },
+        {
+          "id": "yg_graphs",
+          "entity": "yg_graphs",
+          "pos": [
+            120,
+            60
+          ],
+          "kind": "tiny indigo",
+          "w": 100
+        }
+      ],
+      "edges": [
+        {
+          "id": "close_edge_1",
+          "from": "yg_you",
+          "to": "yg_graphs",
+          "label": ":builds"
+        }
+      ],
+      "beats": [
+        {
+          "id": "cue_1",
+          "label": "Opening view",
+          "show": [
+            "yg_you",
+            "yg_graphs"
+          ],
+          "focus": [
+            "yg_you",
+            "yg_graphs"
+          ],
+          "revealOrder": [
+            "yg_you",
+            "yg_graphs"
+          ]
+        }
+      ],
+      "layout": {
+        "fitMargin": 230,
+        "zoomMax": 0.85,
+        "minReadableScale": 0.36
+      }
+    }
+  ],
+  "connections": [
+    {
+      "id": "connection_1",
+      "from": "re_rows",
+      "to": "oc_chaos",
+      "label": ":same_shape",
+      "kind": "cross"
+    },
+    {
+      "id": "connection_2",
+      "from": "re_edges",
+      "to": "oc_order",
+      "label": ":same_shape",
+      "kind": "cross"
+    },
+    {
+      "id": "connection_3",
+      "from": "st_corr",
+      "to": "inv_val",
+      "label": ":same_muscle",
+      "kind": "cross"
+    },
+    {
+      "id": "connection_4",
+      "from": "inv_decay",
+      "to": "st_after",
+      "label": ":creates_the_job",
+      "kind": "cross"
+    },
+    {
+      "id": "connection_5",
+      "from": "st_hub",
+      "to": "ev_hub",
+      "label": ":one_world_graph",
+      "kind": "cross"
+    },
+    {
+      "id": "connection_6",
+      "from": "y_babyagi",
+      "to": "tl_baby",
+      "label": ":that_babyagi",
+      "kind": "cross"
+    },
+    {
+      "id": "connection_7",
+      "from": "y_active",
+      "to": "st_time",
+      "label": ":obsessed_with",
+      "kind": "cross"
+    },
+    {
+      "id": "connection_8",
+      "from": "st_prov",
+      "to": "ev_beliefs",
+      "label": ":same_question",
+      "kind": "cross"
+    },
+    {
+      "id": "connection_9",
+      "from": "st_id",
+      "to": "ex_know",
+      "label": ":benchmarked_by",
+      "kind": "cross"
+    },
+    {
+      "id": "connection_10",
+      "from": "inv_ont_new",
+      "to": "st_hub",
+      "label": ":governs",
+      "kind": "cross"
+    },
+    {
+      "id": "connection_11",
+      "from": "lp_agent",
+      "to": "tl_react",
+      "label": ":since_2022",
+      "kind": "cross"
+    },
+    {
+      "id": "connection_12",
+      "from": "lp_agent",
+      "to": "st_hub",
+      "label": ":writes",
+      "kind": "cross"
+    },
+    {
+      "id": "connection_13",
+      "from": "lp_std",
+      "to": "tl_mcp",
+      "label": ":example",
+      "kind": "cross"
+    },
+    {
+      "id": "connection_14",
+      "from": "lp_trc",
+      "to": "ex_traces",
+      "label": ":fuel",
+      "kind": "cross"
+    },
+    {
+      "id": "connection_15",
+      "from": "lp_dev",
+      "to": "yg_you",
+      "label": ":is_yours",
+      "kind": "cross"
+    },
+    {
+      "id": "connection_16",
+      "from": "yg_graphs",
+      "to": "t_hub",
+      "label": ":are_awesome",
+      "kind": "cross"
+    },
+    {
+      "id": "connection_17",
+      "from": "t_hub",
+      "to": "oc_data",
+      "label": ":begins",
+      "kind": "spine"
+    },
+    {
+      "id": "connection_18",
+      "from": "oc_data",
+      "to": "ev_hub",
+      "kind": "spine"
+    },
+    {
+      "id": "connection_19",
+      "from": "ev_hub",
+      "to": "tl_hub",
+      "kind": "spine"
+    },
+    {
+      "id": "connection_20",
+      "from": "tl_op",
+      "to": "inv_ont_old",
+      "kind": "spine"
+    },
+    {
+      "id": "connection_21",
+      "from": "inv_ont_new",
+      "to": "st_after",
+      "kind": "spine"
+    },
+    {
+      "id": "connection_22",
+      "from": "ex_hub",
+      "to": "lp_dev",
+      "kind": "spine"
+    },
+    {
+      "id": "connection_23",
+      "from": "lp_comm",
+      "to": "yg_you",
+      "kind": "spine"
+    },
+    {
+      "id": "connection_24",
+      "from": "seg_er",
+      "to": "st_id",
+      "label": ":answers",
+      "kind": "cross"
+    },
+    {
+      "id": "connection_25",
+      "from": "seg_mem",
+      "to": "st_time",
+      "label": ":answers",
+      "kind": "cross"
+    },
+    {
+      "id": "connection_26",
+      "from": "seg_kg",
+      "to": "st_prov",
+      "label": ":answers",
+      "kind": "cross"
+    },
+    {
+      "id": "connection_27",
+      "from": "seg_kg",
+      "to": "inv_ont_old",
+      "label": ":lineage",
+      "kind": "cross"
+    },
+    {
+      "id": "connection_28",
+      "from": "seg_build",
+      "to": "inv_prop",
+      "label": ":industrializes",
+      "kind": "cross"
+    },
+    {
+      "id": "connection_29",
+      "from": "seg_viz",
+      "to": "oc_order",
+      "label": ":sells_order",
+      "kind": "cross"
+    },
+    {
+      "id": "connection_30",
+      "from": "seg_db",
+      "to": "ev_hub",
+      "label": ":persists",
+      "kind": "cross"
+    },
+    {
+      "id": "connection_31",
+      "from": "st_before",
+      "to": "inv_ont_old",
+      "label": ":made_this",
+      "kind": "cross"
+    },
+    {
+      "id": "connection_32",
+      "from": "co_neo4j",
+      "to": "ex_know",
+      "label": ":also_try",
+      "kind": "cross"
+    },
+    {
+      "id": "connection_33",
+      "from": "st_after",
+      "to": "mk_hub",
+      "kind": "spine"
+    },
+    {
+      "id": "connection_34",
+      "from": "mk_hub",
+      "to": "ex_hub",
+      "kind": "spine"
+    }
+  ]
+}

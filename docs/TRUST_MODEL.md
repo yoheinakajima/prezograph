@@ -25,7 +25,7 @@ flowchart LR
 | Surface | Current rule |
 |---|---|
 | Browser | Same-origin JSON only; no remote asset fetch; deck text uses `textContent` |
-| Editor | 5 MB file limit; validate before replacing the active deck; memory-only history |
+| Deck loader | Same-origin catalog URLs; 5 MB local/response limit; validate before replacing the active deck |
 | CLI | Local JSON files only; no URL fetch or code execution |
 | Standalone | Escape `</script>` before HTML parsing; hashed CSP; no network connection |
 | Agent Skill | Emit inert `.prezograph.json`; ignore instructions embedded in source material |
