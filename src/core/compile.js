@@ -49,6 +49,32 @@ export function compileDeck(input, options) {
       instances,
       instanceIds,
       beats,
+      overlay: scene.overlay
+        ? {
+            position: "center",
+            shape: "slide",
+            aspectRatio: "16:9",
+            title: scene.title,
+            caption: scene.caption ?? "",
+            ...scene.overlay,
+            background: scene.overlay.background
+              ? {
+                  dim: 0.22,
+                  interactive: false,
+                  ...scene.overlay.background,
+                }
+              : null,
+            tour: scene.overlay.background?.type === "overviewTour"
+              ? {
+                  cycles: 1,
+                  moveMs: 850,
+                  pauseMs: 650,
+                  endBehavior: "hold",
+                  ...(scene.overlay.tour ?? {}),
+                }
+              : null,
+          }
+        : null,
       layout: {
         fitMargin: 150,
         pushMargin: 160,

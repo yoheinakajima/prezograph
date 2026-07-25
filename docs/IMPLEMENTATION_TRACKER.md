@@ -49,6 +49,7 @@ Status: completed unless explicitly marked “future”.
 | T-43 | Content | Correct NRT→SEA, graph-type tips, Operator/Responses, A2A, and company-stage scope | reviewed example tests |
 | T-44 | Direction | Record one-graph slide-local layout, cues, routes, overlays, modes, and performance target | `docs/PRODUCT_DIRECTION.md` |
 | T-45 | Overview | Restore the animated slide-window tour, scene highlighting, push-out, numbering, and reduced-motion hold | player + geometry + browser QA |
+| T-46 | Finale | Add a safe generic overlay, one-cycle whole-graph background tour, final hold, and drawn-edge motion | schema + player + reviewed example + browser QA |
 | F-08 | Future | Slide-local placement graphs and deterministic layout controllers | requires schema/compiler migration |
 | F-09 | Future | First-class node/edge/camera/overlay cue actions | current beats remain compatibility layer |
 | F-10 | Future | Short/long routes, fork compilation, Speaker and Explore modes | no public promise until tested |

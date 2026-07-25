@@ -124,6 +124,8 @@ The complete machine-readable contract is [schemas/deck.schema.json](schemas/dec
 - Beats use explicit `show`, `focus`, and `revealOrder` lists instead of hidden numeric step rules.
 - The optional whole-graph view replays a numbered, slide-shaped window across every scene and is
   not counted as an extra slide or forced after the ending.
+- Any scene can declare a centered, slide-shaped inert-text overlay; the reviewed example uses one
+  over a finite whole-graph tour and holds instead of wrapping back to the title.
 - Mobile camera fitting honors the fixed header and controls before falling back to explicit overflow.
 - Reduced-motion preferences, keyboard navigation, focus states, and emergency readable-scale floors are built in.
 

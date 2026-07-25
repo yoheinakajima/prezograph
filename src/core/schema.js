@@ -7,9 +7,12 @@ const BUILTIN_VISUALS = new Set(["network7", "table7", "jsonSnippet"]);
 const ENTITY_KEYS = new Set(["title", "sub", "body", "tip", "source", "sourceDate"]);
 const INSTANCE_KEYS = new Set(["id", "entity", "pos", "kind", "w", "r", "visual"]);
 const EDGE_KEYS = new Set(["id", "from", "to", "label", "kind", "curve"]);
-const SCENE_KEYS = new Set(["id", "title", "caption", "anchor", "instances", "edges", "beats", "layout"]);
+const SCENE_KEYS = new Set(["id", "title", "caption", "anchor", "instances", "edges", "beats", "layout", "overlay"]);
 const BEAT_KEYS = new Set(["id", "label", "caption", "show", "focus", "revealOrder"]);
 const LAYOUT_KEYS = new Set(["fitMargin", "pushMargin", "zoomMax", "floatAmp", "minReadableScale", "noCard"]);
+const OVERLAY_KEYS = new Set(["position", "shape", "aspectRatio", "title", "caption", "background", "tour"]);
+const OVERLAY_BACKGROUND_KEYS = new Set(["type", "dim", "interactive"]);
+const OVERLAY_TOUR_KEYS = new Set(["cycles", "moveMs", "pauseMs", "endBehavior"]);
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 
 export class DeckValidationError extends Error {
@@ -166,6 +169,98 @@ export function validateDeck(deck, options = {}) {
         }
       }
       if (scene.layout?.noCard != null && typeof scene.layout.noCard !== "boolean") add(issues, `${path}.layout.noCard`, "must be a boolean");
+
+      if (scene.overlay != null && !isObject(scene.overlay)) add(issues, `${path}.overlay`, "must be an object");
+      if (isObject(scene.overlay)) {
+        for (const key of Object.keys(scene.overlay)) {
+          if (!OVERLAY_KEYS.has(key)) add(issues, `${path}.overlay.${key}`, "is not an allowed overlay property");
+        }
+        if (scene.overlay.position != null && scene.overlay.position !== "center") {
+          add(issues, `${path}.overlay.position`, 'must equal "center"');
+        }
+        if (scene.overlay.shape != null && scene.overlay.shape !== "slide") {
+          add(issues, `${path}.overlay.shape`, 'must equal "slide"');
+        }
+        if (scene.overlay.aspectRatio != null && scene.overlay.aspectRatio !== "16:9") {
+          add(issues, `${path}.overlay.aspectRatio`, 'must equal "16:9"');
+        }
+        for (const key of ["title", "caption"]) {
+          if (scene.overlay[key] != null && typeof scene.overlay[key] !== "string") {
+            add(issues, `${path}.overlay.${key}`, "must be a string");
+          }
+        }
+        if (scene.overlay.title != null && !scene.overlay.title.trim()) {
+          add(issues, `${path}.overlay.title`, "must be a non-empty string");
+        }
+        if (scene.overlay.background != null && !isObject(scene.overlay.background)) {
+          add(issues, `${path}.overlay.background`, "must be an object");
+        }
+        if (isObject(scene.overlay.background)) {
+          for (const key of Object.keys(scene.overlay.background)) {
+            if (!OVERLAY_BACKGROUND_KEYS.has(key)) {
+              add(issues, `${path}.overlay.background.${key}`, "is not an allowed overlay background property");
+            }
+          }
+          if (scene.overlay.background.type !== "overviewTour") {
+            add(issues, `${path}.overlay.background.type`, 'must equal "overviewTour"');
+          }
+          if (
+            scene.overlay.background.dim != null
+            && (!Number.isFinite(scene.overlay.background.dim)
+              || scene.overlay.background.dim < 0
+              || scene.overlay.background.dim > 0.8)
+          ) {
+            add(issues, `${path}.overlay.background.dim`, "must be between 0 and 0.8");
+          }
+          if (
+            scene.overlay.background.interactive != null
+            && typeof scene.overlay.background.interactive !== "boolean"
+          ) {
+            add(issues, `${path}.overlay.background.interactive`, "must be a boolean");
+          }
+        }
+        if (scene.overlay.tour != null && !isObject(scene.overlay.tour)) {
+          add(issues, `${path}.overlay.tour`, "must be an object");
+        }
+        if (isObject(scene.overlay.tour)) {
+          for (const key of Object.keys(scene.overlay.tour)) {
+            if (!OVERLAY_TOUR_KEYS.has(key)) {
+              add(issues, `${path}.overlay.tour.${key}`, "is not an allowed overlay tour property");
+            }
+          }
+          if (
+            scene.overlay.tour.cycles != null
+            && (!Number.isInteger(scene.overlay.tour.cycles)
+              || scene.overlay.tour.cycles < 1
+              || scene.overlay.tour.cycles > 5)
+          ) {
+            add(issues, `${path}.overlay.tour.cycles`, "must be an integer between 1 and 5");
+          }
+          for (const key of ["moveMs", "pauseMs"]) {
+            if (
+              scene.overlay.tour[key] != null
+              && (!Number.isFinite(scene.overlay.tour[key])
+                || scene.overlay.tour[key] < (key === "moveMs" ? 100 : 0)
+                || scene.overlay.tour[key] > 10000)
+            ) {
+              add(
+                issues,
+                `${path}.overlay.tour.${key}`,
+                `must be between ${key === "moveMs" ? 100 : 0} and 10000`,
+              );
+            }
+          }
+          if (
+            scene.overlay.tour.endBehavior != null
+            && !["hold", "loop"].includes(scene.overlay.tour.endBehavior)
+          ) {
+            add(issues, `${path}.overlay.tour.endBehavior`, 'must be "hold" or "loop"');
+          }
+        }
+        if (scene.overlay.tour != null && scene.overlay.background?.type !== "overviewTour") {
+          add(issues, `${path}.overlay.tour`, "requires background.type to equal \"overviewTour\"");
+        }
+      }
 
       if (scene.beats != null && !Array.isArray(scene.beats)) add(issues, `${path}.beats`, "must be an array");
       if (Array.isArray(scene.beats)) {

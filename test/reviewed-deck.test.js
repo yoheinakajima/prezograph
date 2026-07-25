@@ -49,3 +49,17 @@ test("company stage is name-only and reflects active-status review", () => {
     assert.equal(deck.entities[entityId].body, undefined, `${entityId} should not show body copy`);
   }
 });
+
+test("reviewed deck ends with a finite whole-graph overlay tour", () => {
+  const close = deck.scenes.at(-1);
+  assert.equal(close.id, "close");
+  assert.equal(close.overlay.title, "(you)-[:builds]->(graphs)");
+  assert.equal(close.overlay.caption, "thank you — go draw the edges");
+  assert.deepEqual(close.overlay.background, {
+    type: "overviewTour",
+    dim: 0.1,
+    interactive: false,
+  });
+  assert.equal(close.overlay.tour.cycles, 1);
+  assert.equal(close.overlay.tour.endBehavior, "hold");
+});

@@ -102,6 +102,40 @@
       },
       "additionalProperties": false
     },
+    "overlay": {
+      "type": "object",
+      "properties": {
+        "position": { "const": "center" },
+        "shape": { "const": "slide" },
+        "aspectRatio": { "const": "16:9" },
+        "title": { "type": "string", "minLength": 1 },
+        "caption": { "type": "string" },
+        "background": {
+          "type": "object",
+          "required": ["type"],
+          "properties": {
+            "type": { "const": "overviewTour" },
+            "dim": { "type": "number", "minimum": 0, "maximum": 0.8 },
+            "interactive": { "type": "boolean" }
+          },
+          "additionalProperties": false
+        },
+        "tour": {
+          "type": "object",
+          "properties": {
+            "cycles": { "type": "integer", "minimum": 1, "maximum": 5 },
+            "moveMs": { "type": "number", "minimum": 100, "maximum": 10000 },
+            "pauseMs": { "type": "number", "minimum": 0, "maximum": 10000 },
+            "endBehavior": { "enum": ["hold", "loop"] }
+          },
+          "additionalProperties": false
+        }
+      },
+      "dependentRequired": {
+        "tour": ["background"]
+      },
+      "additionalProperties": false
+    },
     "scene": {
       "type": "object",
       "required": ["id", "title", "anchor", "instances"],
@@ -109,6 +143,7 @@
         "id": { "type": "string" },
         "title": { "type": "string", "minLength": 1 },
         "caption": { "type": "string" },
+        "overlay": { "$ref": "#/$defs/overlay" },
         "anchor": { "$ref": "#/$defs/pair" },
         "instances": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/instance" } },
         "edges": { "type": "array", "items": { "$ref": "#/$defs/edge" } },

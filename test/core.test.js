@@ -112,3 +112,31 @@ test("overview windows reproduce a scene viewport and interpolate deterministica
     scale: 0.75,
   });
 });
+
+test("compiler adds deterministic safe defaults to optional overlays", () => {
+  const deck = structuredClone(miniDeck);
+  deck.scenes[1].overlay = {
+    title: "The end",
+    background: { type: "overviewTour" },
+  };
+  const overlay = compileDeck(deck).scenes[1].overlay;
+  assert.deepEqual(overlay, {
+    position: "center",
+    shape: "slide",
+    aspectRatio: "16:9",
+    title: "The end",
+    caption: "",
+    background: {
+      dim: 0.22,
+      interactive: false,
+      type: "overviewTour",
+    },
+    tour: {
+      cycles: 1,
+      moveMs: 850,
+      pauseMs: 650,
+      endBehavior: "hold",
+    },
+  });
+  assert.equal(deck.scenes[1].overlay.background.dim, undefined, "caller data remains immutable");
+});

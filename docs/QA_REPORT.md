@@ -6,7 +6,7 @@ Run date: July 25, 2026
 
 - `npm run validate` — passed for both schema-v2 examples; the reviewed adaptation contains 12
   scenes, 133 semantic entities, and 131 rendered instances.
-- `npm test` — passed: 26/26 schema, security, loader, compilation, geometry, content, hostile-input,
+- `npm test` — passed: 29/29 schema, security, loader, compilation, geometry, content, hostile-input,
   public-copy, agent-surface, and workflow-policy assertions.
 - `npm run build` — passed: CSP-hashed portable `dist/prezograph.html`.
 - `npm run build:site` — passed: static Pages artifact with home, app, agent, raw source,
@@ -26,7 +26,8 @@ Run date: July 25, 2026
 - Walked all 23 reviewed cues at 390×844; every active node remained inside the safe area and no
   scene entered overflow.
 - Inspected the opening and mobile deck-selection bottom sheet visually.
-- Confirmed the ending remains scene 12; overview is optional and reports “overview · 12 scenes.”
+- Confirmed the ending remains scene 12 as a centered 16:9 overlay; whole-graph exploration remains
+  optional and reports “overview · 12 scenes.”
 - Confirmed the camera scales content below the former 0.8 mobile floor when needed, while retaining
   an emergency floor and explicit overflow behavior for genuinely unfit content.
 - Switched between the reviewed and technical-preview decks from the selector and confirmed the
@@ -38,6 +39,13 @@ Run date: July 25, 2026
 - Confirmed Next exits overview at scene 1 and Back exits at scene 12.
 - Confirmed the 16:9 overview window remains fully visible at 390×844.
 - Confirmed reduced-motion mode holds a meaningful first scene window without automatic movement.
+- Confirmed the full-motion finale advances its numbered focus window through all 12 scenes once,
+  reaches `finale · 12 / 12 · hold`, and remains at the same window after an additional wait.
+- Confirmed the final Next action holds instead of wrapping, while Back restores scene 11's final
+  beat and removes the overlay/tour state.
+- Confirmed the mobile finale overlay occupies x=14 through x=376 at 390×844, retains a 16:9
+  aspect ratio, and leaves the navigation/progress safe areas clear.
+- Confirmed the reduced-motion finale renders a static `12 / 12` window and the same readable close.
 - Confirmed the launch homepage has a complete discovery path, a truthful available/planned split,
   six durable example actions, and no dead-end footer.
 - Confirmed `/agents/` instructs agents to return inert JSON and labels YAML, API, and MCP as planned.

@@ -3516,6 +3516,24 @@
       "id": "close",
       "title": "(you)-[:builds]->(graphs)",
       "caption": "thank you — go draw the edges",
+      "overlay": {
+        "position": "center",
+        "shape": "slide",
+        "aspectRatio": "16:9",
+        "title": "(you)-[:builds]->(graphs)",
+        "caption": "thank you — go draw the edges",
+        "background": {
+          "type": "overviewTour",
+          "dim": 0.1,
+          "interactive": false
+        },
+        "tour": {
+          "cycles": 1,
+          "moveMs": 760,
+          "pauseMs": 420,
+          "endBehavior": "hold"
+        }
+      },
       "anchor": [
         3242,
         1441

@@ -41,6 +41,12 @@ function template() {
         </section>
       </div>
     </div>
+    <div class="pz-overlay-shade" aria-hidden="true" hidden></div>
+    <section class="pz-overlay" aria-label="Presentation overlay" hidden>
+      <div class="pz-overlay-rule" aria-hidden="true"></div>
+      <h1 class="pz-overlay-title"></h1>
+      <p class="pz-overlay-caption"></p>
+    </section>
     <header class="pz-brand"></header>
     <div class="pz-legend" aria-hidden="true">
       <span style="--dot:var(--pz-indigo)">ideas</span>
@@ -92,7 +98,9 @@ export class PrezographPlayer extends EventTarget {
     super();
     this.root = root;
     this.options = options;
-    this.reducedMotion = globalThis.matchMedia?.("(prefers-reduced-motion: reduce)").matches ?? false;
+    this.reducedMotion = options.reducedMotion
+      ?? globalThis.matchMedia?.("(prefers-reduced-motion: reduce)").matches
+      ?? false;
     this.sceneIndex = 0;
     this.beatIndex = 0;
     this.overview = false;
@@ -128,6 +136,10 @@ export class PrezographPlayer extends EventTarget {
     this.world = $(".pz-world");
     this.svg = $(".pz-edges");
     this.card = $(".pz-card");
+    this.overlayShade = $(".pz-overlay-shade");
+    this.overlay = $(".pz-overlay");
+    this.overlayTitle = $(".pz-overlay-title");
+    this.overlayCaption = $(".pz-overlay-caption");
     this.brand = $(".pz-brand");
     this.progress = $(".pz-progress");
     this.dots = $(".pz-dots");
@@ -178,7 +190,7 @@ export class PrezographPlayer extends EventTarget {
     this.viewport.addEventListener("wheel", (event) => this.onWheel(event), { passive: false });
     globalThis.addEventListener("resize", () => {
       if (!this.freeCamera) this.fitCurrent({ snap: this.reducedMotion });
-      if (this.overview) this.startOverviewTour();
+      if (this.overview || this.hasOverviewTourBackground()) this.startOverviewTour();
       this.positionTip();
     });
   }
@@ -328,6 +340,7 @@ export class PrezographPlayer extends EventTarget {
 
   createEdge(edge) {
     const path = svgElement("path", "pz-edge");
+    path.setAttribute("pathLength", "100");
     for (const token of (edge.kind ?? "").split(" ").filter(Boolean)) path.classList.add(`kind-${token}`);
     if (edge.kind?.includes("cross")) path.style.strokeDasharray = "7 6";
     this.svg.insertBefore(path, this.svg.firstChild);
@@ -374,6 +387,28 @@ export class PrezographPlayer extends EventTarget {
     return this.currentScene()?.beats[this.beatIndex];
   }
 
+  currentOverlay() {
+    return this.overview ? null : this.currentScene()?.overlay;
+  }
+
+  hasOverviewTourBackground() {
+    return this.currentOverlay()?.background?.type === "overviewTour";
+  }
+
+  usesWholeGraphBackdrop() {
+    return this.overview || this.hasOverviewTourBackground();
+  }
+
+  holdsAtEnd() {
+    const scene = this.currentScene();
+    return (
+      !this.overview
+      && this.sceneIndex === this.compiled.scenes.length - 1
+      && Boolean(scene?.overlay)
+      && scene.overlay.tour?.endBehavior !== "loop"
+    );
+  }
+
   goScene(index, options = {}) {
     this.stopOverviewTour();
     const count = this.compiled.scenes.length;
@@ -390,6 +425,8 @@ export class PrezographPlayer extends EventTarget {
     if (this.beatIndex < scene.beats.length - 1) {
       this.beatIndex += 1;
       this.applyState({ announce: true });
+    } else if (this.holdsAtEnd()) {
+      this.stopAutoplay();
     } else {
       this.goScene(this.sceneIndex + 1);
     }
@@ -402,19 +439,18 @@ export class PrezographPlayer extends EventTarget {
       this.applyState({ announce: true });
     } else {
       const previous = (this.sceneIndex - 1 + this.compiled.scenes.length) % this.compiled.scenes.length;
-      this.sceneIndex = previous;
-      this.beatIndex = this.currentScene().beats.length - 1;
-      this.applyState({ announce: true });
+      this.goScene(previous, {
+        beat: this.compiled.scenes[previous].beats.length - 1,
+      });
     }
   }
 
   toggleOverview() {
     const entering = !this.overview;
-    if (!entering) this.stopOverviewTour();
+    this.stopOverviewTour();
     this.overview = entering;
     this.freeCamera = false;
     this.applyState({ snap: this.reducedMotion, announce: true });
-    if (entering) this.startOverviewTour();
   }
 
   applyState(options = {}) {
@@ -424,10 +460,11 @@ export class PrezographPlayer extends EventTarget {
     const previousShow = this.currentShow;
     const scene = this.currentScene();
     const beat = this.currentBeat();
-    this.currentShow = this.overview
+    const graphBackdrop = this.usesWholeGraphBackdrop();
+    this.currentShow = graphBackdrop
       ? new Set(this.compiled.instanceMap.keys())
       : new Set(beat.show);
-    this.currentFocus = this.overview
+    this.currentFocus = graphBackdrop
       ? new Set(this.compiled.instanceMap.keys())
       : new Set(beat.focus);
 
@@ -438,13 +475,13 @@ export class PrezographPlayer extends EventTarget {
       view.element.classList.toggle("is-active", active);
       view.element.classList.toggle("is-shown", shown && !active);
       view.element.classList.toggle("is-context", !shown);
-      view.element.classList.toggle("is-beat-hidden", inScene && !shown && !this.overview);
+      view.element.classList.toggle("is-beat-hidden", inScene && !shown && !graphBackdrop);
       view.element.setAttribute("aria-hidden", active ? "false" : "true");
       view.element.tabIndex = active ? 0 : -1;
       if ("inert" in view.element) view.element.inert = !active;
     }
 
-    if (!this.overview && !this.reducedMotion) {
+    if (!graphBackdrop && !this.reducedMotion) {
       const fresh = beat.revealOrder.filter((id) => this.currentShow.has(id) && !previousShow.has(id));
       fresh.forEach((id) => this.nodeViews.get(id)?.element.classList.add("is-revealing"));
       fresh.forEach((id, index) => {
@@ -457,6 +494,7 @@ export class PrezographPlayer extends EventTarget {
     this.updateEdges();
     this.updateChrome();
     this.fitCurrent({ snap: options.snap });
+    if (graphBackdrop) this.startOverviewTour();
     if (options.announce) this.announce();
     this.dispatchEvent(new CustomEvent("scenechange", {
       detail: { sceneIndex: this.sceneIndex, beatIndex: this.beatIndex, overview: this.overview }
@@ -464,17 +502,18 @@ export class PrezographPlayer extends EventTarget {
   }
 
   updateEdges() {
-    const touring = this.overview && this.overviewTour?.target;
+    const graphBackdrop = this.usesWholeGraphBackdrop();
+    const touring = graphBackdrop && this.overviewTour?.target;
     for (const view of this.edgeViews) {
       const fromShown = this.currentShow.has(view.edge.from);
       const toShown = this.currentShow.has(view.edge.to);
       const fromFocus = this.currentFocus.has(view.edge.from);
       const toFocus = this.currentFocus.has(view.edge.to);
-      const hidden = !this.overview && (
+      const hidden = !graphBackdrop && (
         (this.nodeViews.get(view.edge.from)?.scene.id === this.currentScene().id && !fromShown) ||
         (this.nodeViews.get(view.edge.to)?.scene.id === this.currentScene().id && !toShown)
       );
-      const on = this.overview && !touring ? true : (fromFocus && toFocus);
+      const on = graphBackdrop && !touring ? true : (fromFocus && toFocus);
       const half = !on && view.edge.kind?.includes("cross") && (fromFocus || toFocus);
       view.path.classList.toggle("is-hidden", hidden);
       view.path.classList.toggle("is-on", on);
@@ -489,6 +528,7 @@ export class PrezographPlayer extends EventTarget {
   updateChrome() {
     const scene = this.currentScene();
     const beat = this.currentBeat();
+    const overlay = this.currentOverlay();
     this.brand.replaceChildren();
     const strong = element("strong", null, this.compiled.meta.title);
     this.brand.append(strong);
@@ -499,6 +539,8 @@ export class PrezographPlayer extends EventTarget {
       this.progress.textContent = `overview · ${this.compiled.scenes.length} scenes`;
       this.card.querySelector(".pz-card-title").textContent = "One graph";
       this.card.querySelector(".pz-card-caption").textContent = "Explore the complete presentation graph; choose a scene dot or node to return.";
+    } else if (overlay) {
+      this.progress.textContent = `finale · ${String(this.sceneIndex + 1).padStart(2, "0")} / ${String(this.compiled.scenes.length).padStart(2, "0")}`;
     } else {
       const beatSuffix = scene.beats.length > 1 ? ` · ${this.beatIndex + 1}/${scene.beats.length}` : "";
       this.progress.textContent = `${String(this.sceneIndex + 1).padStart(2, "0")} / ${String(this.compiled.scenes.length).padStart(2, "0")}${beatSuffix}`;
@@ -506,8 +548,23 @@ export class PrezographPlayer extends EventTarget {
       this.card.querySelector(".pz-card-caption").textContent = beat.caption ?? scene.caption ?? "";
     }
 
-    this.card.hidden = !this.overview && scene.layout.noCard === true;
+    this.card.hidden = Boolean(overlay) || (!this.overview && scene.layout.noCard === true);
+    this.overlay.hidden = !overlay;
+    this.overlayShade.hidden = !overlay;
+    this.shell.classList.toggle("is-overlay", Boolean(overlay));
+    this.shell.classList.toggle("is-overlay-blocking", Boolean(overlay && !overlay.background?.interactive));
+    if (overlay) {
+      this.overlayTitle.textContent = overlay.title;
+      this.overlayCaption.textContent = overlay.caption ?? "";
+      this.overlayCaption.hidden = !overlay.caption;
+      this.overlayShade.style.opacity = String(overlay.background?.dim ?? 0);
+    } else {
+      this.overlayTitle.textContent = "";
+      this.overlayCaption.textContent = "";
+      this.overlayShade.style.opacity = "0";
+    }
     this.controls.overview.setAttribute("aria-pressed", String(this.overview));
+    this.controls.next.disabled = this.holdsAtEnd();
     [...this.dots.children].forEach((dot, index) => {
       if (!this.overview && index === this.sceneIndex) dot.setAttribute("aria-current", "step");
       else dot.removeAttribute("aria-current");
@@ -516,13 +573,14 @@ export class PrezographPlayer extends EventTarget {
 
   fitCurrent(options = {}) {
     const scene = this.currentScene();
-    const ids = this.overview ? [...this.compiled.instanceMap.keys()] : [...this.currentFocus];
+    const graphBackdrop = this.usesWholeGraphBackdrop();
+    const ids = graphBackdrop ? [...this.compiled.instanceMap.keys()] : [...this.currentFocus];
     let bounds = boundsFor(ids, this.compiled.instanceMap, this.measurements);
     const cardSpace = this.card.hidden ? 0 : Math.min(130, this.card.offsetHeight + 44);
-    const layout = this.overview
+    const layout = graphBackdrop
       ? { ...scene.layout, minReadableScale: 0.08, zoomMax: 0.32, fitMargin: 80 }
       : scene.layout;
-    if (this.overview) {
+    if (graphBackdrop) {
       for (const candidate of this.compiled.scenes) {
         const window = this.sceneWindow(candidate);
         bounds = {
@@ -543,9 +601,9 @@ export class PrezographPlayer extends EventTarget {
       safeArea: this.safeArea(),
     });
     this.cameraTarget = { x: fit.x, y: fit.y, scale: fit.scale };
-    this.overflowNotice.classList.toggle("is-visible", !this.overview && fit.overflow);
+    this.overflowNotice.classList.toggle("is-visible", !graphBackdrop && fit.overflow);
     this.positionCard(bounds);
-    this.pushContext = this.overview ? null : {
+    this.pushContext = graphBackdrop ? null : {
       x: fit.x,
       y: fit.y,
       halfWidth: fit.availableWidth / 2 / fit.scale,
@@ -584,33 +642,58 @@ export class PrezographPlayer extends EventTarget {
   }
 
   startOverviewTour() {
-    if (!this.overview || !this.tourGroup || !this.compiled.scenes.length) return;
+    const overlay = this.currentOverlay();
+    const mode = this.overview ? "overview" : "overlay";
+    if (
+      (!this.overview && overlay?.background?.type !== "overviewTour")
+      || !this.tourGroup
+      || !this.compiled.scenes.length
+    ) return;
     this.tourGroup.classList.add("is-visible");
-    const startIndex = Math.max(0, this.overviewTour?.index ?? 0);
+    this.shell.classList.remove("is-tour-complete");
+    const settings = mode === "overlay"
+      ? overlay.tour
+      : { cycles: 1, moveMs: 850, pauseMs: 650, endBehavior: "loop" };
+    const startIndex = this.reducedMotion && mode === "overlay"
+      ? this.compiled.scenes.length - 1
+      : 0;
     const target = this.sceneWindow(this.compiled.scenes[startIndex]);
     if (this.reducedMotion) {
       this.overviewTour = {
+        mode,
         index: startIndex,
         phase: "hold",
         current: target,
         target,
+        visits: 1,
+        maxVisits: 1,
+        moveMs: settings.moveMs,
+        pauseMs: settings.pauseMs,
       };
       this.applyOverviewTourScene(startIndex, target);
       this.renderOverviewTourWindow(target);
       return;
     }
     this.overviewTour = {
-      index: startIndex - 1,
+      mode,
+      index: -1,
       phase: "pause",
       until: performance.now() + 280,
       current: null,
       target: null,
+      visits: 0,
+      maxVisits: settings.endBehavior === "loop"
+        ? Number.POSITIVE_INFINITY
+        : settings.cycles * this.compiled.scenes.length,
+      moveMs: settings.moveMs,
+      pauseMs: settings.pauseMs,
     };
   }
 
   stopOverviewTour() {
     this.overviewTour = null;
     this.tourGroup?.classList.remove("is-visible");
+    this.shell.classList.remove("is-tour-complete");
   }
 
   stepOverviewTour(now) {
@@ -618,17 +701,26 @@ export class PrezographPlayer extends EventTarget {
     if (!tour || tour.phase === "hold") return;
     if (now >= tour.until) {
       if (tour.phase === "pause") {
+        if (tour.visits >= tour.maxVisits) {
+          tour.phase = "hold";
+          this.shell.classList.add("is-tour-complete");
+          if (tour.mode === "overlay") {
+            this.progress.textContent = `finale · ${String(this.sceneIndex + 1).padStart(2, "0")} / ${String(this.compiled.scenes.length).padStart(2, "0")} · hold`;
+          }
+          return;
+        }
         tour.index = (tour.index + 1) % this.compiled.scenes.length;
+        tour.visits += 1;
         tour.target = this.sceneWindow(this.compiled.scenes[tour.index]);
         tour.from = tour.current ?? tour.target;
         tour.phase = "move";
         tour.started = now;
-        tour.until = now + 850;
+        tour.until = now + tour.moveMs;
         this.applyOverviewTourScene(tour.index, tour.target);
       } else {
         tour.current = tour.target;
         tour.phase = "pause";
-        tour.until = now + 650;
+        tour.until = now + tour.pauseMs;
       }
     }
     if (!tour.target) return;
@@ -636,7 +728,7 @@ export class PrezographPlayer extends EventTarget {
       ? interpolateWindow(
           tour.from,
           tour.target,
-          easeInOutCubic(Math.min(1, (now - tour.started) / 850)),
+          easeInOutCubic(Math.min(1, (now - tour.started) / tour.moveMs)),
         )
       : tour.target;
     tour.current = window;
@@ -658,13 +750,18 @@ export class PrezographPlayer extends EventTarget {
       if ("inert" in view.element) view.element.inert = !focused;
     }
     this.updateEdges();
-    this.progress.textContent = `overview · ${String(index + 1).padStart(2, "0")} / ${String(this.compiled.scenes.length).padStart(2, "0")}`;
-    this.card.hidden = scene.layout.noCard === true;
-    this.card.querySelector(".pz-card-title").textContent = scene.title;
-    this.card.querySelector(".pz-card-caption").textContent = scene.caption ?? "";
-    if (!this.card.hidden) {
-      this.card.style.left = `${window.x - window.halfWidth + 40}px`;
-      this.card.style.top = `${window.y - window.halfHeight + 40}px`;
+    if (this.overviewTour?.mode === "overview") {
+      this.progress.textContent = `overview · ${String(index + 1).padStart(2, "0")} / ${String(this.compiled.scenes.length).padStart(2, "0")}`;
+      this.card.hidden = scene.layout.noCard === true;
+      this.card.querySelector(".pz-card-title").textContent = scene.title;
+      this.card.querySelector(".pz-card-caption").textContent = scene.caption ?? "";
+      if (!this.card.hidden) {
+        this.card.style.left = `${window.x - window.halfWidth + 40}px`;
+        this.card.style.top = `${window.y - window.halfHeight + 40}px`;
+      }
+    } else {
+      this.progress.textContent = `finale · ${String(index + 1).padStart(2, "0")} / ${String(this.compiled.scenes.length).padStart(2, "0")}`;
+      this.card.hidden = true;
     }
     this.pushContext = {
       x: window.x,
@@ -695,7 +792,9 @@ export class PrezographPlayer extends EventTarget {
     const beat = this.currentBeat();
     this.live.textContent = this.overview
       ? `Whole graph overview. ${this.compiled.scenes.length} scenes.`
-      : `Scene ${this.sceneIndex + 1} of ${this.compiled.scenes.length}: ${scene.title}. ${beat.label ?? beat.caption ?? scene.caption ?? ""}`;
+      : scene.overlay
+        ? `Finale: ${scene.overlay.title}. ${scene.overlay.caption ?? ""}`
+        : `Scene ${this.sceneIndex + 1} of ${this.compiled.scenes.length}: ${scene.title}. ${beat.label ?? beat.caption ?? scene.caption ?? ""}`;
   }
 
   showTip(view, options = {}) {
@@ -846,7 +945,7 @@ export class PrezographPlayer extends EventTarget {
       this.camera.scale += (this.cameraTarget.scale - this.camera.scale) * cameraEase;
     }
     this.renderWorldTransform();
-    if (this.overview) this.stepOverviewTour(timestamp);
+    if (this.overview || this.hasOverviewTourBackground()) this.stepOverviewTour(timestamp);
 
     const pushEase = this.reducedMotion ? 1 : 1 - Math.exp(-dt * 7);
     for (const view of this.nodeViews.values()) {

@@ -32,7 +32,7 @@ transitional. It must not be advertised as the final conceptual model.
 | Modes | Present, Speaker, Explore, and developer-only Layout Debug | Present/overview available; others planned |
 | Routes | Select short/long routes and optional forks before playback | Planned |
 | Whole graph | Fixed overview camera with a numbered, slide-shaped window touring every scene | Available |
-| Finale | Generic centered overlay over an optional one-cycle overview-tour background | Planned |
+| Finale | Generic centered inert-text overlay over an optional one-cycle overview-tour background | Available |
 | Performance | Event-driven rendering, viewport culling, two-hop context, semantic zoom | Planned |
 | Company stage | Names only; sourced facts live in metadata/details | Implemented in reviewed example |
 
@@ -103,7 +103,7 @@ implementation.
 2. Migrate from entity/instance placement to semantic nodes plus slide-local targets.
 3. Add deterministic layout controllers, component packing, and diagnostics.
 4. Compile current beats into first-class cues.
-5. Add generic overlay and slide-shaped overview-tour windows.
+5. Extend the available generic overlay and slide-shaped overview-tour windows into first-class cues.
 6. Compile routes and forks; add Present, Speaker, Explore, and Layout Debug.
 7. Add culling, semantic zoom, idle rendering, and performance budgets.
 8. Add safe YAML and interface parity only after the trust gates pass.

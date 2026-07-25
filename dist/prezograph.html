@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'sha256-/kxYeiPWRTSHimdM/p/+zI0Uocwza9f0rXq1NwCUUeA='; script-src 'sha256-4Od/7C0I3+jnWNkhvEW6WtWiTW3J+fTm/g35Db+j4FU='; img-src data:; connect-src 'none'; font-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'sha256-tHfAr5BlbtT6Ia4L46r9S+FTmsGW+GuKcKFiQWHDbmo='; script-src 'sha256-ZGuwsSlQN6h8PGi4d+bgfNMq67S1XHZ9cNhUOGYKucY='; img-src data:; connect-src 'none'; font-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
   <title>Prezograph · Single-file deck</title>
   <style>:root {
   color-scheme: light;
@@ -87,20 +87,28 @@ textarea {
   stroke: var(--pz-hair);
   stroke-width: 1.6;
   opacity: 0.035;
-  transition: opacity 350ms ease;
+  transition: opacity 350ms ease, stroke-dashoffset 680ms cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.pz-edge:not(.kind-cross) {
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
 }
 
 .pz-edge.is-on {
   opacity: 0.88;
+  stroke-dashoffset: 0;
 }
 
 .pz-edge.is-half {
   opacity: 0.24;
   stroke-dasharray: 7 6;
+  stroke-dashoffset: 0;
 }
 
 .pz-edge.is-hidden {
   opacity: 0;
+  stroke-dashoffset: 100;
 }
 
 .pz-edge-label {
@@ -131,6 +139,7 @@ textarea {
 .pz-tour-window {
   fill: none;
   stroke: var(--pz-indigo);
+  filter: drop-shadow(0 0 5px color-mix(in srgb, var(--pz-indigo) 24%, transparent));
 }
 
 .pz-tour-number {
@@ -380,6 +389,98 @@ textarea {
   line-height: 1.45;
 }
 
+.pz-overlay-shade {
+  position: fixed;
+  inset: 0;
+  z-index: 7;
+  background: var(--pz-bg);
+  pointer-events: none;
+  transition: opacity 500ms ease;
+}
+
+.pz-overlay-shade[hidden],
+.pz-overlay[hidden] {
+  display: none;
+}
+
+.pz-overlay {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: 8;
+  display: grid;
+  width: min(880px, calc(100vw - 64px));
+  aspect-ratio: 16 / 9;
+  align-content: center;
+  padding: clamp(34px, 5.5vw, 72px);
+  overflow: hidden;
+  border: 1.5px solid color-mix(in srgb, var(--pz-indigo) 42%, var(--pz-hair));
+  border-radius: clamp(18px, 2.2vw, 28px);
+  background: color-mix(in srgb, var(--pz-surface) 96%, transparent);
+  box-shadow:
+    0 30px 100px rgba(29, 31, 35, 0.18),
+    0 2px 10px var(--pz-shadow);
+  transform: translate(-50%, -50%);
+  text-align: center;
+  pointer-events: none;
+  animation: pz-overlay-enter 720ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.pz-overlay::after {
+  position: absolute;
+  inset: 10px;
+  border: 1px solid color-mix(in srgb, var(--pz-indigo) 12%, transparent);
+  border-radius: calc(clamp(18px, 2.2vw, 28px) - 7px);
+  content: "";
+  pointer-events: none;
+}
+
+.pz-overlay-rule {
+  width: clamp(52px, 7vw, 88px);
+  height: 3px;
+  margin: 0 auto clamp(18px, 3vw, 30px);
+  border-radius: 999px;
+  background: var(--pz-indigo);
+}
+
+.pz-overlay-title {
+  max-width: 100%;
+  margin: 0;
+  font: 800 clamp(28px, 4.4vw, 58px)/1.08 ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  letter-spacing: -0.055em;
+  overflow-wrap: anywhere;
+}
+
+.pz-overlay-caption {
+  margin: clamp(14px, 2.2vw, 24px) 0 0;
+  color: var(--pz-muted);
+  font-size: clamp(14px, 1.55vw, 20px);
+  font-style: italic;
+  line-height: 1.45;
+}
+
+.pz-shell.is-tour-complete .pz-overlay {
+  box-shadow:
+    0 32px 110px rgba(29, 31, 35, 0.2),
+    0 0 0 4px color-mix(in srgb, var(--pz-indigo) 8%, transparent);
+}
+
+.pz-shell.is-overlay-blocking .pz-viewport {
+  cursor: default;
+  pointer-events: none;
+}
+
+@keyframes pz-overlay-enter {
+  from {
+    opacity: 0;
+    transform: translate(-50%, calc(-50% + 20px)) scale(0.975);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
 .pz-brand {
   position: fixed;
   top: 18px;
@@ -469,6 +570,11 @@ textarea {
   border-color: var(--pz-indigo);
   color: var(--pz-indigo);
   outline: none;
+}
+
+.pz-control:disabled {
+  cursor: default;
+  opacity: 0.42;
 }
 
 .pz-control.is-icon {
@@ -729,6 +835,26 @@ textarea {
 
   .pz-card {
     width: min(300px, calc(100vw - 28px));
+  }
+
+  .pz-overlay {
+    width: calc(100vw - 28px);
+    padding: 24px 22px;
+    border-radius: 18px;
+  }
+
+  .pz-overlay-title {
+    font-size: clamp(21px, 6.4vw, 30px);
+    letter-spacing: -0.05em;
+  }
+
+  .pz-overlay-caption {
+    margin-top: 12px;
+    font-size: 13px;
+  }
+
+  .pz-overlay-rule {
+    margin-bottom: 15px;
   }
 
   .pz-deck-picker {
@@ -4281,6 +4407,24 @@ globalThis.PREZOGRAPH_DECK = {
       "id": "close",
       "title": "(you)-[:builds]->(graphs)",
       "caption": "thank you — go draw the edges",
+      "overlay": {
+        "position": "center",
+        "shape": "slide",
+        "aspectRatio": "16:9",
+        "title": "(you)-[:builds]->(graphs)",
+        "caption": "thank you — go draw the edges",
+        "background": {
+          "type": "overviewTour",
+          "dim": 0.1,
+          "interactive": false
+        },
+        "tour": {
+          "cycles": 1,
+          "moveMs": 760,
+          "pauseMs": 420,
+          "endBehavior": "hold"
+        }
+      },
       "anchor": [
         3242,
         1441
@@ -4583,9 +4727,12 @@ const BUILTIN_VISUALS = new Set(["network7", "table7", "jsonSnippet"]);
 const ENTITY_KEYS = new Set(["title", "sub", "body", "tip", "source", "sourceDate"]);
 const INSTANCE_KEYS = new Set(["id", "entity", "pos", "kind", "w", "r", "visual"]);
 const EDGE_KEYS = new Set(["id", "from", "to", "label", "kind", "curve"]);
-const SCENE_KEYS = new Set(["id", "title", "caption", "anchor", "instances", "edges", "beats", "layout"]);
+const SCENE_KEYS = new Set(["id", "title", "caption", "anchor", "instances", "edges", "beats", "layout", "overlay"]);
 const BEAT_KEYS = new Set(["id", "label", "caption", "show", "focus", "revealOrder"]);
 const LAYOUT_KEYS = new Set(["fitMargin", "pushMargin", "zoomMax", "floatAmp", "minReadableScale", "noCard"]);
+const OVERLAY_KEYS = new Set(["position", "shape", "aspectRatio", "title", "caption", "background", "tour"]);
+const OVERLAY_BACKGROUND_KEYS = new Set(["type", "dim", "interactive"]);
+const OVERLAY_TOUR_KEYS = new Set(["cycles", "moveMs", "pauseMs", "endBehavior"]);
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 
 class DeckValidationError extends Error {
@@ -4742,6 +4889,98 @@ function validateDeck(deck, options = {}) {
         }
       }
       if (scene.layout?.noCard != null && typeof scene.layout.noCard !== "boolean") add(issues, `${path}.layout.noCard`, "must be a boolean");
+
+      if (scene.overlay != null && !isObject(scene.overlay)) add(issues, `${path}.overlay`, "must be an object");
+      if (isObject(scene.overlay)) {
+        for (const key of Object.keys(scene.overlay)) {
+          if (!OVERLAY_KEYS.has(key)) add(issues, `${path}.overlay.${key}`, "is not an allowed overlay property");
+        }
+        if (scene.overlay.position != null && scene.overlay.position !== "center") {
+          add(issues, `${path}.overlay.position`, 'must equal "center"');
+        }
+        if (scene.overlay.shape != null && scene.overlay.shape !== "slide") {
+          add(issues, `${path}.overlay.shape`, 'must equal "slide"');
+        }
+        if (scene.overlay.aspectRatio != null && scene.overlay.aspectRatio !== "16:9") {
+          add(issues, `${path}.overlay.aspectRatio`, 'must equal "16:9"');
+        }
+        for (const key of ["title", "caption"]) {
+          if (scene.overlay[key] != null && typeof scene.overlay[key] !== "string") {
+            add(issues, `${path}.overlay.${key}`, "must be a string");
+          }
+        }
+        if (scene.overlay.title != null && !scene.overlay.title.trim()) {
+          add(issues, `${path}.overlay.title`, "must be a non-empty string");
+        }
+        if (scene.overlay.background != null && !isObject(scene.overlay.background)) {
+          add(issues, `${path}.overlay.background`, "must be an object");
+        }
+        if (isObject(scene.overlay.background)) {
+          for (const key of Object.keys(scene.overlay.background)) {
+            if (!OVERLAY_BACKGROUND_KEYS.has(key)) {
+              add(issues, `${path}.overlay.background.${key}`, "is not an allowed overlay background property");
+            }
+          }
+          if (scene.overlay.background.type !== "overviewTour") {
+            add(issues, `${path}.overlay.background.type`, 'must equal "overviewTour"');
+          }
+          if (
+            scene.overlay.background.dim != null
+            && (!Number.isFinite(scene.overlay.background.dim)
+              || scene.overlay.background.dim < 0
+              || scene.overlay.background.dim > 0.8)
+          ) {
+            add(issues, `${path}.overlay.background.dim`, "must be between 0 and 0.8");
+          }
+          if (
+            scene.overlay.background.interactive != null
+            && typeof scene.overlay.background.interactive !== "boolean"
+          ) {
+            add(issues, `${path}.overlay.background.interactive`, "must be a boolean");
+          }
+        }
+        if (scene.overlay.tour != null && !isObject(scene.overlay.tour)) {
+          add(issues, `${path}.overlay.tour`, "must be an object");
+        }
+        if (isObject(scene.overlay.tour)) {
+          for (const key of Object.keys(scene.overlay.tour)) {
+            if (!OVERLAY_TOUR_KEYS.has(key)) {
+              add(issues, `${path}.overlay.tour.${key}`, "is not an allowed overlay tour property");
+            }
+          }
+          if (
+            scene.overlay.tour.cycles != null
+            && (!Number.isInteger(scene.overlay.tour.cycles)
+              || scene.overlay.tour.cycles < 1
+              || scene.overlay.tour.cycles > 5)
+          ) {
+            add(issues, `${path}.overlay.tour.cycles`, "must be an integer between 1 and 5");
+          }
+          for (const key of ["moveMs", "pauseMs"]) {
+            if (
+              scene.overlay.tour[key] != null
+              && (!Number.isFinite(scene.overlay.tour[key])
+                || scene.overlay.tour[key] < (key === "moveMs" ? 100 : 0)
+                || scene.overlay.tour[key] > 10000)
+            ) {
+              add(
+                issues,
+                `${path}.overlay.tour.${key}`,
+                `must be between ${key === "moveMs" ? 100 : 0} and 10000`,
+              );
+            }
+          }
+          if (
+            scene.overlay.tour.endBehavior != null
+            && !["hold", "loop"].includes(scene.overlay.tour.endBehavior)
+          ) {
+            add(issues, `${path}.overlay.tour.endBehavior`, 'must be "hold" or "loop"');
+          }
+        }
+        if (scene.overlay.tour != null && scene.overlay.background?.type !== "overviewTour") {
+          add(issues, `${path}.overlay.tour`, "requires background.type to equal \"overviewTour\"");
+        }
+      }
 
       if (scene.beats != null && !Array.isArray(scene.beats)) add(issues, `${path}.beats`, "must be an array");
       if (Array.isArray(scene.beats)) {
@@ -5002,6 +5241,32 @@ function compileDeck(input, options) {
       instances,
       instanceIds,
       beats,
+      overlay: scene.overlay
+        ? {
+            position: "center",
+            shape: "slide",
+            aspectRatio: "16:9",
+            title: scene.title,
+            caption: scene.caption ?? "",
+            ...scene.overlay,
+            background: scene.overlay.background
+              ? {
+                  dim: 0.22,
+                  interactive: false,
+                  ...scene.overlay.background,
+                }
+              : null,
+            tour: scene.overlay.background?.type === "overviewTour"
+              ? {
+                  cycles: 1,
+                  moveMs: 850,
+                  pauseMs: 650,
+                  endBehavior: "hold",
+                  ...(scene.overlay.tour ?? {}),
+                }
+              : null,
+          }
+        : null,
       layout: {
         fitMargin: 150,
         pushMargin: 160,
@@ -5128,6 +5393,12 @@ function template() {
         </section>
       </div>
     </div>
+    <div class="pz-overlay-shade" aria-hidden="true" hidden></div>
+    <section class="pz-overlay" aria-label="Presentation overlay" hidden>
+      <div class="pz-overlay-rule" aria-hidden="true"></div>
+      <h1 class="pz-overlay-title"></h1>
+      <p class="pz-overlay-caption"></p>
+    </section>
     <header class="pz-brand"></header>
     <div class="pz-legend" aria-hidden="true">
       <span style="--dot:var(--pz-indigo)">ideas</span>
@@ -5179,7 +5450,9 @@ class PrezographPlayer extends EventTarget {
     super();
     this.root = root;
     this.options = options;
-    this.reducedMotion = globalThis.matchMedia?.("(prefers-reduced-motion: reduce)").matches ?? false;
+    this.reducedMotion = options.reducedMotion
+      ?? globalThis.matchMedia?.("(prefers-reduced-motion: reduce)").matches
+      ?? false;
     this.sceneIndex = 0;
     this.beatIndex = 0;
     this.overview = false;
@@ -5215,6 +5488,10 @@ class PrezographPlayer extends EventTarget {
     this.world = $(".pz-world");
     this.svg = $(".pz-edges");
     this.card = $(".pz-card");
+    this.overlayShade = $(".pz-overlay-shade");
+    this.overlay = $(".pz-overlay");
+    this.overlayTitle = $(".pz-overlay-title");
+    this.overlayCaption = $(".pz-overlay-caption");
     this.brand = $(".pz-brand");
     this.progress = $(".pz-progress");
     this.dots = $(".pz-dots");
@@ -5265,7 +5542,7 @@ class PrezographPlayer extends EventTarget {
     this.viewport.addEventListener("wheel", (event) => this.onWheel(event), { passive: false });
     globalThis.addEventListener("resize", () => {
       if (!this.freeCamera) this.fitCurrent({ snap: this.reducedMotion });
-      if (this.overview) this.startOverviewTour();
+      if (this.overview || this.hasOverviewTourBackground()) this.startOverviewTour();
       this.positionTip();
     });
   }
@@ -5415,6 +5692,7 @@ class PrezographPlayer extends EventTarget {
 
   createEdge(edge) {
     const path = svgElement("path", "pz-edge");
+    path.setAttribute("pathLength", "100");
     for (const token of (edge.kind ?? "").split(" ").filter(Boolean)) path.classList.add(`kind-${token}`);
     if (edge.kind?.includes("cross")) path.style.strokeDasharray = "7 6";
     this.svg.insertBefore(path, this.svg.firstChild);
@@ -5461,6 +5739,28 @@ class PrezographPlayer extends EventTarget {
     return this.currentScene()?.beats[this.beatIndex];
   }
 
+  currentOverlay() {
+    return this.overview ? null : this.currentScene()?.overlay;
+  }
+
+  hasOverviewTourBackground() {
+    return this.currentOverlay()?.background?.type === "overviewTour";
+  }
+
+  usesWholeGraphBackdrop() {
+    return this.overview || this.hasOverviewTourBackground();
+  }
+
+  holdsAtEnd() {
+    const scene = this.currentScene();
+    return (
+      !this.overview
+      && this.sceneIndex === this.compiled.scenes.length - 1
+      && Boolean(scene?.overlay)
+      && scene.overlay.tour?.endBehavior !== "loop"
+    );
+  }
+
   goScene(index, options = {}) {
     this.stopOverviewTour();
     const count = this.compiled.scenes.length;
@@ -5477,6 +5777,8 @@ class PrezographPlayer extends EventTarget {
     if (this.beatIndex < scene.beats.length - 1) {
       this.beatIndex += 1;
       this.applyState({ announce: true });
+    } else if (this.holdsAtEnd()) {
+      this.stopAutoplay();
     } else {
       this.goScene(this.sceneIndex + 1);
     }
@@ -5489,19 +5791,18 @@ class PrezographPlayer extends EventTarget {
       this.applyState({ announce: true });
     } else {
       const previous = (this.sceneIndex - 1 + this.compiled.scenes.length) % this.compiled.scenes.length;
-      this.sceneIndex = previous;
-      this.beatIndex = this.currentScene().beats.length - 1;
-      this.applyState({ announce: true });
+      this.goScene(previous, {
+        beat: this.compiled.scenes[previous].beats.length - 1,
+      });
     }
   }
 
   toggleOverview() {
     const entering = !this.overview;
-    if (!entering) this.stopOverviewTour();
+    this.stopOverviewTour();
     this.overview = entering;
     this.freeCamera = false;
     this.applyState({ snap: this.reducedMotion, announce: true });
-    if (entering) this.startOverviewTour();
   }
 
   applyState(options = {}) {
@@ -5511,10 +5812,11 @@ class PrezographPlayer extends EventTarget {
     const previousShow = this.currentShow;
     const scene = this.currentScene();
     const beat = this.currentBeat();
-    this.currentShow = this.overview
+    const graphBackdrop = this.usesWholeGraphBackdrop();
+    this.currentShow = graphBackdrop
       ? new Set(this.compiled.instanceMap.keys())
       : new Set(beat.show);
-    this.currentFocus = this.overview
+    this.currentFocus = graphBackdrop
       ? new Set(this.compiled.instanceMap.keys())
       : new Set(beat.focus);
 
@@ -5525,13 +5827,13 @@ class PrezographPlayer extends EventTarget {
       view.element.classList.toggle("is-active", active);
       view.element.classList.toggle("is-shown", shown && !active);
       view.element.classList.toggle("is-context", !shown);
-      view.element.classList.toggle("is-beat-hidden", inScene && !shown && !this.overview);
+      view.element.classList.toggle("is-beat-hidden", inScene && !shown && !graphBackdrop);
       view.element.setAttribute("aria-hidden", active ? "false" : "true");
       view.element.tabIndex = active ? 0 : -1;
       if ("inert" in view.element) view.element.inert = !active;
     }
 
-    if (!this.overview && !this.reducedMotion) {
+    if (!graphBackdrop && !this.reducedMotion) {
       const fresh = beat.revealOrder.filter((id) => this.currentShow.has(id) && !previousShow.has(id));
       fresh.forEach((id) => this.nodeViews.get(id)?.element.classList.add("is-revealing"));
       fresh.forEach((id, index) => {
@@ -5544,6 +5846,7 @@ class PrezographPlayer extends EventTarget {
     this.updateEdges();
     this.updateChrome();
     this.fitCurrent({ snap: options.snap });
+    if (graphBackdrop) this.startOverviewTour();
     if (options.announce) this.announce();
     this.dispatchEvent(new CustomEvent("scenechange", {
       detail: { sceneIndex: this.sceneIndex, beatIndex: this.beatIndex, overview: this.overview }
@@ -5551,17 +5854,18 @@ class PrezographPlayer extends EventTarget {
   }
 
   updateEdges() {
-    const touring = this.overview && this.overviewTour?.target;
+    const graphBackdrop = this.usesWholeGraphBackdrop();
+    const touring = graphBackdrop && this.overviewTour?.target;
     for (const view of this.edgeViews) {
       const fromShown = this.currentShow.has(view.edge.from);
       const toShown = this.currentShow.has(view.edge.to);
       const fromFocus = this.currentFocus.has(view.edge.from);
       const toFocus = this.currentFocus.has(view.edge.to);
-      const hidden = !this.overview && (
+      const hidden = !graphBackdrop && (
         (this.nodeViews.get(view.edge.from)?.scene.id === this.currentScene().id && !fromShown) ||
         (this.nodeViews.get(view.edge.to)?.scene.id === this.currentScene().id && !toShown)
       );
-      const on = this.overview && !touring ? true : (fromFocus && toFocus);
+      const on = graphBackdrop && !touring ? true : (fromFocus && toFocus);
       const half = !on && view.edge.kind?.includes("cross") && (fromFocus || toFocus);
       view.path.classList.toggle("is-hidden", hidden);
       view.path.classList.toggle("is-on", on);
@@ -5576,6 +5880,7 @@ class PrezographPlayer extends EventTarget {
   updateChrome() {
     const scene = this.currentScene();
     const beat = this.currentBeat();
+    const overlay = this.currentOverlay();
     this.brand.replaceChildren();
     const strong = element("strong", null, this.compiled.meta.title);
     this.brand.append(strong);
@@ -5586,6 +5891,8 @@ class PrezographPlayer extends EventTarget {
       this.progress.textContent = `overview · ${this.compiled.scenes.length} scenes`;
       this.card.querySelector(".pz-card-title").textContent = "One graph";
       this.card.querySelector(".pz-card-caption").textContent = "Explore the complete presentation graph; choose a scene dot or node to return.";
+    } else if (overlay) {
+      this.progress.textContent = `finale · ${String(this.sceneIndex + 1).padStart(2, "0")} / ${String(this.compiled.scenes.length).padStart(2, "0")}`;
     } else {
       const beatSuffix = scene.beats.length > 1 ? ` · ${this.beatIndex + 1}/${scene.beats.length}` : "";
       this.progress.textContent = `${String(this.sceneIndex + 1).padStart(2, "0")} / ${String(this.compiled.scenes.length).padStart(2, "0")}${beatSuffix}`;
@@ -5593,8 +5900,23 @@ class PrezographPlayer extends EventTarget {
       this.card.querySelector(".pz-card-caption").textContent = beat.caption ?? scene.caption ?? "";
     }
 
-    this.card.hidden = !this.overview && scene.layout.noCard === true;
+    this.card.hidden = Boolean(overlay) || (!this.overview && scene.layout.noCard === true);
+    this.overlay.hidden = !overlay;
+    this.overlayShade.hidden = !overlay;
+    this.shell.classList.toggle("is-overlay", Boolean(overlay));
+    this.shell.classList.toggle("is-overlay-blocking", Boolean(overlay && !overlay.background?.interactive));
+    if (overlay) {
+      this.overlayTitle.textContent = overlay.title;
+      this.overlayCaption.textContent = overlay.caption ?? "";
+      this.overlayCaption.hidden = !overlay.caption;
+      this.overlayShade.style.opacity = String(overlay.background?.dim ?? 0);
+    } else {
+      this.overlayTitle.textContent = "";
+      this.overlayCaption.textContent = "";
+      this.overlayShade.style.opacity = "0";
+    }
     this.controls.overview.setAttribute("aria-pressed", String(this.overview));
+    this.controls.next.disabled = this.holdsAtEnd();
     [...this.dots.children].forEach((dot, index) => {
       if (!this.overview && index === this.sceneIndex) dot.setAttribute("aria-current", "step");
       else dot.removeAttribute("aria-current");
@@ -5603,13 +5925,14 @@ class PrezographPlayer extends EventTarget {
 
   fitCurrent(options = {}) {
     const scene = this.currentScene();
-    const ids = this.overview ? [...this.compiled.instanceMap.keys()] : [...this.currentFocus];
+    const graphBackdrop = this.usesWholeGraphBackdrop();
+    const ids = graphBackdrop ? [...this.compiled.instanceMap.keys()] : [...this.currentFocus];
     let bounds = boundsFor(ids, this.compiled.instanceMap, this.measurements);
     const cardSpace = this.card.hidden ? 0 : Math.min(130, this.card.offsetHeight + 44);
-    const layout = this.overview
+    const layout = graphBackdrop
       ? { ...scene.layout, minReadableScale: 0.08, zoomMax: 0.32, fitMargin: 80 }
       : scene.layout;
-    if (this.overview) {
+    if (graphBackdrop) {
       for (const candidate of this.compiled.scenes) {
         const window = this.sceneWindow(candidate);
         bounds = {
@@ -5630,9 +5953,9 @@ class PrezographPlayer extends EventTarget {
       safeArea: this.safeArea(),
     });
     this.cameraTarget = { x: fit.x, y: fit.y, scale: fit.scale };
-    this.overflowNotice.classList.toggle("is-visible", !this.overview && fit.overflow);
+    this.overflowNotice.classList.toggle("is-visible", !graphBackdrop && fit.overflow);
     this.positionCard(bounds);
-    this.pushContext = this.overview ? null : {
+    this.pushContext = graphBackdrop ? null : {
       x: fit.x,
       y: fit.y,
       halfWidth: fit.availableWidth / 2 / fit.scale,
@@ -5671,33 +5994,58 @@ class PrezographPlayer extends EventTarget {
   }
 
   startOverviewTour() {
-    if (!this.overview || !this.tourGroup || !this.compiled.scenes.length) return;
+    const overlay = this.currentOverlay();
+    const mode = this.overview ? "overview" : "overlay";
+    if (
+      (!this.overview && overlay?.background?.type !== "overviewTour")
+      || !this.tourGroup
+      || !this.compiled.scenes.length
+    ) return;
     this.tourGroup.classList.add("is-visible");
-    const startIndex = Math.max(0, this.overviewTour?.index ?? 0);
+    this.shell.classList.remove("is-tour-complete");
+    const settings = mode === "overlay"
+      ? overlay.tour
+      : { cycles: 1, moveMs: 850, pauseMs: 650, endBehavior: "loop" };
+    const startIndex = this.reducedMotion && mode === "overlay"
+      ? this.compiled.scenes.length - 1
+      : 0;
     const target = this.sceneWindow(this.compiled.scenes[startIndex]);
     if (this.reducedMotion) {
       this.overviewTour = {
+        mode,
         index: startIndex,
         phase: "hold",
         current: target,
         target,
+        visits: 1,
+        maxVisits: 1,
+        moveMs: settings.moveMs,
+        pauseMs: settings.pauseMs,
       };
       this.applyOverviewTourScene(startIndex, target);
       this.renderOverviewTourWindow(target);
       return;
     }
     this.overviewTour = {
-      index: startIndex - 1,
+      mode,
+      index: -1,
       phase: "pause",
       until: performance.now() + 280,
       current: null,
       target: null,
+      visits: 0,
+      maxVisits: settings.endBehavior === "loop"
+        ? Number.POSITIVE_INFINITY
+        : settings.cycles * this.compiled.scenes.length,
+      moveMs: settings.moveMs,
+      pauseMs: settings.pauseMs,
     };
   }
 
   stopOverviewTour() {
     this.overviewTour = null;
     this.tourGroup?.classList.remove("is-visible");
+    this.shell.classList.remove("is-tour-complete");
   }
 
   stepOverviewTour(now) {
@@ -5705,17 +6053,26 @@ class PrezographPlayer extends EventTarget {
     if (!tour || tour.phase === "hold") return;
     if (now >= tour.until) {
       if (tour.phase === "pause") {
+        if (tour.visits >= tour.maxVisits) {
+          tour.phase = "hold";
+          this.shell.classList.add("is-tour-complete");
+          if (tour.mode === "overlay") {
+            this.progress.textContent = `finale · ${String(this.sceneIndex + 1).padStart(2, "0")} / ${String(this.compiled.scenes.length).padStart(2, "0")} · hold`;
+          }
+          return;
+        }
         tour.index = (tour.index + 1) % this.compiled.scenes.length;
+        tour.visits += 1;
         tour.target = this.sceneWindow(this.compiled.scenes[tour.index]);
         tour.from = tour.current ?? tour.target;
         tour.phase = "move";
         tour.started = now;
-        tour.until = now + 850;
+        tour.until = now + tour.moveMs;
         this.applyOverviewTourScene(tour.index, tour.target);
       } else {
         tour.current = tour.target;
         tour.phase = "pause";
-        tour.until = now + 650;
+        tour.until = now + tour.pauseMs;
       }
     }
     if (!tour.target) return;
@@ -5723,7 +6080,7 @@ class PrezographPlayer extends EventTarget {
       ? interpolateWindow(
           tour.from,
           tour.target,
-          easeInOutCubic(Math.min(1, (now - tour.started) / 850)),
+          easeInOutCubic(Math.min(1, (now - tour.started) / tour.moveMs)),
         )
       : tour.target;
     tour.current = window;
@@ -5745,13 +6102,18 @@ class PrezographPlayer extends EventTarget {
       if ("inert" in view.element) view.element.inert = !focused;
     }
     this.updateEdges();
-    this.progress.textContent = `overview · ${String(index + 1).padStart(2, "0")} / ${String(this.compiled.scenes.length).padStart(2, "0")}`;
-    this.card.hidden = scene.layout.noCard === true;
-    this.card.querySelector(".pz-card-title").textContent = scene.title;
-    this.card.querySelector(".pz-card-caption").textContent = scene.caption ?? "";
-    if (!this.card.hidden) {
-      this.card.style.left = `${window.x - window.halfWidth + 40}px`;
-      this.card.style.top = `${window.y - window.halfHeight + 40}px`;
+    if (this.overviewTour?.mode === "overview") {
+      this.progress.textContent = `overview · ${String(index + 1).padStart(2, "0")} / ${String(this.compiled.scenes.length).padStart(2, "0")}`;
+      this.card.hidden = scene.layout.noCard === true;
+      this.card.querySelector(".pz-card-title").textContent = scene.title;
+      this.card.querySelector(".pz-card-caption").textContent = scene.caption ?? "";
+      if (!this.card.hidden) {
+        this.card.style.left = `${window.x - window.halfWidth + 40}px`;
+        this.card.style.top = `${window.y - window.halfHeight + 40}px`;
+      }
+    } else {
+      this.progress.textContent = `finale · ${String(index + 1).padStart(2, "0")} / ${String(this.compiled.scenes.length).padStart(2, "0")}`;
+      this.card.hidden = true;
     }
     this.pushContext = {
       x: window.x,
@@ -5782,7 +6144,9 @@ class PrezographPlayer extends EventTarget {
     const beat = this.currentBeat();
     this.live.textContent = this.overview
       ? `Whole graph overview. ${this.compiled.scenes.length} scenes.`
-      : `Scene ${this.sceneIndex + 1} of ${this.compiled.scenes.length}: ${scene.title}. ${beat.label ?? beat.caption ?? scene.caption ?? ""}`;
+      : scene.overlay
+        ? `Finale: ${scene.overlay.title}. ${scene.overlay.caption ?? ""}`
+        : `Scene ${this.sceneIndex + 1} of ${this.compiled.scenes.length}: ${scene.title}. ${beat.label ?? beat.caption ?? scene.caption ?? ""}`;
   }
 
   showTip(view, options = {}) {
@@ -5933,7 +6297,7 @@ class PrezographPlayer extends EventTarget {
       this.camera.scale += (this.cameraTarget.scale - this.camera.scale) * cameraEase;
     }
     this.renderWorldTransform();
-    if (this.overview) this.stepOverviewTour(timestamp);
+    if (this.overview || this.hasOverviewTourBackground()) this.stepOverviewTour(timestamp);
 
     const pushEase = this.reducedMotion ? 1 : 1 - Math.exp(-dt * 7);
     for (const view of this.nodeViews.values()) {

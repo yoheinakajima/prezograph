@@ -44,6 +44,35 @@ The canonical contract is `schemas/deck.schema.json`; the runtime validator is
 - Deck content is plain text. Raw HTML, SVG, JavaScript, event attributes, and arbitrary visual
   names are not schema fields.
 
+## Optional overlay scene
+
+Any scene may add a centered slide-shaped overlay. `title` and `caption` are always inert text. An
+`overviewTour` background reuses the numbered 16:9 scene window; bounded timing and cycle fields
+keep imported decks from creating unbounded authored animation work.
+
+```json
+{
+  "overlay": {
+    "position": "center",
+    "shape": "slide",
+    "aspectRatio": "16:9",
+    "title": "(you)-[:builds]->(graphs)",
+    "caption": "thank you — go draw the edges",
+    "background": {
+      "type": "overviewTour",
+      "dim": 0.1,
+      "interactive": false
+    },
+    "tour": {
+      "cycles": 1,
+      "moveMs": 760,
+      "pauseMs": 420,
+      "endBehavior": "hold"
+    }
+  }
+}
+```
+
 ## Content heuristics
 
 - Prefer 6–12 scenes and 1–5 beats per scene.

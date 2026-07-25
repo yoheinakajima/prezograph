@@ -45,3 +45,33 @@ test("resource limits are enforced", () => {
   assert.equal(result.valid, false);
   assert.ok(result.issues.some((issue) => issue.message.includes("maximum is 2")));
 });
+
+test("safe scene overlays validate while executable or unbounded fields do not", () => {
+  const deck = structuredClone(fixture);
+  deck.scenes.at(-1).overlay = {
+    position: "center",
+    shape: "slide",
+    aspectRatio: "16:9",
+    title: '<img src=x onerror="globalThis.pwned=true">',
+    caption: "Inert closing copy",
+    background: {
+      type: "overviewTour",
+      dim: 0.1,
+      interactive: false,
+    },
+    tour: {
+      cycles: 1,
+      moveMs: 760,
+      pauseMs: 420,
+      endBehavior: "hold",
+    },
+  };
+  assert.equal(validateDeck(deck).valid, true, "overlay copy remains inert text");
+
+  deck.scenes.at(-1).overlay.rawHtml = "<script>alert(1)</script>";
+  deck.scenes.at(-1).overlay.tour.cycles = 1000;
+  const result = validateDeck(deck);
+  assert.equal(result.valid, false);
+  assert.ok(result.issues.some((issue) => issue.path.endsWith(".overlay.rawHtml")));
+  assert.ok(result.issues.some((issue) => issue.path.endsWith(".overlay.tour.cycles")));
+});
