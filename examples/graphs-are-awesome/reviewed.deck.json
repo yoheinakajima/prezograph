@@ -3529,8 +3529,8 @@
         },
         "tour": {
           "cycles": 1,
-          "moveMs": 760,
-          "pauseMs": 420,
+          "moveMs": 700,
+          "pauseMs": 500,
           "endBehavior": "hold"
         }
       },

@@ -1,0 +1,43 @@
+/*
+ * Browser QA runs in a reduced-motion host environment. This harness-only
+ * override lets parity tests inspect the full-motion path without weakening
+ * the production prefers-reduced-motion contract.
+ */
+@media (prefers-reduced-motion: reduce) {
+  .pz-shell {
+    transition-duration: 180ms !important;
+  }
+
+  .pz-node {
+    transition-duration: var(--pz-node-fade), 180ms, 180ms !important;
+  }
+
+  .pz-edge,
+  .pz-edge-label {
+    transition-duration: var(--pz-edge-fade) !important;
+  }
+
+  .pz-card {
+    transition-duration:
+      var(--pz-card-fade),
+      var(--pz-card-move),
+      var(--pz-card-move) !important;
+  }
+
+  .pz-tour,
+  .pz-overlay-shade {
+    transition-duration: 500ms !important;
+  }
+
+  .pz-dot {
+    transition-duration: 300ms !important;
+  }
+
+  .pz-tip {
+    transition-duration: 180ms !important;
+  }
+
+  .pz-overlay {
+    animation-duration: 720ms !important;
+  }
+}

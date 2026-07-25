@@ -133,8 +133,8 @@ test("compiler adds deterministic safe defaults to optional overlays", () => {
     },
     tour: {
       cycles: 1,
-      moveMs: 850,
-      pauseMs: 650,
+      moveMs: 700,
+      pauseMs: 500,
       endBehavior: "hold",
     },
   });

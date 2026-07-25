@@ -6,6 +6,7 @@ import {
   fitWindow,
   interpolateWindow,
 } from "../core/geometry.js";
+import { frameEase, GRAPH_DECK_MOTION } from "./motion.js";
 import { createVisual } from "./visuals.js";
 
 const SVG_NS = "http://www.w3.org/2000/svg";
@@ -117,10 +118,13 @@ export class PrezographPlayer extends EventTarget {
     this.pushContext = null;
     this.freeCamera = false;
     this.lastFrame = 0;
+    this.frameCount = 0;
+    this.lastCardScene = null;
     this.pan = null;
     this.touches = new Map();
     this.pinch = null;
     this.toastTimer = null;
+    this.tipHideTimer = null;
     this.shell = template();
     root.replaceChildren(this.shell);
     this.collectElements();
@@ -213,7 +217,12 @@ export class PrezographPlayer extends EventTarget {
     this.sceneIndex = restored >= 0 ? restored : 0;
     this.beatIndex = 0;
     this.overview = false;
-    this.applyState({ snap: true, announce: !options.initial });
+    this.lastCardScene = null;
+    this.card.classList.remove("is-in");
+    this.camera = { ...GRAPH_DECK_MOTION.initialCamera };
+    this.cameraTarget = { ...this.camera };
+    this.renderWorldTransform();
+    this.applyState({ snap: this.reducedMotion, announce: !options.initial });
     this.shell.classList.add("is-ready");
     document.title = `${this.compiled.meta.title} · Prezograph`;
     this.dispatchEvent(new CustomEvent("deckchange", { detail: { deck: this.compiled.deck } }));
@@ -340,7 +349,6 @@ export class PrezographPlayer extends EventTarget {
 
   createEdge(edge) {
     const path = svgElement("path", "pz-edge");
-    path.setAttribute("pathLength", "100");
     for (const token of (edge.kind ?? "").split(" ").filter(Boolean)) path.classList.add(`kind-${token}`);
     if (edge.kind?.includes("cross")) path.style.strokeDasharray = "7 6";
     this.svg.insertBefore(path, this.svg.firstChild);
@@ -424,7 +432,7 @@ export class PrezographPlayer extends EventTarget {
     const scene = this.currentScene();
     if (this.beatIndex < scene.beats.length - 1) {
       this.beatIndex += 1;
-      this.applyState({ announce: true });
+      this.applyState({ announce: true, stagger: true });
     } else if (this.holdsAtEnd()) {
       this.stopAutoplay();
     } else {
@@ -481,13 +489,14 @@ export class PrezographPlayer extends EventTarget {
       if ("inert" in view.element) view.element.inert = !active;
     }
 
-    if (!graphBackdrop && !this.reducedMotion) {
+    if (options.stagger && !graphBackdrop && !this.reducedMotion) {
       const fresh = beat.revealOrder.filter((id) => this.currentShow.has(id) && !previousShow.has(id));
       fresh.forEach((id) => this.nodeViews.get(id)?.element.classList.add("is-revealing"));
       fresh.forEach((id, index) => {
         this.revealTimers.push(setTimeout(() => {
           this.nodeViews.get(id)?.element.classList.remove("is-revealing");
-        }, 80 + index * 115));
+          this.updateEdges();
+        }, GRAPH_DECK_MOTION.revealStartMs + index * GRAPH_DECK_MOTION.revealStaggerMs));
       });
     }
 
@@ -505,21 +514,32 @@ export class PrezographPlayer extends EventTarget {
     const graphBackdrop = this.usesWholeGraphBackdrop();
     const touring = graphBackdrop && this.overviewTour?.target;
     for (const view of this.edgeViews) {
-      const fromShown = this.currentShow.has(view.edge.from);
-      const toShown = this.currentShow.has(view.edge.to);
-      const fromFocus = this.currentFocus.has(view.edge.from);
-      const toFocus = this.currentFocus.has(view.edge.to);
+      const fromElement = this.nodeViews.get(view.edge.from)?.element;
+      const toElement = this.nodeViews.get(view.edge.to)?.element;
+      const fromRevealing = fromElement?.classList.contains("is-revealing");
+      const toRevealing = toElement?.classList.contains("is-revealing");
+      const fromShown = this.currentShow.has(view.edge.from) && !fromRevealing;
+      const toShown = this.currentShow.has(view.edge.to) && !toRevealing;
+      const fromFocus = this.currentFocus.has(view.edge.from) && !fromRevealing;
+      const toFocus = this.currentFocus.has(view.edge.to) && !toRevealing;
       const hidden = !graphBackdrop && (
         (this.nodeViews.get(view.edge.from)?.scene.id === this.currentScene().id && !fromShown) ||
         (this.nodeViews.get(view.edge.to)?.scene.id === this.currentScene().id && !toShown)
       );
-      const on = graphBackdrop && !touring ? true : (fromFocus && toFocus);
-      const half = !on && view.edge.kind?.includes("cross") && (fromFocus || toFocus);
+      const kindTokens = (view.edge.kind ?? "").split(" ");
+      const isSpine = kindTokens.includes("spine");
+      const isCross = kindTokens.includes("cross");
+      const on = graphBackdrop && !touring ? !isSpine : (fromFocus && toFocus);
+      const half = !on && (
+        graphBackdrop && !touring
+          ? isSpine
+          : isCross && (fromFocus || toFocus)
+      );
       view.path.classList.toggle("is-hidden", hidden);
       view.path.classList.toggle("is-on", on);
       view.path.classList.toggle("is-half", half);
       if (view.label) {
-        view.label.classList.toggle("is-on", on);
+        view.label.classList.toggle("is-on", graphBackdrop && !touring ? isCross : on);
         view.label.classList.toggle("is-hidden", hidden);
       }
     }
@@ -549,6 +569,17 @@ export class PrezographPlayer extends EventTarget {
     }
 
     this.card.hidden = Boolean(overlay) || (!this.overview && scene.layout.noCard === true);
+    const cardScene = this.overview ? "overview" : scene.id;
+    if (this.card.hidden) {
+      this.card.classList.remove("is-in");
+    } else if (this.lastCardScene !== cardScene) {
+      this.card.classList.remove("is-in");
+      void this.card.offsetWidth;
+      this.card.classList.add("is-in");
+    } else {
+      this.card.classList.add("is-in");
+    }
+    this.lastCardScene = cardScene;
     this.overlay.hidden = !overlay;
     this.overlayShade.hidden = !overlay;
     this.shell.classList.toggle("is-overlay", Boolean(overlay));
@@ -610,7 +641,7 @@ export class PrezographPlayer extends EventTarget {
       halfHeight: fit.availableHeight / 2 / fit.scale,
       margin: layout.pushMargin
     };
-    if (options.snap || this.reducedMotion || !this.shell.classList.contains("is-ready")) {
+    if (options.snap || this.reducedMotion) {
       this.camera = { ...this.cameraTarget };
       this.renderWorldTransform();
     }
@@ -653,7 +684,12 @@ export class PrezographPlayer extends EventTarget {
     this.shell.classList.remove("is-tour-complete");
     const settings = mode === "overlay"
       ? overlay.tour
-      : { cycles: 1, moveMs: 850, pauseMs: 650, endBehavior: "loop" };
+      : {
+          cycles: 1,
+          moveMs: GRAPH_DECK_MOTION.tourMoveMs,
+          pauseMs: GRAPH_DECK_MOTION.tourPauseMs,
+          endBehavior: "loop",
+        };
     const startIndex = this.reducedMotion && mode === "overlay"
       ? this.compiled.scenes.length - 1
       : 0;
@@ -678,7 +714,7 @@ export class PrezographPlayer extends EventTarget {
       mode,
       index: -1,
       phase: "pause",
-      until: performance.now() + 280,
+      until: performance.now() + GRAPH_DECK_MOTION.tourStartDelayMs,
       current: null,
       target: null,
       visits: 0,
@@ -756,8 +792,11 @@ export class PrezographPlayer extends EventTarget {
       this.card.querySelector(".pz-card-title").textContent = scene.title;
       this.card.querySelector(".pz-card-caption").textContent = scene.caption ?? "";
       if (!this.card.hidden) {
+        this.card.classList.add("is-in");
         this.card.style.left = `${window.x - window.halfWidth + 40}px`;
         this.card.style.top = `${window.y - window.halfHeight + 40}px`;
+      } else {
+        this.card.classList.remove("is-in");
       }
     } else {
       this.progress.textContent = `finale · ${String(index + 1).padStart(2, "0")} / ${String(this.compiled.scenes.length).padStart(2, "0")}`;
@@ -800,6 +839,7 @@ export class PrezographPlayer extends EventTarget {
   showTip(view, options = {}) {
     const entity = view.instance.entityDef;
     if (!entity.tip && !entity.source) return;
+    clearTimeout(this.tipHideTimer);
     this.tipView = view;
     this.tip.dataset.persistent = String(options.persistent ?? false);
     this.tipText.textContent = entity.tip ?? [entity.title, entity.sub, entity.body].filter(Boolean).join(". ");
@@ -812,6 +852,8 @@ export class PrezographPlayer extends EventTarget {
       this.tipSource.removeAttribute("href");
     }
     this.tip.hidden = false;
+    void this.tip.offsetWidth;
+    this.tip.classList.add("is-visible");
     this.positionTip();
   }
 
@@ -830,8 +872,16 @@ export class PrezographPlayer extends EventTarget {
   }
 
   hideTip() {
-    this.tip.hidden = true;
     this.tipView = null;
+    this.tip.classList.remove("is-visible");
+    clearTimeout(this.tipHideTimer);
+    if (this.reducedMotion) {
+      this.tip.hidden = true;
+      return;
+    }
+    this.tipHideTimer = setTimeout(() => {
+      if (!this.tip.classList.contains("is-visible")) this.tip.hidden = true;
+    }, 180);
   }
 
   toggleAutoplay() {
@@ -938,7 +988,9 @@ export class PrezographPlayer extends EventTarget {
   frame(timestamp) {
     const dt = this.lastFrame ? Math.min(0.05, (timestamp - this.lastFrame) / 1000) : 1 / 60;
     this.lastFrame = timestamp;
-    const cameraEase = this.reducedMotion ? 1 : 1 - Math.exp(-dt * 8);
+    const cameraEase = this.reducedMotion
+      ? 1
+      : frameEase(GRAPH_DECK_MOTION.cameraFrameFactor, dt);
     if (!this.freeCamera) {
       this.camera.x += (this.cameraTarget.x - this.camera.x) * cameraEase;
       this.camera.y += (this.cameraTarget.y - this.camera.y) * cameraEase;
@@ -947,10 +999,11 @@ export class PrezographPlayer extends EventTarget {
     this.renderWorldTransform();
     if (this.overview || this.hasOverviewTourBackground()) this.stepOverviewTour(timestamp);
 
-    const pushEase = this.reducedMotion ? 1 : 1 - Math.exp(-dt * 7);
+    const pushEase = this.reducedMotion
+      ? 1
+      : frameEase(GRAPH_DECK_MOTION.pushFrameFactor, dt);
     for (const view of this.nodeViews.values()) {
-      const active = this.currentFocus.has(view.instance.id);
-      const floatAmount = this.reducedMotion || !active ? 0 : view.scene.layout.floatAmp;
+      const floatAmount = this.reducedMotion ? 0 : view.scene.layout.floatAmp;
       const floatX = Math.sin(timestamp * 0.00055 + view.phase) * floatAmount;
       const floatY = Math.cos(timestamp * 0.00045 + view.phase * 1.4) * floatAmount;
       const [targetPushX, targetPushY] = this.pushTarget(view);
@@ -960,7 +1013,8 @@ export class PrezographPlayer extends EventTarget {
       view.y = view.scene.anchor[1] + view.instance.pos[1] + floatY + view.pushY;
       view.element.style.transform = `translate(${view.x - view.width / 2}px, ${view.y - view.height / 2}px)`;
     }
-    this.renderEdges();
+    this.frameCount += 1;
+    if (this.frameCount % GRAPH_DECK_MOTION.edgeFrameStride === 0) this.renderEdges();
     if (this.tipView) this.positionTip();
     this.animationFrame = requestAnimationFrame(this.frame);
   }
@@ -990,7 +1044,10 @@ export class PrezographPlayer extends EventTarget {
       }
       if (view.label) {
         view.label.setAttribute("x", (fromX + toX) / 2);
-        view.label.setAttribute("y", (fromY + toY) / 2 - 8);
+        view.label.setAttribute(
+          "y",
+          (fromY + toY) / 2 - 8 - (view.edge.curve ? view.edge.curve * 0.42 : 0),
+        );
       }
     }
   }
@@ -1005,6 +1062,7 @@ export class PrezographPlayer extends EventTarget {
   destroy() {
     this.stopAutoplay();
     this.stopOverviewTour();
+    clearTimeout(this.tipHideTimer);
     cancelAnimationFrame(this.animationFrame);
     this.root.replaceChildren();
   }

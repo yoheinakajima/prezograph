@@ -18,6 +18,7 @@ flowchart LR
 | `core/schema.js` | Reject malformed, oversized, or dangling graph data | Touch the DOM |
 | `core/compile.js` | Clone input, resolve entities, normalize beats and layout | Mutate caller data |
 | `core/geometry.js` | Bounds, camera fit, edge endpoints | Depend on browser globals |
+| `player/motion.js` | Original-compatible timing constants and refresh-rate-normalized easing | Touch deck content or the DOM |
 | `player/player.js` | Render, navigate, animate, pan, zoom, announce | Interpret arbitrary HTML |
 | `player/visuals.js` | Render allow-listed structured mini-visuals | Execute deck-provided code |
 | `loader/deck-loader.js` | Same-origin catalog fetch and validated local import | Replace a valid active deck before validation |
@@ -52,4 +53,6 @@ Each beat has three explicit lists:
 - `revealOrder` — newly added nodes animated in sequence.
 
 There is no implicit “all nodes with step less than N” behavior. A beat is a complete snapshot,
-which makes deletions, reorderings, and tests deterministic.
+which makes deletions, reorderings, and tests deterministic. Entering a scene shows its initial beat
+together. Moving forward within a scene staggers only the newly added nodes, using `revealOrder` as
+the stable authored sequence.

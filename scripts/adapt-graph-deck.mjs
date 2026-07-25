@@ -423,6 +423,35 @@ if (companies) {
   }];
 }
 
+const closeIndex = scenes.findIndex((scene) => scene.id === "close");
+if (closeIndex >= 0) {
+  const { id, title, caption, ...closeRest } = scenes[closeIndex];
+  scenes[closeIndex] = {
+    id,
+    title,
+    caption,
+    overlay: {
+      position: "center",
+      shape: "slide",
+      aspectRatio: "16:9",
+      title: "(you)-[:builds]->(graphs)",
+      caption: "thank you — go draw the edges",
+      background: {
+        type: "overviewTour",
+        dim: 0.1,
+        interactive: false,
+      },
+      tour: {
+        cycles: 1,
+        moveMs: 700,
+        pauseMs: 500,
+        endBehavior: "hold",
+      },
+    },
+    ...closeRest,
+  };
+}
+
 const allInstanceIds = new Set(scenes.flatMap((scene) => scene.instances.map((instance) => instance.id)));
 const connections = (legacy.connections ?? [])
   .filter((edge) => allInstanceIds.has(edge.from) && allInstanceIds.has(edge.to))

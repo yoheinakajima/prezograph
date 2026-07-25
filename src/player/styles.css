@@ -10,6 +10,11 @@
   --pz-green: #47751f;
   --pz-tan: #80551d;
   --pz-shadow: rgba(90, 80, 60, 0.1);
+  --pz-card-delay: 120ms;
+  --pz-card-fade: 550ms;
+  --pz-card-move: 700ms;
+  --pz-edge-fade: 700ms;
+  --pz-node-fade: 700ms;
 }
 
 * {
@@ -79,29 +84,20 @@ textarea {
   fill: none;
   stroke: var(--pz-hair);
   stroke-width: 1.6;
-  opacity: 0.035;
-  transition: opacity 350ms ease, stroke-dashoffset 680ms cubic-bezier(0.65, 0, 0.35, 1);
-}
-
-.pz-edge:not(.kind-cross) {
-  stroke-dasharray: 100;
-  stroke-dashoffset: 100;
+  opacity: 0.08;
+  transition: opacity var(--pz-edge-fade) ease;
 }
 
 .pz-edge.is-on {
-  opacity: 0.88;
-  stroke-dashoffset: 0;
+  opacity: 0.9;
 }
 
 .pz-edge.is-half {
-  opacity: 0.24;
-  stroke-dasharray: 7 6;
-  stroke-dashoffset: 0;
+  opacity: 0.3;
 }
 
 .pz-edge.is-hidden {
   opacity: 0;
-  stroke-dashoffset: 100;
 }
 
 .pz-edge-label {
@@ -112,27 +108,30 @@ textarea {
   text-anchor: middle;
   font: 12px ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
   opacity: 0;
-  transition: opacity 350ms ease;
+  transition: opacity var(--pz-edge-fade) ease;
 }
 
 .pz-edge-label.is-on {
   opacity: 1;
 }
 
+.pz-edge-label.is-hidden {
+  opacity: 0;
+}
+
 .pz-tour {
   opacity: 0;
   pointer-events: none;
-  transition: opacity 300ms ease;
+  transition: opacity 500ms ease;
 }
 
 .pz-tour.is-visible {
-  opacity: 1;
+  opacity: 0.85;
 }
 
 .pz-tour-window {
   fill: none;
   stroke: var(--pz-indigo);
-  filter: drop-shadow(0 0 5px color-mix(in srgb, var(--pz-indigo) 24%, transparent));
 }
 
 .pz-tour-number {
@@ -158,10 +157,10 @@ textarea {
   box-shadow: 0 1px 4px var(--pz-shadow);
   text-align: left;
   cursor: pointer;
-  opacity: 0.08;
+  opacity: 0.55;
   user-select: none;
   will-change: transform;
-  transition: opacity 430ms ease, border-color 180ms ease, box-shadow 180ms ease;
+  transition: opacity var(--pz-node-fade) ease, border-color 180ms ease, box-shadow 180ms ease;
 }
 
 .pz-node:hover,
@@ -175,11 +174,11 @@ textarea {
 }
 
 .pz-node.is-shown {
-  opacity: 0.56;
+  opacity: 0.55;
 }
 
 .pz-node.is-context {
-  opacity: 0.08;
+  opacity: 0.55;
 }
 
 .pz-node.is-beat-hidden,
@@ -363,8 +362,16 @@ textarea {
   border-radius: 16px;
   background: var(--pz-surface);
   box-shadow: 0 2px 8px var(--pz-shadow);
+  opacity: 0;
   pointer-events: none;
-  transition: opacity 300ms ease;
+  transition:
+    opacity var(--pz-card-fade) ease var(--pz-card-delay),
+    left var(--pz-card-move) ease,
+    top var(--pz-card-move) ease;
+}
+
+.pz-card.is-in {
+  opacity: 1;
 }
 
 .pz-card-title {
@@ -593,6 +600,7 @@ textarea {
   border-radius: 50%;
   background: var(--pz-hair);
   cursor: pointer;
+  transition: background 300ms ease;
 }
 
 .pz-dot[aria-current="step"] {
@@ -628,6 +636,12 @@ textarea {
   box-shadow: 0 7px 30px rgba(0, 0, 0, 0.2);
   font-size: 12px;
   line-height: 1.5;
+  opacity: 0;
+  transition: opacity 180ms ease;
+}
+
+.pz-tip.is-visible {
+  opacity: 0.96;
 }
 
 .pz-tip[hidden] {

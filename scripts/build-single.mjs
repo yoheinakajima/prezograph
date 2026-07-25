@@ -12,6 +12,7 @@ const deckPath = path.resolve(process.argv[2] || path.join(root, "examples/graph
 const modulePaths = [
   "src/core/schema.js",
   "src/core/geometry.js",
+  "src/player/motion.js",
   "src/core/compile.js",
   "src/player/visuals.js",
   "src/player/player.js",

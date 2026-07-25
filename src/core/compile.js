@@ -67,8 +67,8 @@ export function compileDeck(input, options) {
             tour: scene.overlay.background?.type === "overviewTour"
               ? {
                   cycles: 1,
-                  moveMs: 850,
-                  pauseMs: 650,
+                  moveMs: 700,
+                  pauseMs: 500,
                   endBehavior: "hold",
                   ...(scene.overlay.tour ?? {}),
                 }
