@@ -122,7 +122,8 @@ The complete machine-readable contract is [schemas/deck.schema.json](schemas/dec
 - Schema validation happens before a deck is compiled, selected, or imported.
 - Entity identity and visual placement are separate, so one fact can appear locally in many scenes.
 - Beats use explicit `show`, `focus`, and `revealOrder` lists instead of hidden numeric step rules.
-- The whole-graph view is optional and is not counted as an extra slide or forced after the ending.
+- The optional whole-graph view replays a numbered, slide-shaped window across every scene and is
+  not counted as an extra slide or forced after the ending.
 - Mobile camera fitting honors the fixed header and controls before falling back to explicit overflow.
 - Reduced-motion preferences, keyboard navigation, focus states, and emergency readable-scale floors are built in.
 

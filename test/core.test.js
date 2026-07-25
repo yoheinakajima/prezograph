@@ -1,7 +1,13 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { compileDeck } from "../src/core/compile.js";
-import { borderPoint, boundsFor, fitBounds } from "../src/core/geometry.js";
+import {
+  borderPoint,
+  boundsFor,
+  fitBounds,
+  fitWindow,
+  interpolateWindow,
+} from "../src/core/geometry.js";
 
 const miniDeck = {
   schemaVersion: "2.0",
@@ -72,4 +78,37 @@ test("edge endpoints stop at node borders", () => {
   );
   assert.ok(Math.abs(point[0] - 56) < Number.EPSILON * 64);
   assert.equal(point[1], 0);
+});
+
+test("overview windows reproduce a scene viewport and interpolate deterministically", () => {
+  const viewport = { width: 390, height: 844 };
+  const safeArea = { top: 84, right: 14, bottom: 112, left: 14 };
+  const bounds = { x0: -300, y0: -100, x1: 300, y1: 100, width: 600, height: 200 };
+  const layout = {
+    fitMargin: 54,
+    pushMargin: 160,
+    zoomMax: 1,
+    minReadableScale: 0.4,
+  };
+  const window = fitWindow(bounds, viewport, layout, {
+    aspectRatio: 16 / 9,
+    safeArea,
+    cardSpace: 80,
+  });
+  assert.equal(window.halfWidth / window.halfHeight, 16 / 9);
+  assert.equal(window.margin, 160);
+
+  const halfway = interpolateWindow(
+    { x: 0, y: 10, halfWidth: 100, halfHeight: 200, margin: 10, scale: 0.5 },
+    { x: 20, y: 30, halfWidth: 200, halfHeight: 400, margin: 20, scale: 1 },
+    0.5,
+  );
+  assert.deepEqual(halfway, {
+    x: 10,
+    y: 20,
+    halfWidth: 150,
+    halfHeight: 300,
+    margin: 20,
+    scale: 0.75,
+  });
 });

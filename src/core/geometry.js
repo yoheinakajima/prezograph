@@ -67,6 +67,47 @@ export function fitBounds(bounds, viewport, layout, options = {}) {
   };
 }
 
+export function fitWindow(bounds, viewport, layout, options = {}) {
+  const fit = fitBounds(bounds, viewport, layout, options);
+  if (options.aspectRatio) {
+    let halfWidth = (bounds.width + fit.pad * 2) / 2;
+    let halfHeight = (bounds.height + fit.pad * 2 + (options.cardSpace ?? 0)) / 2;
+    if (halfWidth / halfHeight < options.aspectRatio) {
+      halfWidth = halfHeight * options.aspectRatio;
+    } else {
+      halfHeight = halfWidth / options.aspectRatio;
+    }
+    return {
+      x: fit.x,
+      y: fit.y,
+      halfWidth,
+      halfHeight,
+      margin: layout.pushMargin,
+      scale: fit.scale,
+    };
+  }
+  return {
+    x: fit.x,
+    y: fit.y,
+    halfWidth: fit.availableWidth / (2 * fit.scale),
+    halfHeight: fit.availableHeight / (2 * fit.scale),
+    margin: layout.pushMargin,
+    scale: fit.scale,
+  };
+}
+
+export function interpolateWindow(from, to, amount) {
+  const t = Math.max(0, Math.min(1, amount));
+  return {
+    x: from.x + (to.x - from.x) * t,
+    y: from.y + (to.y - from.y) * t,
+    halfWidth: from.halfWidth + (to.halfWidth - from.halfWidth) * t,
+    halfHeight: from.halfHeight + (to.halfHeight - from.halfHeight) * t,
+    margin: to.margin,
+    scale: from.scale + (to.scale - from.scale) * t,
+  };
+}
+
 export function borderPoint(node, targetX, targetY) {
   const dx = targetX - node.x;
   const dy = targetY - node.y;

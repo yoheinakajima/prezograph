@@ -31,7 +31,8 @@ transitional. It must not be advertised as the final conceptual model.
 | Manual editing | No drag editing, sliders, undo snapshots, or browser position writeback | Removed from production runtime |
 | Modes | Present, Speaker, Explore, and developer-only Layout Debug | Present/overview available; others planned |
 | Routes | Select short/long routes and optional forks before playback | Planned |
-| Finale | Generic centered overlay over an optional one-cycle overview tour | Planned |
+| Whole graph | Fixed overview camera with a numbered, slide-shaped window touring every scene | Available |
+| Finale | Generic centered overlay over an optional one-cycle overview-tour background | Planned |
 | Performance | Event-driven rendering, viewport culling, two-hop context, semantic zoom | Planned |
 | Company stage | Names only; sourced facts live in metadata/details | Implemented in reviewed example |
 

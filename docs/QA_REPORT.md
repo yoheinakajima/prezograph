@@ -1,12 +1,12 @@
 # QA report
 
-Run date: July 24, 2026
+Run date: July 25, 2026
 
 ## Automated
 
 - `npm run validate` — passed for both schema-v2 examples; the reviewed adaptation contains 12
   scenes, 133 semantic entities, and 131 rendered instances.
-- `npm test` — passed: 25/25 schema, security, loader, compilation, geometry, content, hostile-input,
+- `npm test` — passed: 26/26 schema, security, loader, compilation, geometry, content, hostile-input,
   public-copy, agent-surface, and workflow-policy assertions.
 - `npm run build` — passed: CSP-hashed portable `dist/prezograph.html`.
 - `npm run build:site` — passed: static Pages artifact with home, app, agent, raw source,
@@ -32,6 +32,12 @@ Run date: July 24, 2026
 - Switched between the reviewed and technical-preview decks from the selector and confirmed the
   active title and URL update.
 - Confirmed the reviewed deck begins at `01 / 12 · 1/5`.
+- Confirmed whole-graph mode restores the original moving-window model: fixed overview camera,
+  scene-local emphasis, push-out context, a 16:9 outline, and a constant-screen-size `01 / 12`
+  badge.
+- Confirmed Next exits overview at scene 1 and Back exits at scene 12.
+- Confirmed the 16:9 overview window remains fully visible at 390×844.
+- Confirmed reduced-motion mode holds a meaningful first scene window without automatic movement.
 - Confirmed the launch homepage has a complete discovery path, a truthful available/planned split,
   six durable example actions, and no dead-end footer.
 - Confirmed `/agents/` instructs agents to return inert JSON and labels YAML, API, and MCP as planned.

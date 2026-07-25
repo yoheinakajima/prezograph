@@ -111,6 +111,30 @@ textarea {
   opacity: 1;
 }
 
+.pz-tour {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 300ms ease;
+}
+
+.pz-tour.is-visible {
+  opacity: 1;
+}
+
+.pz-tour-window {
+  fill: none;
+  stroke: var(--pz-indigo);
+}
+
+.pz-tour-number {
+  fill: var(--pz-indigo);
+  stroke: var(--pz-bg);
+  paint-order: stroke;
+  font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  font-weight: 750;
+  letter-spacing: 0.02em;
+}
+
 .pz-node {
   position: absolute;
   display: block;
