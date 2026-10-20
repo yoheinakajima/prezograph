@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- Added regression coverage for preserving authored deck content through JSON save/load cycles,
+  including hidden instances, local edges, and cross-scene connections; runtime behavior is unchanged.
+
 ## 0.1.0 — 2026-07-24
 
 - Split the original single-file prototype into core, player, editor, CLI, scripts, schema, example,
